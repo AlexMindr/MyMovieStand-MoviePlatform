@@ -1,0 +1,20 @@
+.pg{
+    display:flex;
+    width: 100%;
+  }
+  .meniuleft{
+    display:inline-block;
+    flex:20%;
+    background-color: aqua;
+    border: solid;
+    border-color: black;
+    height:100%;
+    
+  }
+  .container{
+    flex:80%;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    
+  
+  }

@@ -1,0 +1,354 @@
+{
+    "tables": {
+        "genres": {
+            "tableName": "genres",
+            "schema": {
+                "genreid": {
+                    "primaryKey": true,
+                    "field": "genreid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "name": {
+                    "unique": true,
+                    "allowNull": false,
+                    "field": "name",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "movies": {
+            "tableName": "movies",
+            "schema": {
+                "movieid": {
+                    "autoIncrement": true,
+                    "primaryKey": true,
+                    "field": "movieid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "adult": {
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "adult",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "backdrop_path": {
+                    "field": "backdrop_path",
+                    "seqType": "Sequelize.STRING"
+                },
+                "budget": {
+                    "field": "budget",
+                    "seqType": "Sequelize.BIGINT(16).UNSIGNED"
+                },
+                "homepage": {
+                    "field": "homepage",
+                    "seqType": "Sequelize.STRING"
+                },
+                "imdb_id": {
+                    "field": "imdb_id",
+                    "seqType": "Sequelize.STRING"
+                },
+                "tmdb_id": {
+                    "field": "tmdb_id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "language": {
+                    "field": "language",
+                    "seqType": "Sequelize.STRING(1234)"
+                },
+                "original_title": {
+                    "field": "original_title",
+                    "seqType": "Sequelize.STRING"
+                },
+                "overview": {
+                    "field": "overview",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "poster_path": {
+                    "field": "poster_path",
+                    "seqType": "Sequelize.STRING"
+                },
+                "release_date": {
+                    "field": "release_date",
+                    "seqType": "Sequelize.DATE"
+                },
+                "revenue": {
+                    "field": "revenue",
+                    "seqType": "Sequelize.BIGINT(16).UNSIGNED"
+                },
+                "duration": {
+                    "field": "duration",
+                    "seqType": "Sequelize.STRING"
+                },
+                "status": {
+                    "field": "status",
+                    "seqType": "Sequelize.STRING"
+                },
+                "title": {
+                    "field": "title",
+                    "seqType": "Sequelize.STRING"
+                },
+                "trailer": {
+                    "field": "trailer",
+                    "seqType": "Sequelize.STRING"
+                },
+                "keywords": {
+                    "field": "keywords",
+                    "seqType": "Sequelize.STRING(5000)"
+                },
+                "popularity": {
+                    "field": "popularity",
+                    "seqType": "Sequelize.INTEGER.UNSIGNED"
+                },
+                "uscertification": {
+                    "field": "uscertification",
+                    "seqType": "Sequelize.STRING"
+                },
+                "rating": {
+                    "field": "rating",
+                    "seqType": "Sequelize.DECIMAL(10, 1)"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "moviegenres": {
+            "tableName": "moviegenres",
+            "schema": {
+                "mgid": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "mgid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "MovieMovieid": {
+                    "allowNull": false,
+                    "field": "MovieMovieid",
+                    "unique": "moviegenres_MovieMovieid_GenreGenreid_unique",
+                    "references": {
+                        "model": "movies",
+                        "key": "movieid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "GenreGenreid": {
+                    "allowNull": false,
+                    "field": "GenreGenreid",
+                    "unique": "moviegenres_MovieMovieid_GenreGenreid_unique",
+                    "references": {
+                        "model": "genres",
+                        "key": "genreid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "notifications": {
+            "tableName": "notifications",
+            "schema": {
+                "notificationid": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "notificationid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "userid": {
+                    "allowNull": false,
+                    "onDelete": "CASCADE",
+                    "field": "userid",
+                    "references": {
+                        "model": "users",
+                        "key": "userid"
+                    },
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "content": {
+                    "allowNull": false,
+                    "field": "content",
+                    "seqType": "Sequelize.STRING(1000)"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "users": {
+            "tableName": "users",
+            "schema": {
+                "userid": {
+                    "autoIncrement": true,
+                    "primaryKey": true,
+                    "field": "userid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "useruuid": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.UUIDV4"
+                    },
+                    "unique": true,
+                    "allowNull": false,
+                    "field": "useruuid",
+                    "seqType": "Sequelize.UUID"
+                },
+                "username": {
+                    "unique": true,
+                    "allowNull": false,
+                    "field": "username",
+                    "seqType": "Sequelize.STRING"
+                },
+                "fullname": {
+                    "field": "fullname",
+                    "seqType": "Sequelize.STRING"
+                },
+                "dateofbirth": {
+                    "field": "dateofbirth",
+                    "seqType": "Sequelize.DATE"
+                },
+                "role": {
+                    "allowNull": false,
+                    "field": "role",
+                    "seqType": "Sequelize.STRING"
+                },
+                "email": {
+                    "unique": true,
+                    "allowNull": false,
+                    "isEmail": true,
+                    "field": "email",
+                    "seqType": "Sequelize.STRING"
+                },
+                "password": {
+                    "allowNull": false,
+                    "field": "password",
+                    "seqType": "Sequelize.STRING"
+                },
+                "location": {
+                    "allowNull": true,
+                    "field": "location",
+                    "seqType": "Sequelize.STRING"
+                },
+                "changecode": {
+                    "field": "changecode",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "watchlists": {
+            "tableName": "watchlists",
+            "schema": {
+                "wlid": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "wlid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "UserUserid": {
+                    "allowNull": false,
+                    "field": "UserUserid",
+                    "unique": "watchlists_UserUserid_MovieMovieid_unique",
+                    "references": {
+                        "model": "users",
+                        "key": "userid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "MovieMovieid": {
+                    "allowNull": false,
+                    "field": "MovieMovieid",
+                    "unique": "watchlists_UserUserid_MovieMovieid_unique",
+                    "references": {
+                        "model": "movies",
+                        "key": "movieid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "rating": {
+                    "field": "rating",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "status": {
+                    "field": "status",
+                    "seqType": "Sequelize.STRING"
+                },
+                "episodes": {
+                    "field": "episodes",
+                    "seqType": "Sequelize.INTEGER.UNSIGNED"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        }
+    },
+    "path": "E:\\ProiecteVSCode\\Licenta\\notypesfrbck\\bck\\migrations\\_current.json",
+    "backupPath": "E:\\ProiecteVSCode\\Licenta\\notypesfrbck\\bck\\migrations\\_current_bak.json",
+    "exists": false,
+    "revision": 1
+}

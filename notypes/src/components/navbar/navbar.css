@@ -1,0 +1,22 @@
+.app__navbar{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 2rem 6rem;
+}
+
+.app__navbar-links{
+    flex:1;
+    display:flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.app__navbar-links_logo{
+    margin-right:2rem;
+}
+.app__navbar-links_logo img{
+    width:60px;
+    height:30px;
+}

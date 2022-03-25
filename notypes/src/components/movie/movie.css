@@ -1,0 +1,153 @@
+.container{
+    margin-left:5%;
+    margin-right: 5%;
+    
+}
+.background{
+    display:block;
+    opacity: 0.4;
+    position: absolute;
+    width: 90vw;
+    height: 100vh;
+    max-width: 90vmax;
+    z-index: -1; 
+}
+
+.title-container{
+    
+    align-content: center;
+    background-color: grey;
+    opacity: 0.8;
+    
+}
+
+.title-container h5{
+    font-style:oblique;
+    color:beige;
+}
+
+.movie-info{
+     
+    display:flex;
+    opacity: 0.9;
+}
+
+.media{
+    flex:20%;
+    width: auto;
+    
+}
+
+.media img{
+    display: block;
+    height: clamp(35vh,55vh,60vh);
+    width: clamp(17vw,18vw,20vw);
+    padding: 0.1rem;
+    margin-left:1rem;
+    margin:auto;
+}
+
+.info-container{
+    flex:80%;
+}
+
+.status-info{
+    display:grid;
+    justify-content: left;
+    align-items: center;
+    column-gap: 0.5rem;
+    grid-auto-flow: column;
+}
+
+.status-info span{
+    font-weight: bold;
+}
+
+
+.popularity-info{
+    background-color:rgb(168, 168, 168);
+    display:grid;
+    justify-content: center;
+    align-content: center;
+    column-gap: 7rem;
+    grid-auto-flow: column;  
+     
+}
+.popularity-info span{
+    font-weight: bold;
+}
+
+.score{
+    display:inline-block;
+    color:rgb(247, 135, 7);
+    background-color: rgb(47, 47, 243);
+    border-radius: 12%;
+    padding-right:1px;
+    padding-left:1px;
+}
+
+.time-info{
+    display:grid;
+    justify-content: left;
+    align-items: center;
+    column-gap: 1rem;
+    grid-auto-flow: column;  
+}
+
+.time-info span{
+    font-weight: 550;
+}
+
+.certification{
+    border:0.1rem dashed rgb(212, 0, 255);
+    color:rgb(216, 64, 4);
+    font-weight: bolder;
+    padding:0.15rem;
+}
+
+.genres{
+    display:grid;
+    justify-content: center;
+    align-items: center;
+    column-gap: 1rem;
+    grid-auto-flow: column;
+    background-color: rgb(180, 127, 57);
+}
+
+.genres button{
+    padding:0.1rem 0.2rem 0.1rem 0.2rem;
+    background-color: rgb(94, 206, 250);
+    font-weight: bolder;
+    color:rgb(238, 253, 23);
+}
+.container-synopsis{
+    padding:1px;
+}
+.overview-title{
+    font-weight: 600;
+}
+.trailer-and-synopsis{
+    display:flex;
+}
+.synopsis{
+     flex:70%;
+     
+ }
+.trailer{
+    flex:30%;
+}
+.trailer img{
+    opacity: 0.8;
+    position: absolute;
+    height: 25%;
+    width: 20%;
+    
+}
+.trailer button{
+    margin-left: 45%;
+    margin-top:25%;    
+    color:rgb(255, 1, 141);
+    text-shadow: 5%;
+    
+    
+}
