@@ -7,9 +7,9 @@
     display:block;
     opacity: 0.4;
     position: absolute;
-    width: 90vw;
-    height: 100vh;
-    max-width: 90vmax;
+    width: 90%;
+    height: 100%;
+    max-width: 90vw;
     z-index: -1; 
 }
 
@@ -28,28 +28,34 @@
 
 .movie-info{
      
-    display:flex;
     opacity: 0.9;
 }
 
 .media{
-    flex:20%;
-    width: auto;
-    
+    width:100%;
+    height: 100%;
+    min-width: 150px;
+    max-height:min(95%,500px);
+    min-height: 200px;
 }
 
 .media img{
     display: block;
-    height: clamp(35vh,55vh,60vh);
-    width: clamp(17vw,18vw,20vw);
-    padding: 0.1rem;
-    margin-left:1rem;
-    margin:auto;
+    /*height: clamp(35vh,55vh,60vh);
+    width: clamp(17vw,18vw,20vw);*/
+    height: 95%;
+    width: 80%;
+    min-width: 100px;
+    max-width: min(95%,400px);
+    max-height:min(95%,500px);
+    min-height: 200px;
+    margin-top:0.5rem;
+    margin-left:auto;
+    margin-right:auto;
+    
 }
 
-.info-container{
-    flex:80%;
-}
+
 
 .status-info{
     display:grid;
@@ -66,24 +72,23 @@
 
 .popularity-info{
     background-color:rgb(168, 168, 168);
-    display:grid;
     justify-content: center;
     align-content: center;
-    column-gap: 7rem;
-    grid-auto-flow: column;  
-     
+    margin: 0 0.1rem 0.1rem 0.1rem;
+    width: 100%;
+    
 }
-.popularity-info span{
+.popularity-info div{
     font-weight: bold;
+    padding: 0;
 }
 
 .score{
-    display:inline-block;
     color:rgb(247, 135, 7);
     background-color: rgb(47, 47, 243);
     border-radius: 12%;
-    padding-right:1px;
-    padding-left:1px;
+    padding:0.2rem 0.2rem 0.2rem 0.2rem;
+    text-align: center;
 }
 
 .time-info{
@@ -122,32 +127,32 @@
 }
 .container-synopsis{
     padding:1px;
+    margin-top:1rem;
 }
 .overview-title{
     font-weight: 600;
 }
-.trailer-and-synopsis{
-    display:flex;
-}
-.synopsis{
-     flex:70%;
-     
- }
+
 .trailer{
-    flex:30%;
-}
-.trailer img{
-    opacity: 0.8;
-    position: absolute;
-    height: 25%;
-    width: 20%;
     
+    height: 100%;
+    width: 100%;
+    opacity: 0.9;
+}
+.trailer button img{
+    opacity: 1;
+    position: absolute;
+    padding:0;
+    z-index:-1;
 }
 .trailer button{
-    margin-left: 45%;
-    margin-top:25%;    
     color:rgb(255, 1, 141);
-    text-shadow: 5%;
-    
+    min-width: 80px;
+    max-width: min(95%,350px);
+    max-height:min(95%,500px);
+    min-height: 200px;
+    padding-left:0;
+    padding-top:0;
+    margin-left: 35%;
     
 }

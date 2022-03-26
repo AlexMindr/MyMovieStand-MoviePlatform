@@ -18,10 +18,8 @@ export const getMovies = ()  => api.get(`/movies/`)
 export const login = (formValues) => api.post("/user/login", formValues);
 export const signup = (formValues) => api.post("/user/signup", formValues);
 
-//const apikey ='api_key=d05a8d2156e4230aded1c48bf6f75b82'
-//const url=`https://api.themoviedb.org/3/movie/550?${apikey}`
-//api_key: 'd05a8d2156e4230aded1c48bf6f75b82'
-//export const getMovie = (id) => tmdb.get(`/${id}?${apikey}` );
+const apikey ='api_key=d05a8d2156e4230aded1c48bf6f75b82'
 
-
+export const getCredits = (id) => tmdb.get(`/${id}/credits?${apikey}`);
+export const getImages = (id) => tmdb.get(`/${id}/images?${apikey}`);
 
