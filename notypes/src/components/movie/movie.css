@@ -3,6 +3,12 @@
     margin-right: 5%;
     
 }
+.container-grid{
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: auto 110%;
+    background-blend-mode: screen;
+}
 .background{
     display:block;
     opacity: 0.4;
@@ -11,6 +17,7 @@
     height: 100%;
     max-width: 90vw;
     z-index: -1; 
+    
 }
 
 .title-container{

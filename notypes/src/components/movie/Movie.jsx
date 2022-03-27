@@ -1,8 +1,8 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect,useRef} from 'react';
 import './movie.css'
-import {getMovie} from '../../api';
+import {getMovie,getImages,getCredits} from '../../api';
 import moment from 'moment'
-import { Divider,Box, Button, Typography,Grid,Chip/*Paper,Container,*/ } from '@mui/material'
+import { Divider,Box, Button, Typography,Grid,ImageList,ImageListItem,ImageListItemBar/*Paper,Container,*/ } from '@mui/material'
 //import {Link} from 'react-router-dom'
 import { StyledEngineProvider } from '@mui/material/styles';
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
@@ -25,19 +25,35 @@ const Movie = ({movieid,children}) => {
 
    const [movie, setMovie]=useState();
    const [bgColor, setBgColor]=useState('rgb(224, 155, 63)');
+   const [images,setImages]=useState(null);
+   const [showImages,setShowImages]=useState(null)
+   //const images=useRef(null);
+   
    
    useEffect(() => {
       //console.log("child component mounted");
       
       async function getData(){
          const res= await getMovie(movieid);
-         const data= await res.data
-         setMovie(data);
+         setMovie(res.data);
+         const res2= await getImages(res.data.tmdb_id);
+         const {backdrops,logos,posters}= res2.data
+         setImages({backdrops,logos,posters});
+         
          }
       
       getData();
    },[movieid]);
-  
+      
+   const fetchImages = async (id) =>{
+      
+      const res= await getImages(id);
+      const {backdrops,logos,posters}= res.data
+      setImages({backdrops,logos,posters});
+         
+   }
+   
+
     //console.log("rendering child");
     //console.log(movie)
 //ramas homepage  
@@ -61,9 +77,10 @@ return (
       
    <Box className='container' sx={{ flexGrow: 1 }} component='article'>
       
-      <Grid container spacing={1} className='container-grid'>
-         <img className='background' src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`} alt={movie.title}/>
-      
+      <Grid container spacing={1} className='container-grid' 
+      sx={{backgroundImage:`url(${`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}),linear-gradient(to bottom, #f0f0f0, #57525a)`}}>
+         {//<img className='background' src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`} alt={movie.title}/>
+         }
          <Grid item className='title-container'  xs={12} md={12}>
                   <Typography variant='h4'>{movie.original_title}</Typography>   
                   <Typography variant='h5'>{movie.title}</Typography>
@@ -159,6 +176,8 @@ return (
                   <Divider flexItem/>
                   <Box component='div'>
                      <Button>Add to list</Button>
+                     <Typography component='span'>My rating</Typography>
+                     <Typography component='span'>My status</Typography>
                   </Box>
              
             </Grid>
@@ -167,14 +186,38 @@ return (
 
 
 
-         <Grid item  xs={12} md={9}>
-            Crew
+         <Grid item  xs={10} md={8}>
+            {/*<Button onClick={(e)=>{e.preventDefault();
+               fetchImages(movie.tmdb_id)}}>See more images </Button>*/}
+            
+            <ImageList sx={{ width: '350px', height: '450px' }}>
+               {images && images.posters.map((item) => (
+               <ImageListItem key={item.file_path}>
+                  <img
+                     src={`https://image.tmdb.org/t/p/original/${item.file_path}`}
+                     alt={movie.title}
+                     loading="lazy"
+                     width={'10%'}
+                     height={'10%'}
+                  />
+                  {/*<ImageListItemBar
+                     title={item.title}
+                     subtitle={<span>by: {item.author}</span>}
+                     position="below"
+                  />*/}
+               </ImageListItem>
+               ))}
+            </ImageList>
          </Grid>
-         <Grid item  xs={12} md={3}>
-               <Typography component='p'>Budget: ${movie.budget}</Typography>
-               <Typography component='p'>Revenue: ${movie.revenue}</Typography>
+         <Grid item  xs={2} md={4}>
+               <Typography component='span'>Budget: ${movie.budget}</Typography>
+               <Typography component='span'>Revenue: ${movie.revenue}</Typography>
                <Typography component='span'>Keywords: {movie.keywords}</Typography>   
          </Grid>
+         <Grid item  xs={12} md={12}>
+            Crew
+         </Grid>
+
       </Grid>
       </Box>
    </StyledEngineProvider>
