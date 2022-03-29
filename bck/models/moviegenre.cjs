@@ -6,8 +6,8 @@ module.exports = (sequelize, DataTypes) => {
   class Moviegenre extends Model {
     
     static associate({Movie,Genre}) {
-      this.belongsTo(Movie);
-      this.belongsTo(Genre);
+      this.belongsTo(Movie,{foreignKey: {name:'movieid',allowNull:false}});
+      this.belongsTo(Genre,{foreignKey: {name:'genreid',allowNull:false}});
     }
   }
   Moviegenre.init({
@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement:true
     },
-    MovieMovieid: {
+    /*MovieMovieid: {
       type: DataTypes.INTEGER,
       allowNull:false  
     },
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     GenreGenreid: {
         type: DataTypes.INTEGER,
         allowNull:false
-    },
+    },*/
   }, {
     sequelize,
     tableName:'moviegenres',

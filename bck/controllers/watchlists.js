@@ -8,7 +8,7 @@ const getWatchlist = async (req, res) => {
     try {
         const watchlist = await Watchlist.findAll({
             where:{
-              UserUserid:id
+              userid:id
             }, 
             include:{
             model:Movie,
@@ -31,8 +31,8 @@ const createWatchlistEntry = async (req, res) => {
       
       await Watchlist.create(
         {
-            UserUserid:id,
-            MovieMovieid:movieid,
+            userid:id,
+            movieid,
             status,
             episodes,
             rating,
@@ -61,8 +61,8 @@ const updateWatchlistEntry = async (req, res) => {
             updatedAt:new Date()
         },
         {where: {
-          UserUserid:id,
-          MovieMovieid:movieid
+          userid:id,
+          movieid
         }}
       );
 
@@ -79,8 +79,8 @@ const updateWatchlistEntry = async (req, res) => {
         
         await Watchlist.destroy(
           {where: {
-            UserUserid:id,
-            MovieMovieid:movieid
+            userid:id,
+            movieid
           }}
         );
   

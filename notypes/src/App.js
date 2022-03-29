@@ -64,7 +64,7 @@ export default function App() {
     <>
     <StyledEngineProvider injectFirst>
       <CssBaseline/>
-      <Movie movieid={64} />
+      <Movie movieid={1} />
     </StyledEngineProvider>
    </>
   );

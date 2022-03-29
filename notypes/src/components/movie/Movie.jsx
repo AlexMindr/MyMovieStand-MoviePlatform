@@ -1,13 +1,15 @@
-import React,{useState,useEffect,useRef} from 'react';
+import React,{useState,useEffect} from 'react';
 import './movie.css'
 import {getMovie,getImages,getCredits} from '../../api';
 import moment from 'moment'
-import { Divider,Box, Button, Typography,Grid,ImageList,ImageListItem,ImageListItemBar } from '@mui/material'
+import { Divider,Box, Button, Typography,Grid,ImageList,ImageListItem,Modal } from '@mui/material'
 //import {Link} from 'react-router-dom'
 import { StyledEngineProvider } from '@mui/material/styles';
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import imageUnknown from '../../images/unknown.jpg'
+import StarBorderPurple500Icon from '@mui/icons-material/StarBorderPurple500';
+import MovieIcon from '@mui/icons-material/Movie';
 //import { alignProperty } from '@mui/material/styles/cssUtils';
 
 
@@ -28,6 +30,9 @@ const Movie = ({movieid,children}) => {
    const [bgColor, setBgColor]=useState('rgb(224, 155, 63)');
    const [images,setImages]=useState(null);
    const [credits,setCredits]=useState(null)
+   const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
    //const images=useRef(null);
    
    
@@ -143,8 +148,26 @@ return (
                            <Typography className='synopsis' component='p'>{movie.overview}</Typography>
                         </Grid>
                         {movie.trailer!=null?   
-                        <Grid item xs={12} md={7} lg={5} component='div' className='trailer'>
-                              <Button onClick={
+                        <Grid item xs={12} md={7} lg={5} component='div' className='trailer'
+                         sx={{backgroundImage:`url(${`https://i.ytimg.com/vi/${movie.trailer}/mqdefault.jpg`})`}}>
+                           <Button onClick={handleOpen} >
+                              <PlayCircleOutlineIcon fontSize='large' />
+                           </Button>
+                           <Modal
+                              open={open}
+                              onClose={(e) => {
+                                 e.preventDefault();
+                                 handleClose();
+                              }}
+                              aria-labelledby={movie.title}
+                              aria-describedby="trailer"
+                              >
+                              <Box className='trailermodal'>
+                                 <Typography  sx={{width:'90vw',height:'90vh'}} component="iframe"
+                                  src={`https://www.youtube.com/embed/${movie.trailer}?enablejsapi=1&wmode=opaque&autoplay=1`}/>
+                              </Box>
+                           </Modal>                           
+                              {/* {<Button onClick={
                                  (e) => {
                                     e.preventDefault();
                                     window.location.href=`https://www.youtube.com/embed/${movie.trailer}?enablejsapi=1&wmode=opaque&autoplay=1`
@@ -152,8 +175,8 @@ return (
                                variant='text' >
                                   <PlayCircleOutlineIcon fontSize='large' />
                                   <img src={`https://i.ytimg.com/vi/${movie.trailer}/mqdefault.jpg`} alt={movie.title}/>
-                               </Button>
-                           
+                               </Button> */}
+
                         </Grid>
                         :<></>}
                      </Grid>
@@ -171,9 +194,9 @@ return (
 
 
 
-         <Grid item  xs={9} md={8}>
+         <Grid item  xs={12} md={7} lg={8}>
             {/*De pus Tabs pt fiecare tip de imagine*/}
-            <Typography component='h5'>Gallery</Typography>
+            <Typography component='h5' variant='h5'>Gallery</Typography>
             <Divider flexItem/>
             <Box component='div' className='imageroot'>
                <ImageList  className="images" >
@@ -191,7 +214,7 @@ return (
             </Box>
 
          </Grid>
-         <Grid className='financial' item  xs={3} md={4}>
+         <Grid className='financial' item  xs={12} md={5} lg={4}>
                <Typography component='h6'>Budget</Typography>
                <Typography component='span'>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(movie.budget)}</Typography>
                <Typography component='h6'>Revenue</Typography>
@@ -199,34 +222,50 @@ return (
                <Typography component='h6'>Keywords</Typography>
                <Typography component='p'>{movie.keywords}</Typography>   
          </Grid>
-         <Grid item  xs={6} md={6}>
-            <Typography component='h4'>Cast</Typography>
+         <Grid item  xs={12} md={6} lg={6}>
+            <Typography component='h5' variant='h5'>Cast</Typography>
             <Divider flexItem/>
-               <ImageList  className="actors" cols={1} >
-                  {credits && credits.cast.map((item) => (
-                     <ImageListItem key={item.name}>
-                        <img
-                           src={item.profile_path?`https://image.tmdb.org/t/p/original/${item.profile_path}`:imageUnknown}
-                           alt={movie.name}
-                           loading="lazy" 
-                        />
-                        <div>
-                           <Typography component='h5'>{item.character}</Typography>
-                           <Typography component='h6'>{item.name}</Typography>
-                        </div>
-                     {/*<ImageListItemBar
-                        title={item.character}
-                        subtitle={item.name}
-                        position='below'
-                     />*/}
-                     </ImageListItem>
-                  ))}
-               {children}
-               </ImageList>
-               
+            <ImageList  className="actors" cols={1} >
+               {credits && credits.cast.map((item) => (
+                  <ImageListItem key={item.name}>
+                     <img
+                        src={item.profile_path?`https://image.tmdb.org/t/p/original/${item.profile_path}`:imageUnknown}
+                        alt={item.name}
+                        loading="lazy" 
+                     />
+                     <StarBorderPurple500Icon fontSize='medium'/>
+                     <Typography component='div'>
+                        <Typography component='h5'>{item.character}</Typography>
+                        <Typography component='h6'>{item.name}</Typography>
+                     </Typography>
+                  
+                  </ImageListItem>
+               ))}
+            {children}
+            </ImageList>
+            
          </Grid>
-         <Grid item  xs={6} md={6}>
-            Crew
+         <Grid item  xs={12} md={6} lg={6}>
+            <Typography component='h5' variant='h5'>Crew</Typography>
+            <Divider flexItem/>
+            <ImageList  className="crew" cols={1} >
+               {credits && credits.crew.map((item) => (
+                  <ImageListItem key={item.name}>
+                     <img
+                        src={item.profile_path?`https://image.tmdb.org/t/p/original/${item.profile_path}`:imageUnknown}
+                        alt={item.name}
+                        loading="lazy" 
+                     />
+                     <MovieIcon fontSize='medium'/>
+                     <Typography component='div'>
+                        <Typography component='h5'>{item.job}</Typography>
+                        <Typography component='h6'>{item.name}</Typography>
+                     </Typography>
+                  
+                  </ImageListItem>
+               ))}
+            {children}
+            </ImageList>
          </Grid>
       </Grid>
       </Box>

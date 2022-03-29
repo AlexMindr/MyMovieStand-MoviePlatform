@@ -64,7 +64,7 @@ const populateMovies = async (req, res) => {
             let trailerPath=videos.results[0]!=undefined?videos.results[0].key:null;
             release_date=release_date?release_date:null
             let genreids=[]
-            genres.map((genre)=>{genreids.push({GenreGenreid:genre.id})})
+            genres.map((genre)=>{genreids.push({genreid:genre.id})})
             
             let keywordsarr=""
             keywords.keywords.map((keyword)=>{keywordsarr+=","+keyword.name})
@@ -125,7 +125,7 @@ const populateMovies = async (req, res) => {
           
           genres=genres.split(',');
           let genreids=[]
-          genres.map((genre)=>{genreids.push({GenreGenreid:genre.id})})
+          genres.map((genre)=>{genreids.push({genreid:genre.id})})
         
           await Movie.create({
                 adult,
@@ -173,14 +173,14 @@ const populateMovies = async (req, res) => {
             //genres update not working
             /*genres=genres.split(',');
             let genreids=[]
-            genres.map((genre)=>{genreids.push({GenreGenreid:genre.id})})
+            genres.map((genre)=>{genreids.push({genreid:genre.id})})
             
             await Moviegenre.update({
-              GenreGenreid:genreids,
+              genreid:genreids,
               updatedAt: new Date()
             },{
               where:{
-              MovieMovieid:movieid
+              movieid:movieid
             }});
             */
             await Movie.update({

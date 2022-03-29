@@ -19,11 +19,11 @@ module.exports = (sequelize, DataTypes) => {
   class Movie extends Model {
     
     static associate({Genre,User,Watchlist,Moviegenre}) {
-      this.belongsToMany(Genre,{through:Moviegenre, /*foreignKey:{name:'movieid'} , targetKey: 'genreid',sourceKey:'movieid',unique:false*/});
-      this.hasMany(Moviegenre,/*{foreignKey:{name:'movieid'}}*/);
+      this.belongsToMany(Genre,{through:Moviegenre, foreignKey: {name:'movieid',allowNull:false}});
+      this.hasMany(Moviegenre,{foreignKey: {name:'movieid',allowNull:false}});
     
-      this.belongsToMany(User,{through:Watchlist,/* unique: false, foreignKey: 'movieid', otherKey: 'userid'*/ });  
-      this.hasMany(Watchlist);
+      this.belongsToMany(User,{through:Watchlist,foreignKey: {name:'movieid',allowNull:false}});  
+      this.hasMany(Watchlist,{foreignKey: {name:'movieid',allowNull:false}});
       }
     toJSON(){
       return {...this.get(),createdAt:undefined,updatedAt:undefined}

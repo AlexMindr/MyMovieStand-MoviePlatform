@@ -6,8 +6,8 @@ module.exports = (sequelize, DataTypes) => {
   class Watchlist extends Model {
    
     static associate({User,Movie}) {
-      this.belongsTo(User);
-      this.belongsTo(Movie);
+      this.belongsTo(User,{foreignKey:{name:'userid',allowNull:false}});
+      this.belongsTo(Movie,{foreignKey:{name:'movieid',allowNull:false}});
     }
   }
   Watchlist.init({
@@ -16,14 +16,14 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement:true
     },
-    UserUserid: {
+    /*UserUserid: {
       type: DataTypes.INTEGER,
       allowNull:false
     },
     MovieMovieid: {
         type: DataTypes.INTEGER,
         allowNull:false   
-    },
+    },*/
     rating: {
         type: DataTypes.INTEGER,
         validate: {

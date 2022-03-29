@@ -7,8 +7,8 @@ module.exports = (sequelize, DataTypes) => {
   class Genre extends Model {
    
     static associate({Movie,Moviegenre}) {
-      this.belongsToMany(Movie ,{through:{ model:Moviegenre, /*unique: false, foreignKey: 'genreid', otherKey: 'movieid'*/}});
-      this.hasMany(Moviegenre);
+      this.belongsToMany(Movie ,{through:Moviegenre,foreignKey: {name:'genreid',allowNull:false} });
+      this.hasMany(Moviegenre,{foreignKey: {name:'genreid',allowNull:false}});
     }
   }
   Genre.init({

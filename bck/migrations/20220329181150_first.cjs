@@ -6,16 +6,16 @@ const Sequelize = require("sequelize");
  * createTable() => "genres", deps: []
  * createTable() => "movies", deps: []
  * createTable() => "users", deps: []
- * createTable() => "moviegenres", deps: [movies, genres]
+ * createTable() => "moviegenres", deps: [genres, movies]
  * createTable() => "notifications", deps: [users]
- * createTable() => "watchlists", deps: [users, movies]
+ * createTable() => "watchlists", deps: [movies, users]
  *
  */
 
 const info = {
   revision: 1,
   name: "first",
-  created: "2022-03-22T19:24:13.292Z",
+  created: "2022-03-29T18:11:50.005Z",
   comment: "",
 };
 
@@ -165,24 +165,6 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
           primaryKey: true,
         },
-        MovieMovieid: {
-          type: Sequelize.INTEGER,
-          onUpdate: "CASCADE",
-          onDelete: "CASCADE",
-          references: { model: "movies", key: "movieid" },
-          unique: "moviegenres_MovieMovieid_GenreGenreid_unique",
-          field: "MovieMovieid",
-          allowNull: false,
-        },
-        GenreGenreid: {
-          type: Sequelize.INTEGER,
-          onUpdate: "CASCADE",
-          onDelete: "CASCADE",
-          references: { model: "genres", key: "genreid" },
-          unique: "moviegenres_MovieMovieid_GenreGenreid_unique",
-          field: "GenreGenreid",
-          allowNull: false,
-        },
         createdAt: {
           type: Sequelize.DATE,
           field: "createdAt",
@@ -192,6 +174,26 @@ const migrationCommands = (transaction) => [
           type: Sequelize.DATE,
           field: "updatedAt",
           allowNull: false,
+        },
+        genreid: {
+          type: Sequelize.INTEGER,
+          field: "genreid",
+          onUpdate: "CASCADE",
+          onDelete: "CASCADE",
+          references: { model: "genres", key: "genreid" },
+          unique: "moviegenres_movieid_genreid_unique",
+          allowNull: false,
+          name: "genreid",
+        },
+        movieid: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          name: "movieid",
+          field: "movieid",
+          onUpdate: "CASCADE",
+          onDelete: "CASCADE",
+          references: { model: "movies", key: "movieid" },
+          unique: "moviegenres_movieid_genreid_unique",
         },
       },
       { transaction },
@@ -221,6 +223,12 @@ const migrationCommands = (transaction) => [
           field: "content",
           allowNull: false,
         },
+        read: {
+          type: Sequelize.BOOLEAN,
+          field: "read",
+          allowNull: false,
+          defaultValue: false,
+        },
         createdAt: {
           type: Sequelize.DATE,
           field: "createdAt",
@@ -246,24 +254,6 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
           primaryKey: true,
         },
-        UserUserid: {
-          type: Sequelize.INTEGER,
-          onUpdate: "CASCADE",
-          onDelete: "CASCADE",
-          references: { model: "users", key: "userid" },
-          unique: "watchlists_UserUserid_MovieMovieid_unique",
-          field: "UserUserid",
-          allowNull: false,
-        },
-        MovieMovieid: {
-          type: Sequelize.INTEGER,
-          onUpdate: "CASCADE",
-          onDelete: "CASCADE",
-          references: { model: "movies", key: "movieid" },
-          unique: "watchlists_UserUserid_MovieMovieid_unique",
-          field: "MovieMovieid",
-          allowNull: false,
-        },
         rating: { type: Sequelize.INTEGER, field: "rating" },
         status: { type: Sequelize.STRING, field: "status" },
         episodes: { type: Sequelize.INTEGER.UNSIGNED, field: "episodes" },
@@ -276,6 +266,26 @@ const migrationCommands = (transaction) => [
           type: Sequelize.DATE,
           field: "updatedAt",
           allowNull: false,
+        },
+        movieid: {
+          type: Sequelize.INTEGER,
+          field: "movieid",
+          onUpdate: "CASCADE",
+          onDelete: "CASCADE",
+          references: { model: "movies", key: "movieid" },
+          unique: "watchlists_userid_movieid_unique",
+          allowNull: false,
+          name: "movieid",
+        },
+        userid: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          name: "userid",
+          field: "userid",
+          onUpdate: "CASCADE",
+          onDelete: "CASCADE",
+          references: { model: "users", key: "userid" },
+          unique: "watchlists_userid_movieid_unique",
         },
       },
       { transaction },

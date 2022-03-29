@@ -141,30 +141,6 @@
                     "field": "mgid",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "MovieMovieid": {
-                    "allowNull": false,
-                    "field": "MovieMovieid",
-                    "unique": "moviegenres_MovieMovieid_GenreGenreid_unique",
-                    "references": {
-                        "model": "movies",
-                        "key": "movieid"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "GenreGenreid": {
-                    "allowNull": false,
-                    "field": "GenreGenreid",
-                    "unique": "moviegenres_MovieMovieid_GenreGenreid_unique",
-                    "references": {
-                        "model": "genres",
-                        "key": "genreid"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -174,6 +150,32 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                },
+                "genreid": {
+                    "name": "genreid",
+                    "allowNull": false,
+                    "unique": "moviegenres_movieid_genreid_unique",
+                    "references": {
+                        "model": "genres",
+                        "key": "genreid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "genreid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "movieid": {
+                    "unique": "moviegenres_movieid_genreid_unique",
+                    "references": {
+                        "model": "movies",
+                        "key": "movieid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "movieid",
+                    "name": "movieid",
+                    "allowNull": false,
+                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -305,30 +307,6 @@
                     "field": "wlid",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "UserUserid": {
-                    "allowNull": false,
-                    "field": "UserUserid",
-                    "unique": "watchlists_UserUserid_MovieMovieid_unique",
-                    "references": {
-                        "model": "users",
-                        "key": "userid"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "MovieMovieid": {
-                    "allowNull": false,
-                    "field": "MovieMovieid",
-                    "unique": "watchlists_UserUserid_MovieMovieid_unique",
-                    "references": {
-                        "model": "movies",
-                        "key": "movieid"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "rating": {
                     "field": "rating",
                     "seqType": "Sequelize.INTEGER"
@@ -350,6 +328,32 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                },
+                "movieid": {
+                    "name": "movieid",
+                    "allowNull": false,
+                    "unique": "watchlists_userid_movieid_unique",
+                    "references": {
+                        "model": "movies",
+                        "key": "movieid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "movieid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "userid": {
+                    "unique": "watchlists_userid_movieid_unique",
+                    "references": {
+                        "model": "users",
+                        "key": "userid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "userid",
+                    "name": "userid",
+                    "allowNull": false,
+                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -357,6 +361,6 @@
     },
     "path": "E:\\ProiecteVSCode\\Licenta\\notypesfrbck\\bck\\migrations\\_current.json",
     "backupPath": "E:\\ProiecteVSCode\\Licenta\\notypesfrbck\\bck\\migrations\\_current_bak.json",
-    "exists": true,
-    "revision": 2
+    "exists": false,
+    "revision": 1
 }

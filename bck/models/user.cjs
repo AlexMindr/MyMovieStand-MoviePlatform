@@ -6,8 +6,9 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
    
     static associate({Movie,Watchlist,Notification}) {
-      this.belongsToMany(Movie,{through:Watchlist, /*unique: false, foreignKey: 'userid', otherKey: 'movieid' */})
-      this.hasMany(Watchlist);
+      this.belongsToMany(Movie,{through:Watchlist, foreignKey:{name:'userid',allowNull:false}})
+      this.hasMany(Watchlist,{foreignKey:{name:'userid',allowNull:false}});
+
       this.hasMany(Notification,{foreignKey:'userid'});
     }
 
