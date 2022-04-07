@@ -1,5 +1,5 @@
 import React from 'react'
-import Scrollbtn from '../components/Scrollbtn'
+import {Scrollbtn} from '../../components'
 
 const Footer = () => {
   return (<>

@@ -54,15 +54,14 @@ const Movie = ({movieid,children}) => {
    },[movieid]);
       
       
-    //console.log("rendering child");
-    //console.log(movie)
-//ramas homepage  
+    
+//ramas homepage,tmdb link, imdb link 
   
       //de pus culoare cand adaugam in lista la element etc.   
       //de modificat members = nr membri, popularity=al cate-lea dupa nr membrii
 
 /*      popularity, score, add to  favs(profile)/watchlist, 
-      cast gallery, 
+      
       reviews, 
       comments
       
@@ -72,15 +71,13 @@ const Movie = ({movieid,children}) => {
 if(movie===undefined)return (<>Loading</>)
 else
 return (
+ <StyledEngineProvider injectFirst>  
 
-<StyledEngineProvider injectFirst> 
       
    <Box className='container' sx={{ flexGrow: 1 }} component='article'>
       
       <Grid container spacing={1} className='container-grid' 
       sx={{backgroundImage:`url(${`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}),linear-gradient(to bottom, #f0f0f0, #57525a)`}}>
-         {//<img className='background' src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`} alt={movie.title}/>
-         }
          <Grid item className='title-container'  xs={12} md={12}>
                   <Typography variant='h4'>{movie.original_title}</Typography>   
                   <Typography variant='h5'>{movie.title}</Typography>
@@ -108,16 +105,6 @@ return (
                      </Grid>
                      <Grid item xs={3} md={3}> Members: N/A</Grid>
                   </Grid>  
-                  {/*<Box component='div' >
-                     <Typography variant="subtitle1" component='span' className='score'>Score: {movie.rating?movie.rating:'N/A'}</Typography>   
-                     <Typography variant="subtitle1" component='span' >
-                        <PeopleAltRoundedIcon fontSize='small' sx={{verticalAlign:'sub'}}/>
-                        {movie.popularity?movie.popularity:'N/A'}
-                        
-                     </Typography>
-                     <Typography variant="subtitle1" component='span'>Members: N/A</Typography>
-                      </Box>*/}
-                  
                   <Box component='div' className='time-info'>
                      <Typography variant="subtitle1" component='span' className='certification'>
                         {movie.adult?'Adult movie':movie.uscertification}
@@ -142,13 +129,13 @@ return (
                   </Box>
                   <Box className='container-synopsis' component='div'>
                      <Grid  container spacing={3} className='trailer-and-synopsis'>
-                        <Grid item xs={12} md={5} lg={7} component='div'>
+                        <Grid item xs={12} md={12} lg={7} component='div'>
                            <Typography className='overview-title' component='h6'>Synopsis</Typography>
                            <Divider flexItem/>
                            <Typography className='synopsis' component='p'>{movie.overview}</Typography>
                         </Grid>
                         {movie.trailer!=null?   
-                        <Grid item xs={12} md={7} lg={5} component='div' className='trailer'
+                        <Grid item xs={12} md={12} lg={5} component='div' className='trailer'
                          sx={{backgroundImage:`url(${`https://i.ytimg.com/vi/${movie.trailer}/mqdefault.jpg`})`}}>
                            <Button onClick={handleOpen} >
                               <PlayCircleOutlineIcon fontSize='large' />
@@ -167,16 +154,6 @@ return (
                                   src={`https://www.youtube.com/embed/${movie.trailer}?enablejsapi=1&wmode=opaque&autoplay=1`}/>
                               </Box>
                            </Modal>                           
-                              {/* {<Button onClick={
-                                 (e) => {
-                                    e.preventDefault();
-                                    window.location.href=`https://www.youtube.com/embed/${movie.trailer}?enablejsapi=1&wmode=opaque&autoplay=1`
-                                    }}
-                               variant='text' >
-                                  <PlayCircleOutlineIcon fontSize='large' />
-                                  <img src={`https://i.ytimg.com/vi/${movie.trailer}/mqdefault.jpg`} alt={movie.title}/>
-                               </Button> */}
-
                         </Grid>
                         :<></>}
                      </Grid>
@@ -269,7 +246,7 @@ return (
          </Grid>
       </Grid>
       </Box>
-   </StyledEngineProvider>
+    </StyledEngineProvider>
    )
 };
 

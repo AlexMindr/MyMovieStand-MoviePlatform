@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react'
-import {FaArrowCircleUp} from 'react-icons/fa';
+import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import './scrollbtn.css';
 /*type ScrollTopArrowProps = {
     showBelow?: number
@@ -24,7 +24,7 @@ const Scrollbtn /*: FC<ScrollTopArrowProps>*/ = ({ showBelow = 400 }) => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
     return (
-        <FaArrowCircleUp className="scrollTop" onClick={scrollTop} style={{height: 40, display: showScroll ? 'flex' : 'none'}}/>
+        <ArrowCircleUpIcon className="scrollTop" onClick={scrollTop} style={{height: 40, display: showScroll ? 'flex' : 'none'}}/>
     )
 }
 

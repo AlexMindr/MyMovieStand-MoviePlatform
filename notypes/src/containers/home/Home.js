@@ -6,23 +6,7 @@ import './home.css'
 
 
 const Home=() =>{
-    const [movie, setMovie]=useState(null);
-    
-    
-    useEffect(() => {
-        getData();
-    
-    async function getData() {
-        const response = await getMovie(550);
-        const data = await response.data;
-    
-        // store the data into our books variable
-        setMovie(data) ;
-      }
-
-    }, []);
-    console.log(movie)
-    return(<>st</>)
+    return(<>HOME</>)
 /*return (<>
 <h1>MOVIE</h1>
 {movie && (

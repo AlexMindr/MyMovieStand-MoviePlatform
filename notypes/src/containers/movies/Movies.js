@@ -1,10 +1,10 @@
 import React from 'react';
-import Movie from './components/Movie'
+//import Movie from './components/movie/Movie'
 import './movies.css'
 
 
 
-const Movies=(movies)=>{
+const Movies=()=>{
 
     return (
         <div className='pg'>
@@ -13,13 +13,14 @@ const Movies=(movies)=>{
         {
         //snackbar+circleloading+grid+containers
         }
+        MOVIES
             <ul>
             {
-                movies.map((movie) =>
-                <li> 
-                    <Movie  key={movie.tmbdId} title={movie.title} tmbdId={movie.TmbdId} genres={movie.genres}
-                    releaseDate={movie.release_date} budget={movie.budget} posterPath={movie.poster_path} adult={movie.adult} overview={movie.overview}/>  
-                </li>)
+                // movies.map((movie) =>
+                // <li> 
+                //     <Movie  key={movie.tmbdId} title={movie.title} tmbdId={movie.TmbdId} genres={movie.genres}
+                //     releaseDate={movie.release_date} budget={movie.budget} posterPath={movie.poster_path} adult={movie.adult} overview={movie.overview}/>  
+                // </li>)
                 
             }
             </ul>
