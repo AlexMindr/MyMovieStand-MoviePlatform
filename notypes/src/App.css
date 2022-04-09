@@ -4,8 +4,26 @@
   scroll-behavior: smooth;
 }
 
+
+/* body{
+  height: 100vh;
+} */
 .app__content{
-  margin-top:4rem ;
+  margin-top:6.5rem ;
+}
+
+@media only screen and (max-width:900px){
+  .app__content{
+    margin-top:6rem ;
+  }
+  
+}
+
+@media only screen and (max-width:750px){
+  .app__content{
+    margin-top:5rem ;
+  }
+  
 }
 /*
 body{
