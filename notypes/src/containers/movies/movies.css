@@ -1,20 +1,29 @@
 .pg{
     display:flex;
     width: 100%;
-  }
-  .meniuleft{
+    margin-top:1rem;
+}
+.meniuleft{
     display:inline-block;
     flex:20%;
     background-color: aqua;
     border: solid;
     border-color: black;
     height:100%;
-    
-  }
-  .container{
+}
+.container{
     flex:80%;
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
     
   
-  }
+}
+.container ul {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  row-gap: 1rem;
+    
+}
+
+.container ul>li {
+  list-style-type: none;
+  text-decoration: none;  
+}

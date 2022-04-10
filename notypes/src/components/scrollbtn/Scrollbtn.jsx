@@ -4,7 +4,7 @@ import './scrollbtn.css';
 /*type ScrollTopArrowProps = {
     showBelow?: number
 }*/
-const Scrollbtn /*: FC<ScrollTopArrowProps>*/ = ({ showBelow = 400 }) => {
+const Scrollbtn /*: FC<ScrollTopArrowProps>*/ = ({ showBelow = 300 }) => {
     const [showScroll, setShowScroll] = useState /*<boolean>*/(false)
     useEffect(() => {
         window.addEventListener('scroll', checkScrollTop)
@@ -24,7 +24,7 @@ const Scrollbtn /*: FC<ScrollTopArrowProps>*/ = ({ showBelow = 400 }) => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
     return (
-        <ArrowCircleUpIcon className="scrollTop" onClick={scrollTop} style={{height: 40, display: showScroll ? 'flex' : 'none'}}/>
+        <ArrowCircleUpIcon className="scrollTop" fontSize='large' onClick={scrollTop} style={{height: 50, display: showScroll ? 'flex' : 'none'}}/>
     )
 }
 

@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom'
 import {PersonOutline,StarBorderPurple500Outlined} from '@mui/icons-material';
 import { StyledEngineProvider } from '@mui/material/styles';
 
-const MovieList = ({adult,budget,genres,overview,posterPath,releaseDate,title,tmbdId, children }) => {
+const MovieList = ({uscertification,duration,genres,overview,posterPath,releaseDate,title,tmbdId,movieid, children }) => {
     
 
 
@@ -15,7 +15,7 @@ const MovieList = ({adult,budget,genres,overview,posterPath,releaseDate,title,tm
     <Card className='card'>
         
         {/*de pus culoare cand adaugam in lista la element etc. de pus adult, de pus genres top */}
-        <Typography className='title' variant="h6">{/*-<Link to={`/movie/${title}`}/>{title}</Link>*/}{title}</Typography>
+        <Typography className='title' variant="h6"><Link to={`/movies/${movieid}`}>{title}</Link></Typography>
         
         
         <Divider variant="middle" flexItem/>
@@ -24,11 +24,11 @@ const MovieList = ({adult,budget,genres,overview,posterPath,releaseDate,title,tm
            <Button variant='contained'>PV</Button>
            <Typography className='date' variant="subtitle1" component='div' >{moment(releaseDate).format("MMM YYYY")}</Typography>
            <Divider id='divi' orientation="vertical" variant="middle" flexItem />
-           <Typography variant="subtitle1" component='div'>Type</Typography>
-           <Typography variant="subtitle1" component='div'>duration</Typography>
+           <Typography variant="subtitle1" component='div'>Type Movie</Typography>
+           <Typography variant="subtitle1" component='div'>{duration}</Typography>
         </Box>
         
-        <Box component='div' className='genres'>
+        <Box component='div' className='genres-movielist'>
             {/*la fiecare buton onclick cu link cautare */}
            <Typography variant="subtitle2" component='div'>{genres.map((genre) => (
                                 <Button  variant='outlined' key={genre.id}>

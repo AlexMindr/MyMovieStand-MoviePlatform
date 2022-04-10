@@ -1,12 +1,13 @@
-.container{
+.container-movie{
     margin-left:5%;
     margin-right: 5%;
+    height:100%;
     
 }
 .container-grid{
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-size: auto 110%;
+    background-size: 100% 110%;
     background-blend-mode: screen;
 }
 .background{
@@ -50,13 +51,15 @@
     display: block;
     /*height: clamp(35vh,55vh,60vh);
     width: clamp(17vw,18vw,20vw);*/
-    height: 95%;
+    /* height: 95%;
     width: 80%;
     min-width: 100px;
     max-width: min(95%,400px);
     max-height:min(95%,500px);
-    min-height: 200px;
-    margin-top:0.5rem;
+    min-height: 200px;*/
+    height: clamp(200px,300px + 25%,500px);
+    width: clamp(100px,200px + 15%,400px);
+    margin-top:0.5rem; 
     margin-left:auto;
     margin-right:auto;
     

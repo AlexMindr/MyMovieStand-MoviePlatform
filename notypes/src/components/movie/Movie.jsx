@@ -26,7 +26,7 @@ function numFormatter(num) {
 
 const Movie = ({movieid,children}) => {
 
-   const [movie, setMovie]=useState();
+   const [movie, setMovie]=useState(null);
    const [bgColor, setBgColor]=useState('rgb(224, 155, 63)');
    const [images,setImages]=useState(null);
    const [credits,setCredits]=useState(null)
@@ -68,13 +68,13 @@ const Movie = ({movieid,children}) => {
       */
 
 
-if(movie===undefined)return (<>Loading</>)
+if(movie===null)return (<>Loading</>)
 else
 return (
  <StyledEngineProvider injectFirst>  
 
       
-   <Box className='container' sx={{ flexGrow: 1 }} component='article'>
+   <Box className='container-movie' sx={{ flexGrow: 1 }} component='article'>
       
       <Grid container spacing={1} className='container-grid' 
       sx={{backgroundImage:`url(${`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}),linear-gradient(to bottom, #f0f0f0, #57525a)`}}>
@@ -204,7 +204,7 @@ return (
             <Divider flexItem/>
             <ImageList  className="actors" cols={1} >
                {credits && credits.cast.map((item) => (
-                  <ImageListItem key={item.name}>
+                  <ImageListItem key={item.character+item.name}>
                      <img
                         src={item.profile_path?`https://image.tmdb.org/t/p/original/${item.profile_path}`:imageUnknown}
                         alt={item.name}
@@ -227,7 +227,7 @@ return (
             <Divider flexItem/>
             <ImageList  className="crew" cols={1} >
                {credits && credits.crew.map((item) => (
-                  <ImageListItem key={item.name}>
+                  <ImageListItem key={item.name+item.job}>
                      <img
                         src={item.profile_path?`https://image.tmdb.org/t/p/original/${item.profile_path}`:imageUnknown}
                         alt={item.name}
