@@ -5,24 +5,51 @@ import fs from 'fs';
 
 const {Movie,Moviegenre,Genre,User}=db;
 
+const getPagination = (page, size) => {
+  const limit = size ? +size : 21;
+  const offset = page? page * limit : 0;
+  return { limit, offset };
+};
+
+const getPagingData = (data, page, limit) => {
+  const { count: totalItems, rows: movies } = data;
+  const currentPage = page ? +page : 0;
+  const totalPages = Math.ceil(totalItems / limit);
+  return {  movies, totalPages };
+};
+
 
 const getMovies = async (req, res) => {
-    try {
-        const movies = await Movie.findAll({
-          attributes:['movieid','title','release_date','poster_path','duration','overview','uscertification','rating','popularity'], 
-          include:{
-          model:Genre,
-          attributes:['name','genreid'],
-          through:{
-            attributes:[]
-          }
-        }});
+    const {page}=req.params;
+    //var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+    const { limit, offset } = getPagination(page-1);
+    
   
-      res.status(200).json(movies);
-    } catch (error) {
-      res.status(404).json({ message: error.message });
-    }
-};
+      await Movie.findAndCountAll({
+          attributes:['movieid','title','release_date','poster_path','duration','overview','uscertification','rating','popularity'], 
+          limit,
+          offset,
+          distinct: true,
+          include:{
+            required:false,
+            model:Genre,
+            attributes:['name','genreid'],
+            through:{
+              attributes:[]
+            },
+            
+          }
+        })
+        .then(data => {
+          const {movies,totalPages} = getPagingData(data, page, limit);
+          
+          res.status(200).json({movies,totalPages});
+        })
+
+        .catch(error=>{
+          res.status(404).json({ message: error.message });
+      })
+}
 
 const getMovie = async (req, res) => {
   const {id} = req.params

@@ -16,14 +16,38 @@
     
   
 }
-.container ul {
+.contained-movies{
+  display:flex;
+}
+.container-movies ul{
   display: grid;
   grid-template-columns: repeat(3,1fr);
   row-gap: 1rem;
     
 }
 
-.container ul>li {
+.container-movies ul>li {
   list-style-type: none;
   text-decoration: none;  
+}
+
+.loading-movies{
+  display:flex;
+  position:relative;
+  top:40%;
+  height: 500px;
+  left:50%;
+  overflow-y: hidden;
+}
+
+.loading-movies svg{
+ color:red;
+}
+
+.container-pagination{
+  position:relative;
+  width: 100%;
+  left:25%;
+  margin-top: 4rem;
+  margin-bottom: 3rem;
 }

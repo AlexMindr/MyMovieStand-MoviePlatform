@@ -4,6 +4,7 @@
     height: 4rem;
     width: 100%;
     background-color: grey;
-    display: table-row;
+    display: block;
+    position:relative;
 
 }

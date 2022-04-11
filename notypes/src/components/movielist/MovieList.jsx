@@ -30,10 +30,11 @@ const MovieList = ({uscertification,duration,genres,overview,posterPath,releaseD
         
         <Box component='div' className='genres-movielist'>
             {/*la fiecare buton onclick cu link cautare */}
-           <Typography variant="subtitle2" component='div'>{genres.map((genre) => (
-                                <Button  variant='outlined' key={genre.id}>
-                                {genre.name}
-                                </Button>))}
+           <Typography variant="subtitle2" component='div'>
+              {genres.map((genre) => (
+                     <Button  variant='outlined' key={genre.genreid}>
+                        {genre.name}
+                     </Button>))}
            </Typography>
         </Box>
 

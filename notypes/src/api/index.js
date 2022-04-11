@@ -12,8 +12,8 @@ api.interceptors.request.use((req) => {
   return req;
 });
 
-export const getMovie = (id) => api.get(`/movies/${id}`);
-export const getMovies = ()  => api.get(`/movies/`)
+export const getMovie = (id) => api.get(`/movies/movie=${id}`);
+export const getMovies = (page)  => api.get(`/movies/page=${page}`)
 
 export const login = (formValues) => api.post("/user/login", formValues);
 export const signup = (formValues) => api.post("/user/signup", formValues);

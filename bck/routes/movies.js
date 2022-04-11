@@ -11,8 +11,8 @@ import {
 
 const router = Router();
 
-router.get("/", getMovies);
-router.get("/:id",getMovie)
+router.get("/page=:page", getMovies);
+router.get("/movie=:id",getMovie)
 router.post("/populate",populateMovies)
 router.post("/create",createMovie)
 router.put("/update/:movieid",updateMovie)
