@@ -26,7 +26,8 @@ const getMovies = async (req, res) => {
     
   
       await Movie.findAndCountAll({
-          attributes:['movieid','title','release_date','poster_path','duration','overview','uscertification','rating','popularity'], 
+          attributes:['movieid','title','release_date','poster_path',
+          'duration','overview','uscertification','rating','popularity','trailer','keywords','adult'], 
           limit,
           offset,
           distinct: true,

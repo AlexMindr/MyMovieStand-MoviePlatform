@@ -98,9 +98,13 @@ return (
                      <Typography variant="subtitle2" component='span'>Language: {movie.language.toUpperCase()}</Typography>
                   </Box> 
                   <Grid container spacing={1} className='popularity-info' >
-                     <Grid item  xs={3} md={3} > <em className='score'>Score: {movie.rating?movie.rating:'N/A'}</em></Grid>
+                     <Grid item  xs={3} md={3} > 
+                        <em className='score'>
+                           Score: {movie.rating?movie.rating:'N/A'}
+                        </em>
+                     </Grid>
                      <Grid item  xs={3} md={3}>
-                     <PeopleAltRoundedIcon fontSize='small' sx={{verticalAlign:'sub'}}/>
+                        <PeopleAltRoundedIcon fontSize='small' sx={{verticalAlign:'sub'}}/>
                         {movie.popularity?movie.popularity:'N/A'}   
                      </Grid>
                      <Grid item xs={3} md={3}> Members: N/A</Grid>
@@ -132,7 +136,9 @@ return (
                         <Grid item xs={12} md={12} lg={7} component='div'>
                            <Typography className='overview-title' component='h6'>Synopsis</Typography>
                            <Divider flexItem/>
-                           <Typography className='synopsis' component='p'>{movie.overview}</Typography>
+                           <Typography className='synopsis' component='p'>
+                              {movie.overview?movie.overview:<em>No synopsis has been added</em>}
+                           </Typography>
                         </Grid>
                         {movie.trailer!=null?   
                         <Grid item xs={12} md={12} lg={5} component='div' className='trailer'

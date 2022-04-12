@@ -9,12 +9,38 @@
     
  }
 .title{
-    
-    text-align: center;
-    vertical-align: middle;
-    margin:0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size:1rem;
-    font-weight: bold;    
+    font-weight: bold;
+    height: 2.75rem;    
+}
+.title a{
+    text-align: center;
+    text-decoration: none; 
+}
+
+.trailer-movielist{
+    font-size:0.8rem;
+    border-radius: 0.5em;
+    min-width: 3em;
+    padding: 1px 0.5rem;
+    background-color: rgb(53, 44, 232);
+    color:rgb(255, 255, 255);
+}
+
+
+.trailermodal{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400;
+    background-color: black;
+    border: 2px solid #000;
+    box-shadow: 24;
+    padding: 4px;
 }
 
 .overlay {
@@ -22,17 +48,17 @@
     grid-template-columns: 1fr 2fr 0fr 1fr 2fr;
     align-items: center;
     justify-items: center;
-    margin-left: 0.2rem;
-    margin-right: 0.2rem;
-    
+    margin:0.2 0.1rem 0.2rem 0.1rem;
 }
-.overlay button{
-    font-size:0.8rem;
-    border-radius: 0.5em;
-    min-width: 3em;
-    padding: 2px;
-    
+
+.overlay .movielist-certification{
+    border: 1px solid red;
+    border-radius: 2px;
+    padding:0 0.75rem;
+    min-width: 10px;
+
 }
+
 .overlay div{
     font-size: 0.8rem;
 }
@@ -47,23 +73,21 @@
 .genres-movielist{
     display:flex;
     
-    margin-left:auto;
-    margin-right: auto;
+    column-gap: 3px;
     width:auto;
+    align-items: center;
+    justify-content: center;
     background-color: rgb(240, 236, 236);
     
 }
 
-.genres button:nth-child(n){
-    display: inline-block;
-    color:grey;
-    cursor:pointer;
-    margin:0.2rem;
-    padding:1px;
-    font-size:0.7rem;
-    min-width: 2px;
-    width: auto;
-    background-color: bisque;
+.genres-movielist button{
+    
+    background-color: rgb(196, 253, 255);
+    padding: 1px 3px !important;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    text-transform: none;
 }
 
 
@@ -73,11 +97,14 @@
     border:1px solid sienna;
     margin: 1px;
     padding:1px;
+    min-height: 15rem;
+    
 
 }
 .media {
     display: block;
     height: 15rem;
+    
     width: 12rem;
     flex:45%;
     padding: 0.1px;
@@ -87,6 +114,7 @@
     overflow: hidden;
     height:15rem;
     width: 14rem;
+    margin-left: 1rem;
 }
 .text:hover{
     overflow: visible;
@@ -98,29 +126,44 @@
     justify-content: space-between;
     margin: 20px;
     overflow-y: scroll;
-};
+}
 
 
-.overlay2{
-    display:flex;
+.bottom-card {
+    display: flex;
     align-items: center;
-    margin:0.5rem;
-    justify-items: center;
-    margin-left: 1px;
-    margin-right: 0.2rem;
-    
+    justify-content: center;
+    margin-bottom: 0.2rem;
+    margin-top: 0.1rem;
+}
+.bottom-button{
+    align-items: center;
+    justify-self: flex-start;
+    flex:20%;
+    margin-left: 0.25rem;
 }
 .cardButton{
-    float:right;
-    vertical-align: sub;
-    background-color: rgb(247, 0, 255);
-    color:rgb(243, 208, 132);
+    
+    border-radius: 0.5em;
+    min-width: 2em;
+    padding: 0;
+    color:rgb(23, 210, 2);
 }
 
-.bottomCard{
- font-weight: bold;
+.cardButton:hover{
+    
+    color:rgb(210, 179, 2);
 }
-.bottomCard:nth-child(2){
+
+.bottom-info{
+ flex:80%;
+ display:flex;
+ font-weight: bold;
+ column-gap: 6.5rem;
+ margin-left: 20%;
+ align-items: center;
+}
+.bottom-info div:nth-child(2){
     color:rgb(218, 199, 32);
 }
 
