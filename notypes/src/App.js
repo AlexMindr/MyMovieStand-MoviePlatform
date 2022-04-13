@@ -1,8 +1,8 @@
 import React, {useState,useEffect} from 'react';
 import './App.css';
 import {Routes, Route, BrowserRouter as Router,Link} from 'react-router-dom';
-import {Navbar,Movie} from './components';
-import {Footer,Home,Movies,Errorpage,Moviepage} from './containers'
+import {Navbar} from './components';
+import {Footer,Home,Movies,Errorpage,Moviepage,Login} from './containers'
 import {getMovie,getMovies} from './api';
 import CssBaseline from '@mui/material/CssBaseline';
 
@@ -29,6 +29,7 @@ export default function App() {
               <Route path='/home' element={<Home/>}/>
               <Route path='/movies' element={<Movies/>}/>
               <Route path='/movies/:id' element={<Moviepage/>}/>
+              <Route path='/login' element={<Login/>}/>
               <Route path='*' element={<Errorpage/>}/>
             </Routes>
 

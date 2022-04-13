@@ -6,7 +6,7 @@ const Footer = () => {
   return (
   <div className='app__footer'>
       <Scrollbtn/>
-      <div>Footer</div>
+      <footer>Footer</footer>
     
   </div>
   )

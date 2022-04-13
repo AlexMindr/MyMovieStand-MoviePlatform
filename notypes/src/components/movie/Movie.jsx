@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react';
 import './movie.css'
 import {getMovie,getImages,getCredits} from '../../api';
 import moment from 'moment'
-import { Divider,Box, Button, Typography,Grid,ImageList,ImageListItem,Modal } from '@mui/material'
+import { Divider,Box, Button, Typography,Grid,ImageList,ImageListItem,Modal,Container,Paper } from '@mui/material'
 //import {Link} from 'react-router-dom'
 import { StyledEngineProvider } from '@mui/material/styles';
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
@@ -10,8 +10,7 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import imageUnknown from '../../images/unknown.jpg'
 import StarBorderPurple500Icon from '@mui/icons-material/StarBorderPurple500';
 import MovieIcon from '@mui/icons-material/Movie';
-//import { alignProperty } from '@mui/material/styles/cssUtils';
-
+import StarOutlineIcon from '@mui/icons-material/StarOutline';
 
 function numFormatter(num) {
    if(num > 999 && num < 1000000){
@@ -73,14 +72,14 @@ else
 return (
  <StyledEngineProvider injectFirst>  
 
-      
-   <Box className='container-movie' sx={{ flexGrow: 1 }} component='article'>
+  <Container component='main' className='container-movie'>    
+   <Box className='article-movie' sx={{ flexGrow: 1 }} component='article'>
       
       <Grid container spacing={1} className='container-grid' 
       sx={{backgroundImage:`url(${`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}),linear-gradient(to bottom, #f0f0f0, #57525a)`}}>
          <Grid item className='title-container'  xs={12} md={12}>
-                  <Typography variant='h4'>{movie.original_title}</Typography>   
-                  <Typography variant='h5'>{movie.title}</Typography>
+                  <Typography variant='h3'>{movie.original_title}</Typography>   
+                  <Typography variant='h4'>{movie.title}</Typography>
          </Grid>
         
          <Grid item  className='movie-info' sx={{ bgcolor:bgColor  }}  xs={12} md={12}>
@@ -99,8 +98,10 @@ return (
                   </Box> 
                   <Grid container spacing={1} className='popularity-info' >
                      <Grid item  xs={3} md={3} > 
+                        
                         <em className='score'>
-                           Score: {movie.rating?movie.rating:'N/A'}
+                           <StarOutlineIcon fontSize='small' sx={{verticalAlign:'sub'}}/>
+                            {movie.rating?movie.rating:'N/A'}
                         </em>
                      </Grid>
                      <Grid item  xs={3} md={3}>
@@ -216,11 +217,11 @@ return (
                         alt={item.name}
                         loading="lazy" 
                      />
-                     <StarBorderPurple500Icon fontSize='medium'/>
-                     <Typography component='div'>
+                     <Paper component='div' elevation={3} >
                         <Typography component='h5'>{item.character}</Typography>
                         <Typography component='h6'>{item.name}</Typography>
-                     </Typography>
+                        
+                     </Paper>
                   
                   </ImageListItem>
                ))}
@@ -239,11 +240,10 @@ return (
                         alt={item.name}
                         loading="lazy" 
                      />
-                     <MovieIcon fontSize='medium'/>
-                     <Typography component='div'>
+                     <Paper component='div' elevation={3}>
                         <Typography component='h5'>{item.job}</Typography>
                         <Typography component='h6'>{item.name}</Typography>
-                     </Typography>
+                     </Paper>
                   
                   </ImageListItem>
                ))}
@@ -251,8 +251,9 @@ return (
             </ImageList>
          </Grid>
       </Grid>
-      </Box>
-    </StyledEngineProvider>
+   </Box>
+</Container>
+</StyledEngineProvider>
    )
 };
 
