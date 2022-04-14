@@ -4,18 +4,24 @@ import { TextField, Grid, InputAdornment, IconButton } from '@mui/material'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
-const Input = ({ name, handleChange, label, half, autoFocus, type, handleShowPassword }) => {
+const Input = ({ value,name, handleChange, label, autoFocus, type, handleShowPassword,required,select,helperText,children }) => {
    return (
-      <Grid item xs={12} sm={half ? 6 : 12}>
+      <Grid item xs={12} >
          <TextField
+            value={value}
             name={name}
             onChange={handleChange}
             variant="outlined"
-            required
+            required={required}
             fullWidth
             label={label}
             autoFocus={autoFocus}
             type={type}
+            select={select}
+            helperText={helperText}
+            SelectProps={{
+               native: true,
+             }}
             InputProps={name === 'password' ? {
                endAdornment: (
                   <InputAdornment position="end">
@@ -25,9 +31,10 @@ const Input = ({ name, handleChange, label, half, autoFocus, type, handleShowPas
                   </InputAdornment>
                ),
             } : null}
-         />
+         >
+         {children}
+         </TextField>
       </Grid>
    )
 }
-
-export default Input
+export default Input;

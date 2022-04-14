@@ -3,14 +3,11 @@ import './movie.css'
 import {getMovie,getImages,getCredits} from '../../api';
 import moment from 'moment'
 import { Divider,Box, Button, Typography,Grid,ImageList,ImageListItem,Modal,Container,Paper } from '@mui/material'
-//import {Link} from 'react-router-dom'
-import { StyledEngineProvider } from '@mui/material/styles';
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import imageUnknown from '../../images/unknown.jpg'
-import StarBorderPurple500Icon from '@mui/icons-material/StarBorderPurple500';
-import MovieIcon from '@mui/icons-material/Movie';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import {Link} from 'react-router-dom'
 
 function numFormatter(num) {
    if(num > 999 && num < 1000000){
@@ -70,9 +67,7 @@ const Movie = ({movieid,children}) => {
 if(movie===null)return (<>Loading</>)
 else
 return (
- <StyledEngineProvider injectFirst>  
-
-  <Container component='main' className='container-movie'>    
+ 
    <Box className='article-movie' sx={{ flexGrow: 1 }} component='article'>
       
       <Grid container spacing={1} className='container-grid' 
@@ -252,9 +247,7 @@ return (
          </Grid>
       </Grid>
    </Box>
-</Container>
-</StyledEngineProvider>
-   )
-};
+
+)};
 
 export default Movie;

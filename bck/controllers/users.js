@@ -33,7 +33,7 @@ const login = async (req, res) => {
     });
 
     let {fullname,email,dateofbirth,location}=currentUser;
-    let result={fullname,email,dateofbirth,location};
+    let result={username,fullname,email,dateofbirth,location};
     res.status(200).json({ result, token });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
@@ -43,7 +43,9 @@ const login = async (req, res) => {
 const signup = async (req, res) => {
   
   try {
-    
+    const { username, password,dateofbirth,location,email,confirmPassword,firstName,lastName } = req.body;
+
+
     let currentUser = await User.findOne({where:{username}});
     if (currentUser)
       return res.status(400).json({
@@ -67,6 +69,8 @@ const signup = async (req, res) => {
       password: encryptedPassword,
       username,
       fullname:firstName+' '+lastName,
+      dateofbirth: new Date(dateofbirth._d),
+      location,
       role:'user',
       createdAt: new Date(),
       updatedAt: new Date()
@@ -76,8 +80,8 @@ const signup = async (req, res) => {
       expiresIn: "7d",
     });
     //send mail?
-    let {fullname,email,dateofbirth,location}=newUser;
-    let result={fullname,email,dateofbirth,location};
+    let {fullname}=newUser;
+    let result={fullname,email,dateofbirth,location,username};
     res.status(201).json({ result, token });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong!" });
@@ -105,7 +109,7 @@ const update = async (req, res) => {
     const updatedUser = await User.update({
         fullname:firstName+' '+lastName,
         email:emailupdt,
-        dateofbirth:dateofbirthupdt,
+        dateofbirth:new Date(dateofbirthupdt._d),
         location:locationupdt,  
         password:updatePass,
         updatedAt:new Date()
@@ -116,7 +120,7 @@ const update = async (req, res) => {
   
     
     let {fullname,email,dateofbirth,location}=updatedUser;
-    let result={fullname,email,dateofbirth,location};
+    let result={fullname,email,dateofbirth,location,username};
     res.status(201).json({ result});
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });

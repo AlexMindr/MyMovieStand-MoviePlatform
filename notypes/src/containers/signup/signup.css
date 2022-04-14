@@ -1,13 +1,13 @@
-.login-container{
+.signup-container{
     margin-top: 1rem;
     margin-bottom: 1rem;
 }
-.login-signup {
+.signup-login {
     text-decoration: none;
     color:blue;
     font-weight: bold;
 }
-.login-p{
+.signup-p,.signup-login-p{
     margin-bottom: 1rem;
     margin-top: 0.5rem;
     text-align: justify;
