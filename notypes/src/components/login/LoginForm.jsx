@@ -1,7 +1,7 @@
 import React,{ useState } from 'react'
 import './login.css'
 import { Button, Grid, Box } from '@mui/material'
-import Input from '../input/Input'
+import Input from '../../auxcomponents/input/Input'
 import { useNavigate,Link } from 'react-router-dom'
 /*import { signin, signup } from '../../actions/auth'
 import { useDispatch } from 'react-redux'

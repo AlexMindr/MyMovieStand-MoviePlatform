@@ -22,8 +22,6 @@ export const movieSlice = createSlice({
 })
 export const { logIn, logOut } = movieSlice.actions;
 
-export const isLoggedIn = (state) => {
-    return !!state.user.name;
-};
+
 
 export default movieSlice.reducer;

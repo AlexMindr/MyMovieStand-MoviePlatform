@@ -1,50 +1,79 @@
 import React,{ useState } from 'react'
 import './signup.css'
-import { Button, Grid, Box, Typography,TextField } from '@mui/material'
+import { Button, Grid, Box, TextField } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import Input from '../input/Input'
-import Countries from '../input/Countries'
+// import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import Input from '../../auxcomponents/input/Input'
+import Countries from '../../auxcomponents/input/Countries'
 import { useNavigate,Link } from 'react-router-dom'
+import {signup} from '../../api'
 /*import { signin, signup } from '../../actions/auth'
 import { useDispatch } from 'react-redux'
 */
 
-const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '',username: '',location: '',dateofbirth:new Date() }
+const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '',username: '',location: null,dateofbirth:null }
 
 
 const Signup = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [formData, setFormData] = useState(initialState)
-    const [initialDate]=useState(new Date())
-    // const classes = useStyles()
+    const [errorPassForm, setErrorPassForm] =useState(false)
+    const [errorCPassForm, setErrorCPassForm] =useState(false)
+    //const [initialDate,setInitialDate]=useState(false)
     // const history = useHistory()
     // const dispatch = useDispatch()
  
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
        e.preventDefault()
-       if(new Date(formData.dateofbirth._d).toDateString()===initialDate.toDateString())
-            formData.dateofbirth='';
+       if (formData.dateofbirth!==null)formData.dateofbirth=new Date((formData.dateofbirth));
+       //console.log(formData.dateofbirth)
+       await signup(formData).then(res=>console.log(res.data.result,res.data.token)).catch(err=>console.log(err.response.data))
+       //de pus data toDateString() in bd 
        /*if (isSignup) {
           dispatch(signup(formData, history))
        } else {
           dispatch(signin(formData, history))
        }*/
- //      console.log(formData, history);
+   
     }
  
     const handleChange = (e) => {
        setFormData({ ...formData, [e.target.name]: e.target.value });
-    }
+    };
 
     
-    const handleChange2 = (newValue) => {
-        setFormData({ ...formData, dateofbirth:newValue });
-        // console.log(new Date(newValue).toDateString())
-        // console.log(initialDate.toDateString())
-        // console.log(new Date(newValue._d).toDateString()===new Date().toDateString())    
+    const handleChangeDate = (newValue) => {
+        setFormData({ ...formData, dateofbirth:newValue });    
+    };
+
+    const handleChangePass = (e) => {
+      let password = e.target.value
+      let re = new RegExp("^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9_.-:;]{4,}$")
+      
+      if (re.test(password)) {
+         setErrorPassForm(false)
+         setFormData({ ...formData, password });   
+     } else {
+         setErrorPassForm(true)
+     }
+      
+    };
+
+    const handleChangeConfPass = (e) => {
+      let confirmPassword = e.target.value
+
+      let re = new RegExp("^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9_.-:;]{4,}$")
+      
+      if (re.test(confirmPassword) && confirmPassword===formData.password) {
+         setErrorCPassForm(false)
+         setFormData({ ...formData, confirmPassword });   
+     } else {
+         setErrorCPassForm(true)
+     }
+     
+      
     };
     
     const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword)
@@ -56,12 +85,15 @@ const Signup = () => {
                 <Grid container spacing={2} className='signup-form'>
                    <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus required={true} />
                    <Input name="lastName" label="Last Name" handleChange={handleChange} required={true}/>
-                   <Input name="email" label="Email Adress" handleChange={handleChange} type="email" required={true}/>
-                   <Input name="username" label="Username" handleChange={handleChange} type="text" required={true}/>
-                   <Input name="password" label="Password" required={true} 
-                   handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
-                   <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type='password' required={true} />
-                   <Input name="location" label="Select your location" select={true} handleChange={handleChange} required={false}>
+                   <Input name="email" label="Email Adress" handleChange={handleChange} type="email" required={true} helperText={"Your email address"}/>
+                   <Input name="username" label="Username" handleChange={handleChange} type="text" required={true} helperText={"You will use it to login to your account"}/>
+                   <Input name="password" label="Password" required={true} error={errorPassForm} 
+                     helperText={"The password must be at least 4 characters long and contain an uppercase letter and a number"}
+                     handleChange={handleChangePass} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
+                   <Input name="confirmPassword" label="Repeat Password" handleChange={handleChangeConfPass} error={errorCPassForm}
+                     type='password' required={true} helperText={errorCPassForm?"Passwords don't match":''} />
+
+                   <Input name="location" label="Select your location" helperText={'This field is optional'} select={true} handleChange={handleChange} required={false}>
                        <Countries/>
                    </Input>
                    <Grid item xs={12}>
@@ -70,8 +102,8 @@ const Signup = () => {
                             label="Birthday"
                             inputFormat="DD/MM/yyyy"
                             value={formData.dateofbirth}
-                            onChange={handleChange2}
-                            renderInput={(params) => <TextField {...params} />}
+                            onChange={handleChangeDate}
+                            renderInput={(params) => <TextField helperText={'This field is optional'} {...params} />}
                             />
                         </LocalizationProvider>
                    </Grid>

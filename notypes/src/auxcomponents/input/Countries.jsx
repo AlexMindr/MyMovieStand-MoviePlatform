@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Countries = () => {
-  return (<>   
+  return (<>    <option value={null}></option>
                 <option value="Afghanistan">Afghanistan</option>
                 <option value="Åland Islands">Åland Islands</option>
                 <option value="Albania">Albania</option>
