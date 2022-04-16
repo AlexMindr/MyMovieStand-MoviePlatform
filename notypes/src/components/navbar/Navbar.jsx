@@ -6,8 +6,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import ClearIcon from '@mui/icons-material/Clear';
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
+import {useSelector } from 'react-redux'
+import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 
 
 function stringToColor(string) {
@@ -31,12 +34,14 @@ function stringToColor(string) {
 }
 
 function stringAvatar(name) {
+  if (name.split(' ')[0][0] && name.split(' ')[1][0] )
   return {
     sx: {
       bgcolor: stringToColor(name),
     },
     children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
   };
+  
 }
 
 const Navbar = () => {
@@ -50,8 +55,19 @@ const Navbar = () => {
   const [inputSearch,setInputSearch]=useState();
   const [isLoggedIn,setIsLoggedIn]=useState(false);
   const [show, setShow] = useState(true)
-  let activeStyle = "active-link";
+  const {user}=useSelector(state=>state.userReducer)
+  console.log(user)
 
+  useEffect(()=>{
+     if(user)
+      setIsLoggedIn(true)
+    else 
+      setIsLoggedIn(false)
+    
+  },[user])
+
+  let activeStyle = "active-link";
+  
 
   const controlNavbar = () => {
         if (window.scrollY > 100) {
@@ -103,7 +119,7 @@ const Navbar = () => {
     }, [ref]);
   }
   
-  
+  console.log(isLoggedIn)
   return (
           <div className='app__header' ref={menuBox}>
             <div className={`app__header-header ${show?'':'navbar--hidden'}`}>
@@ -113,15 +129,19 @@ const Navbar = () => {
               </div>
               <div className='app__header-login' >
                 {isLoggedIn?
-                /*full name to be added */
-                <Avatar {...stringAvatar('Kent Dodds')} />
+                <>
+                <Button><CircleNotificationsIcon fontSize='large'/></Button>
+                <Divider orientation="vertical" flexItem  />
+                <Avatar {...stringAvatar(user.fullname)} className='navbar__avatar' />
+                </>
                 :
                 <>
                 <NavLink className={({ isActive }) =>
               isActive ? activeStyle : undefined} to='/login'>Login</NavLink >
                 <NavLink  className={({ isActive }) =>
               isActive ? activeStyle : undefined} to='/signup'>Sign up</NavLink >
-                </>}
+                </>
+                }
               </div>
             </div>
 

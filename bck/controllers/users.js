@@ -16,7 +16,7 @@ const login = async (req, res) => {
       where:{username}
     });
     if (!currentUser)
-      return res.status(404).json({
+      return res.status(400).json({
         message: "The username you entered doesn't belong to an account.",
       });
 
@@ -29,65 +29,19 @@ const login = async (req, res) => {
       expiresIn: "7d",
     });
 
-    let {fullname,email,dateofbirth,location}=currentUser;
-    let result={username,fullname,email,dateofbirth,location};
+    let fullname,email,dateofbirth,location,role,result
+    ({fullname,email,dateofbirth,location,role}=currentUser); 
+    if(role==='admin')
+       result={username,fullname,email,dateofbirth,location,role};
+    else
+       result={username,fullname,email,dateofbirth,location};
+    
     res.status(200).json({ result, token });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
 
-/*const signup = async (req, res) => {
-  
-  try {
-    console.log(req.body)
-    const { username, password,dateofbirth,location,email,confirmPassword,firstName,lastName } = req.body;
-
-
-    // let currentUser = await User.findOne({where:{username}});
-    // if (currentUser)
-    //   return res.status(400).json({
-    //     message: "This username already exists. Please use different one",
-    //   });
-      
-    // currentUser = await User.findOne({where:{email}});
-    // if (currentUser)
-    //   return res.status(400).json({
-    //     message: "This email already exists. Please use different email",
-    //   });
-
-    // if (password !== confirmPassword)
-    //   return res.status(400).json({
-    //        message: "Password and confirm password don't match" 
-    //     });
-
-    // const encryptedPassword = await bcrypt.hash(password, saltHash);
-    // // const newUser = await User.create({
-    //   email,
-    //   password: encryptedPassword,
-    //   username,
-    //   fullname:firstName+' '+lastName,
-    //   dateofbirth,
-    //   location,
-    //   role:'user',
-    //   createdAt: new Date(),
-    //   updatedAt: new Date()
-    // });
-
-    // const token = jwt.sign({ useruuid: newUser.useruuid, role:newUser.role }, jwtSecret, {
-    //   expiresIn: "7d",
-    // });
-    // //send mail?
-    // let {fullname}=newUser;
-    // let result={fullname,email,dateofbirth,location,username};
-    result="success"
-    token="token"
-    res.status(200).json({message:"success"});
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-  }
-};
-*/
 
 
 const signup = async (req, res) => {
@@ -97,7 +51,7 @@ const signup = async (req, res) => {
     
     var { username, password,dateofbirth,location,email,confirmPassword,firstName,lastName } = req.body;
 
-    await User.findOne({ where:{username}})
+    User.findOne({ where:{username}})
     .then(async (data) => {
       if (data)
         return res.status(400).json({message: "This username already exists. Please use different one"});
@@ -105,8 +59,11 @@ const signup = async (req, res) => {
       if (findUser)
         return res.status(400).json({
           message: "This email already exists. Please use a different email" });
+      let re = new RegExp("^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9_.-:;]{4,}$")
+      if(!re.test(password))
+        return res.status(400).json({message: "Invalid password" });
       if (password !== confirmPassword)
-        return res.status(400).json({message: "Password and confirm password don't match" });
+        return res.status(400).json({message: "Passwords don't match" });
       else {
         const fullname=firstName+' '+lastName
         const encryptedPassword = await bcrypt.hash(password, saltHash);

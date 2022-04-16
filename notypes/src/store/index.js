@@ -1,15 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers } from 'redux'
 import userReducer from './userSlice';
 import movieReducer from './movieSlice';
 //import userReducer from './watchlistSlice';
 
 
+
+const reducer = combineReducers({
+  userReducer,
+  movieReducer,
+  //watchlistReducer,
+})
+
 const store = configureStore({
-    reducer: {
-      users: userReducer,
-      movies:movieReducer,
-      //watchlist:watchlistReducer,
-    },
+    reducer,
   })
 
   export default store;

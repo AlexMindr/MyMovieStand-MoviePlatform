@@ -1,11 +1,10 @@
 import React,{ useState } from 'react'
 import './login.css'
-import { Button, Grid, Box } from '@mui/material'
+import { Button, Grid, Box,Typography } from '@mui/material'
 import Input from '../../auxcomponents/input/Input'
 import { useNavigate,Link } from 'react-router-dom'
-/*import { signin, signup } from '../../actions/auth'
-import { useDispatch } from 'react-redux'
-*/
+import { actionLogin} from '../../store/userSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const initialState = {  username: '', password: '' }
 
@@ -13,20 +12,27 @@ const initialState = {  username: '', password: '' }
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [formData, setFormData] = useState(initialState)
-    // const classes = useStyles()
-    // const history = useHistory()
-    // const dispatch = useDispatch()
+    const [formError,setFormError]=useState(false)
+    const dispatch = useDispatch()
  
-    const handleSubmit = (e) => {
-       e.preventDefault()
- 
-       /*if (isSignup) {
-          dispatch(signup(formData, history))
-       } else {
-          dispatch(signin(formData, history))
-       }*/
- //      console.log(formData, history);
-    }
+    const handleSubmit = async (e) => {
+      e.preventDefault()
+      dispatch(actionLogin(formData))
+      .then(res=>{
+         if(res){
+            setFormError(res)
+            setFormData(initialState)
+         }
+         else setFormError(false)
+        })
+      .catch(e=>{
+         setFormError(e)
+         setFormData(initialState)
+      })
+     //de redirectionat la home/unde era inainte
+     
+  
+   }
  
     const handleChange = (e) => {
        setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -39,9 +45,15 @@ const Login = () => {
          <Box  sx={{ flexGrow: 1 }} component='form' onSubmit={handleSubmit}>
     
                 <Grid container spacing={2} className='login-form'>
-                   
-                   <Input name="username" label="Username" handleChange={handleChange} type="text" required={true}/>
-                   <Input name="password" label="Password" required={true}
+                  {formError?
+                  <Grid item xs={12}>
+                  <Typography variant='h6' color='red'>{formError}</Typography>
+                  </Grid>
+                  :
+                  <></>
+                  }
+                   <Input name="username" label="Username" handleChange={handleChange} type="text" required={true} value={formData.username}/>
+                   <Input name="password" label="Password" required={true} value={formData.password}
                    handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
                    <Grid item xs={12}>
                      <Button type="submit"  variant="contained" color="primary" className='submit-login'>
