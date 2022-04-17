@@ -15,6 +15,7 @@ export const userSlice = createSlice({
             localStorage.setItem("profile", JSON.stringify({token,user}));
         },
         logOut: (state) => {
+            console.log('here2')
             state.user = '';
             state.token= '';
             localStorage.removeItem('profile');
@@ -31,9 +32,10 @@ export const userSlice = createSlice({
 export const { logIn, logOut, signUp } = userSlice.actions;
 
 
-
-
-
+export const actionLogOut = () => async dispatch => {
+        dispatch(logOut())
+        console.log('here')
+}
 
 export const actionSignUp = (formData) => async dispatch => {
         

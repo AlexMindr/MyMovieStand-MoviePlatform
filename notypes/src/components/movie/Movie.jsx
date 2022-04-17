@@ -79,7 +79,7 @@ return (
         
          <Grid item  className='movie-info' sx={{ bgcolor:bgColor  }}  xs={12} md={12}>
             <Grid container spacing={1} >
-            <Grid item className='media' xs={12} md={4} lg={3}>
+            <Grid item className='media-movie' xs={12} md={4} lg={3}>
                <img src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`} alt={movie.title}/>
             </Grid>
                   

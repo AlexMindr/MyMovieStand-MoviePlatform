@@ -19,7 +19,11 @@ const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,re
     <Card className='card' sx={{ bgcolor:bgColor  }}>
         
         {/*de pus culoare cand adaugam in lista la element etc.  */}
-        <Typography className='title' variant="h4"><Link to={`/movies/${movieid}`}>{title}</Link></Typography>
+        <Typography className='title' variant="h4">
+           <Link to={`/movies/${movieid}`}>
+            {title.length>50?title.substring(0,50)+'...':title}
+           </Link>
+        </Typography>
         
         <Divider variant='horizontal' flexItem>
          {trailer?<>
@@ -44,14 +48,14 @@ const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,re
         </Divider>
 
         <Box component='div' className='overlay' >
-           <Typography className='movielist-certification' variant="subtitle1" component='div' >
+           <Typography className={uscertification?'movielist-certification':''} variant="subtitle1" component='div' >
                {adult?'Adult movie':uscertification?uscertification:'-'}
            </Typography>
            <Typography className='date' variant="subtitle1" component='div' >{moment(releaseDate).format("MMM YYYY")}</Typography>
            <Divider id='divi' orientation="vertical" variant="middle" flexItem />
            <Typography variant="subtitle1" component='div'>Movie</Typography>
            <Typography variant="subtitle1" component='div'>
-              Runtime: {Math.round(parseInt(duration)/60)}h {parseInt(duration)%60}min
+              {Math.round(parseInt(duration)/60)}h {parseInt(duration)%60}min
            </Typography>
         </Box>
         
@@ -69,7 +73,8 @@ const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,re
            <CardMedia className='media' image={`https://image.tmdb.org/t/p/original/${posterPath}`} title={title}> </CardMedia>
            <Typography className='text' variant="body2" color="textSecondary" component="p">
               {overview?overview:<em>No synopsis has been added</em>}
-           </Typography>
+           </Typography> 
+           
         </CardContent>
 
         <Box className='bottom-card' component='div'>

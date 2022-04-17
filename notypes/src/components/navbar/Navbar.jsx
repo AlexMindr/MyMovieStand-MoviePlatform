@@ -1,7 +1,7 @@
 import React,{useState,useRef,useEffect} from 'react'
 import './navbar.css'
 import logo from '../../images/Logo.png'
-import {NavLink} from 'react-router-dom';
+import {NavLink, useNavigate} from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -9,9 +9,11 @@ import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
-import {useSelector } from 'react-redux'
+import {useSelector,useDispatch } from 'react-redux'
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
-
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import {actionLogOut} from '../../store/userSlice'
 
 function stringToColor(string) {
   let hash = 0;
@@ -55,9 +57,19 @@ const Navbar = () => {
   const [inputSearch,setInputSearch]=useState();
   const [isLoggedIn,setIsLoggedIn]=useState(false);
   const [show, setShow] = useState(true)
-  const {user}=useSelector(state=>state.userReducer)
-  console.log(user)
+  var {user}=useSelector(state=>state.userReducer)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
+
+  const handleLogout = () =>{
+    dispatch(actionLogOut())
+    navigate('/')
+    user=null;
+    console.log("here3")
+  }
+
+  
   useEffect(()=>{
      if(user)
       setIsLoggedIn(true)
@@ -119,7 +131,7 @@ const Navbar = () => {
     }, [ref]);
   }
   
-  console.log(isLoggedIn)
+  
   return (
           <div className='app__header' ref={menuBox}>
             <div className={`app__header-header ${show?'':'navbar--hidden'}`}>
@@ -128,18 +140,44 @@ const Navbar = () => {
                 <Typography variant='h1' component='h1' className='small-logo'> MMS</Typography>
               </div>
               <div className='app__header-login' >
-                {isLoggedIn?
-                <>
-                <Button><CircleNotificationsIcon fontSize='large'/></Button>
+              {user && isLoggedIn?
+              <>
+                <div className="dropdown-submenu">
+                  <NavLink to={`/watchlist/${user.username}`}>
+                    <Button className='watchlist-dropdown'><FormatListBulletedIcon fontSize='large'/></Button>
+                  </NavLink>
+                  <div className="dropdown-content">
+                    <NavLink to={`/watchlist/${user.username}`}>Watchlist</NavLink>
+                  </div>
+                </div>
                 <Divider orientation="vertical" flexItem  />
-                <Avatar {...stringAvatar(user.fullname)} className='navbar__avatar' />
+                <div className="dropdown-submenu">
+                  <NavLink to={`/notifications`}>
+                    <Button><CircleNotificationsIcon fontSize='large'/></Button>
+                  </NavLink>
+                  <div className="dropdown-content">
+                    {/*Notifications list */}
+                  </div>
+                </div>
+                <Divider orientation="vertical" flexItem  />
+                <><div className="dropdown-submenu">
+                    <Button>{user.username.length>10?user.username.substring(0,10)+'...':user.username}<ArrowDropDownIcon/></Button>
+                    <div className="dropdown-content">
+                      <NavLink to={`/profile/${user.username}`}>Profile</NavLink>
+                      <NavLink to={`/myfriends`}>Friends</NavLink>
+                      <NavLink to={`/myposts`}>Forum posts</NavLink>
+                      <button onClick={handleLogout}>Logout</button>
+                    </div>
+                  </div>
+                  <NavLink to={`/profile/${user.username}`}><Avatar {...stringAvatar(user.fullname)} className='navbar__avatar' /></NavLink>
                 </>
+              </>
                 :
                 <>
                 <NavLink className={({ isActive }) =>
-              isActive ? activeStyle : undefined} to='/login'>Login</NavLink >
+              isActive ? `login-button ${activeStyle} `: 'login-button'} to='/login'>Login</NavLink >
                 <NavLink  className={({ isActive }) =>
-              isActive ? activeStyle : undefined} to='/signup'>Sign up</NavLink >
+              isActive ? `login-button ${activeStyle} `: 'login-button'} to='/signup'>Sign up</NavLink >
                 </>
                 }
               </div>
@@ -161,10 +199,10 @@ const Navbar = () => {
                             onClick={()=>{setMenuBars(false)}}>Home</NavLink ></li>
                         <li><NavLink className={({ isActive }) =>isActive ? activeStyle : undefined} to='/movies' 
                             onClick={()=>{setMenuBars(false)}}>Movies</NavLink ></li>
-                        <li><NavLink className={({ isActive }) =>isActive ? activeStyle : undefined} to='/watchlist' 
-                            onClick={()=>{setMenuBars(false)}}>Watchlist</NavLink ></li>
                         <li><NavLink className={({ isActive }) =>isActive ? activeStyle : undefined} to='/forum' 
                             onClick={()=>{setMenuBars(false)}}>Forum</NavLink ></li>
+                        {/* <li><NavLink className={({ isActive }) =>isActive ? activeStyle : undefined} to='/watchlist' 
+                            onClick={()=>{setMenuBars(false)}}>Watchlist</NavLink ></li> */}
                       </ul>
                     </nav>
                 </div>
