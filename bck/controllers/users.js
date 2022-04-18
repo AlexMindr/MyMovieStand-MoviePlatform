@@ -5,7 +5,24 @@ import crypto from "crypto";
 //import { Op } from '@sequelize/core';
 const {User,Notification}=db;
 
+const verifyToken= async(req,res)=>{
+  const jwtSecret=process.env.JWT_SECRET;
+   try {
+      const token = req.headers.authorization.split(" ")[1];
 
+      
+      if (token) {
+         const decodedData = jwt.verify(token, jwtSecret)
+         res.status(200).json({ token });
+      }
+      else res.status(404).json({ message:'Not logged in' });  
+
+      
+
+   } catch (error) {
+    res.status(400).json({ error });
+   }
+}
 const login = async (req, res) => {
   const jwtSecret=process.env.JWT_SECRET;
   try {
@@ -230,4 +247,4 @@ const changePass = async (req, res) => {
 
 
 
-export { login, signup, update, resetPass, deleteAdm, changePass };
+export { login, signup, update, resetPass, deleteAdm, changePass,verifyToken };

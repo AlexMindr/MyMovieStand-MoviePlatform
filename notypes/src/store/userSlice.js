@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
-import {signup as apisignUp,login as apilogIn} from '../api'
+import {signup as apisignUp,login as apilogIn,verify as verifyToken} from '../api'
+import { useNavigate } from 'react-router-dom';
+
 
 export const userSlice = createSlice({
     name: 'user',
     initialState: {
-        user: (JSON.parse(localStorage.getItem('profile'))).token?(JSON.parse(localStorage.getItem('profile'))).user:'',
-        token:(JSON.parse(localStorage.getItem('profile'))).token?(JSON.parse(localStorage.getItem('profile'))).token:'',
+        user:'',
+        token:'',
     },
     reducers: {
         logIn: (state, action) => {
@@ -15,7 +17,6 @@ export const userSlice = createSlice({
             localStorage.setItem("profile", JSON.stringify({token,user}));
         },
         logOut: (state) => {
-            console.log('here2')
             state.user = '';
             state.token= '';
             localStorage.removeItem('profile');
@@ -27,14 +28,37 @@ export const userSlice = createSlice({
             localStorage.setItem("profile", JSON.stringify({token,user}));
             
         },
+        tokenVerifySuccess:(state,action) => {
+            state.user =  JSON.parse(localStorage.getItem('profile')).user
+            state.token = action.payload.token
+        },
+        tokenVerifyFailed:(state) => {
+            state.user =  ''
+            state.token = ''
+            localStorage.removeItem('profile');
+        },
+        
     },
 })
-export const { logIn, logOut, signUp } = userSlice.actions;
+export const { logIn, logOut, signUp, tokenVerifySuccess,tokenVerifyFailed } = userSlice.actions;
 
+
+export const actionVerify = () => async dispatch => {
+    verifyToken()
+    .then(res=>{
+        const token = res.data.token
+        dispatch(tokenVerifySuccess(token))
+    })
+    .catch(err=>{
+        dispatch(tokenVerifyFailed())
+        //useNavigate('/')
+    })
+
+}
 
 export const actionLogOut = () => async dispatch => {
         dispatch(logOut())
-        console.log('here')
+        
 }
 
 export const actionSignUp = (formData) => async dispatch => {

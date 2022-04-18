@@ -5,11 +5,13 @@ import {
  update,
  resetPass,
  changePass,
- deleteAdm 
+ deleteAdm,
+ verifyToken
 } from "../controllers/users.js";
 
 const router = Router();
 
+router.get("/verify", verifyToken);
 router.post("/signup", signup);
 router.post("/login", login);
 router.put("/update",update);

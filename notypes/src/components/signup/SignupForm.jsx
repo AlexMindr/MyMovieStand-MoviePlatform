@@ -106,7 +106,8 @@ const Signup = () => {
                    <Input name="confirmPassword" label="Repeat Password" handleChange={handleChangeConfPass} error={errorCPassForm}
                      type='password' required={true} helperText={errorCPassForm?"Passwords don't match":''} />
 
-                   <Input name="location" label="Select your location" helperText={'This field is optional'} select={true} handleChange={handleChange} required={false}>
+                   <Input name="location" label="Select your location" helperText={'This field is optional'} 
+                      select={true} handleChange={handleChange} required={false}>
                        <Countries/>
                    </Input>
                    <Grid item xs={12}>

@@ -3,20 +3,18 @@ import './App.css';
 import {Routes, Route, BrowserRouter as Router,Link} from 'react-router-dom';
 import {Navbar} from './components';
 import {Footer,Home,Movies,Errorpage,Moviepage,Login,Signup} from './containers'
-import {getMovie,getMovies} from './api';
 import CssBaseline from '@mui/material/CssBaseline';
-
-//import { Layout } from "antd";
-
-//const { Footer } = Layout;
-
-
+import { useDispatch } from 'react-redux';
+import { actionVerify } from './store/userSlice';
 
 export default function App() {
-  /*useEffect(() => {
-  }, []);
- 
-  */
+  const dispatch=useDispatch()
+
+  useEffect(() => {
+  
+    dispatch(actionVerify())
+    
+  }, [dispatch])
   return (
     
     <>

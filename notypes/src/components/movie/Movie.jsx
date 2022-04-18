@@ -7,7 +7,10 @@ import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import imageUnknown from '../../images/unknown.jpg'
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import CircularProgress from '@mui/material/CircularProgress';
 import {Link} from 'react-router-dom'
+import {useSelector} from 'react-redux'
+import WatchlistForm from '../watchlist/WatchlistForm';
 
 function numFormatter(num) {
    if(num > 999 && num < 1000000){
@@ -26,9 +29,16 @@ const Movie = ({movieid,children}) => {
    const [bgColor, setBgColor]=useState('rgb(224, 155, 63)');
    const [images,setImages]=useState(null);
    const [credits,setCredits]=useState(null)
-   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+   const [openTrailer, setOpenTrailer] = useState(false);
+   const [openWatchForm, setOpenWatchForm] = useState(false);
+   
+   const {user}=useSelector(state=>state.userReducer)
+   
+   
+   const handleOpenTrailer = () => setOpenTrailer(true);
+   const handleCloseTrailer = () => setOpenTrailer(false);
+   const handleOpenWatchForm = () => setOpenWatchForm(true);
+   const handleCloseWatchForm = () => setOpenWatchForm(false);
    //const images=useRef(null);
    
    
@@ -64,9 +74,12 @@ const Movie = ({movieid,children}) => {
       */
 
 
-if(movie===null)return (<>Loading</>)
+if(movie===null)
+   return (<Box sx={{ display: 'flex', position:'absolute', right:'50%',top:'40%' }}>
+               <CircularProgress />
+           </Box>)
 else
-return (
+   return (
  
    <Box className='article-movie' sx={{ flexGrow: 1 }} component='article'>
       
@@ -139,14 +152,14 @@ return (
                         {movie.trailer!=null?   
                         <Grid item xs={12} md={12} lg={5} component='div' className='trailer'
                          sx={{backgroundImage:`url(${`https://i.ytimg.com/vi/${movie.trailer}/mqdefault.jpg`})`}}>
-                           <Button onClick={handleOpen} >
+                           <Button onClick={handleOpenTrailer} >
                               <PlayCircleOutlineIcon fontSize='large' />
                            </Button>
                            <Modal
-                              open={open}
+                              open={openTrailer}
                               onClose={(e) => {
                                  e.preventDefault();
-                                 handleClose();
+                                 handleCloseTrailer();
                               }}
                               aria-labelledby={movie.title}
                               aria-describedby="trailer"
@@ -161,12 +174,34 @@ return (
                      </Grid>
                   </Box>
                   <Divider flexItem/>
+                  {user?
+                  //TODO mask my rating/status or blur if they arent in my list
                   <Box component='div'>
-                     <Button>Add to list</Button>
+                     <Button onClick={handleOpenWatchForm}>Add to list</Button>
+                     <Modal
+                              open={openWatchForm}
+                              onClose={(e) => {
+                                 e.preventDefault();
+                                 handleCloseWatchForm();
+                              }}
+                              aria-labelledby={'add'+movie.title}
+                              aria-describedby="formWatchlist"
+                              >
+                              <Box className='watchformmodal'>
+                                 <Box  sx={{width:'70vw',height:'70vh'}} component="div">
+                                    <WatchlistForm id={movieid} type={'movie'} handleCloseWatchForm={handleCloseWatchForm} title={movie.title}/>
+                                 </Box>
+                              </Box>
+                     </Modal> 
                      <Typography component='span'>My rating</Typography>
                      <Typography component='span'>My status</Typography>
                   </Box>
-             
+                  :
+                  //TODO style/verify
+                  <Box>
+                     <Link to='/login'>Login to add movie to your list</Link>
+                  </Box>
+                  }   
             </Grid>
          </Grid>
          </Grid>
