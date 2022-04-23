@@ -2,36 +2,60 @@ import db from '../models/index.cjs';
 //import { Op } from '@sequelize/core';
 const {Watchlist,User,Movie}=db;
 
-const getWatchlist = async (req, res) => {
-    const {id}=req.params
+const getWatchlistInit = async (req, res) => {
+    const uuid=req.userId
     
     try {
+        const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+      
         const watchlist = await Watchlist.findAll({
+            attributes:['status','rating','episodes','movieid'],
             where:{
-              userid:id
+              userid
+            }, 
+          });
+  
+      res.status(200).json({watchlist});
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
+  };
+
+
+const getWatchlist = async (req, res) => {
+    const uuid=req.userId
+    
+    try {
+        const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+      
+        const watchlist = await Watchlist.findAll({
+            attributes:['status','rating','episodes','movieid'],
+            where:{
+              userid
             }, 
             include:{
             model:Movie,
-            attributes:['name','title','release_date'],
+            attributes:['title','release_date'],
             /*through:{
               attributes:[]
             }*/
           }});
   
-      res.status(200).json(watchlist);
+      res.status(200).json({watchlist});
     } catch (error) {
       res.status(404).json({ message: error.message });
     }
   };
 
 const createWatchlistEntry = async (req, res) => {
-  const {id}=req.params
+  const uuid=req.userId
   const {status,episodes,rating,movieid}=req.body
   try {
+      const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
       
       await Watchlist.create(
         {
-            userid:id,
+            userid:userid,
             movieid,
             status,
             episodes,
@@ -49,9 +73,11 @@ const createWatchlistEntry = async (req, res) => {
 
 
 const updateWatchlistEntry = async (req, res) => {
-  const {id}=req.params
+  const uuid=req.userId
   const {status,episodes,rating,movieid}=req.body
   try {
+      
+      const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
       
       await Watchlist.update(
         {
@@ -61,7 +87,7 @@ const updateWatchlistEntry = async (req, res) => {
             updatedAt:new Date()
         },
         {where: {
-          userid:id,
+          userid,
           movieid
         }}
       );
@@ -73,13 +99,15 @@ const updateWatchlistEntry = async (req, res) => {
   };
 
   const deleteWatchlistEntry = async (req, res) => {
-    const {id}=req.params
+    const uuid=req.userId
     const {movieid}=req.body
     try {
         
+        const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+      
         await Watchlist.destroy(
           {where: {
-            userid:id,
+            userid,
             movieid
           }}
         );
@@ -91,4 +119,4 @@ const updateWatchlistEntry = async (req, res) => {
     };
   
 
-  export {getWatchlist, createWatchlistEntry, updateWatchlistEntry, deleteWatchlistEntry};
+  export {getWatchlist, createWatchlistEntry, updateWatchlistEntry, deleteWatchlistEntry, getWatchlistInit};

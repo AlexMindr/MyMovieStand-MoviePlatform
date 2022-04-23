@@ -160,18 +160,18 @@
     
     height: 100%;
     width: 100%;
+    box-sizing: border-box;
     opacity: 0.9;
     background-repeat: no-repeat;
-    background-position: fixed;
-    background-size: 85% auto;
+    background-size: auto 100%;
     background-position-x: center;
-    
-    min-width: 150px;
+    /*min-width: 175px;
     max-width: min(95%,350px);
     max-height:min(95%,350px); 
-    min-height: 200px;
+    min-height: 200px;*/
     margin-top: 2rem;
-    margin-left: 0.5rem;
+    margin-bottom: 1rem;
+    /*margin-left: 0.5rem;*/
      
 }
 /* .trailer button img{
@@ -182,18 +182,24 @@
 }*/
 .trailer button{
     color:rgb(255, 1, 141);
-    min-width: 80px;
+    /* min-width: 80px;
     max-width: min(95%,350px);
     max-height:min(95%,500px); 
-    min-height: 125px;
+    min-height: 150px;  */
     padding-left:0 !important;
     padding-top:0 !important;
-    /* margin-left: 35%; */
-
+    width: 100px;
+    height: 150px;
+    /*width:clamp(80px,100px + 10vw, 350px);
+    height: clamp(100px, 150px + 10vh,450px);
+     width:clamp(175px,90% + 100px, 350px);
+    height:clamp(250px,80% + 100px , 450px); */
     transition: none;
     position: relative;
-    right:-37.5%;
+    left:38.5%;
     margin-top: -0.5rem;
+    overflow-x: hidden;
+    
     
 } 
 .trailermodal{
@@ -382,6 +388,13 @@
 .actors::-webkit-scrollbar-thumb:hover,.crew::-webkit-scrollbar-thumb:hover {
     background: rgb(4, 216, 4); 
 }
+
+/* @media only screen and (max-width:1199px){
+    .trailer{
+        margin-left: 0;
+        margin-inline:25%;
+    }
+} */
 
 @media only screen and (max-width:600px){
     

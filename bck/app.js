@@ -7,6 +7,7 @@ import movieRoutes from "./routes/movies.js";
 import userRoutes from "./routes/users.js";
 import genreRoutes from "./routes/genres.js";
 import notificationRoutes from "./routes/notifications.js";
+import watchlistRoutes from "./routes/watchlists.js"
 
 const {sequelize}= db;
 
@@ -23,6 +24,7 @@ app.use("/movies", movieRoutes);
 app.use("/user", userRoutes);
 app.use("/genres", genreRoutes);
 app.use("/notifications", notificationRoutes);
+app.use("/watchlist", watchlistRoutes);
 
 
 app.all('*', (req,res,next)=>{

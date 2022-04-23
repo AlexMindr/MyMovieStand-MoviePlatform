@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import {signup as apisignUp,login as apilogIn,verify as verifyToken} from '../api'
-import { useNavigate } from 'react-router-dom';
+import { actionGetWl } from './watchlistSlice';
+import { useDispatch } from 'react-redux';
 
 
 export const userSlice = createSlice({
@@ -46,7 +47,8 @@ export const { logIn, logOut, signUp, tokenVerifySuccess,tokenVerifyFailed } = u
 export const actionVerify = () => async dispatch => {
     verifyToken()
     .then(res=>{
-        const token = res.data.token
+        const token = res.data
+        
         dispatch(tokenVerifySuccess(token))
     })
     .catch(err=>{
@@ -55,7 +57,7 @@ export const actionVerify = () => async dispatch => {
     })
 
 }
-
+//TODO De pus ca param navigator pt pag
 export const actionLogOut = () => async dispatch => {
         dispatch(logOut())
         

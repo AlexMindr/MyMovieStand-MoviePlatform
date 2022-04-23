@@ -3,14 +3,17 @@ import {
   getWatchlist,
   createWatchlistEntry,
   updateWatchlistEntry,
-  deleteWatchlistEntry
+  deleteWatchlistEntry,
+  getWatchlistInit
 } from "../controllers/watchlists.js";
-//import auth from "../middlewares/auth.mjs";
+import auth from "../middleware/auth.js";
 
 const router = Router();
 
-router.get("/:id",getWatchlist);
-router.post("/:id",createWatchlistEntry);
-router.put("/:id",updateWatchlistEntry);
-router.delete("/:id",deleteWatchlistEntry);
+
+router.get("/",auth,getWatchlistInit);
+router.get("/all",auth,getWatchlist);
+router.post("/",auth,createWatchlistEntry);
+router.put("/",auth,updateWatchlistEntry);
+router.delete("/",auth,deleteWatchlistEntry);
 export default router;

@@ -1,14 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux'
 import userReducer from './userSlice';
-import movieReducer from './movieSlice';
+import watchlistReducer from './watchlistSlice';
 //import userReducer from './watchlistSlice';
 
 
 
 const reducer = combineReducers({
   userReducer,
-  movieReducer,
+  watchlistReducer,
   //watchlistReducer,
 })
 

@@ -7,7 +7,6 @@ import Container from '@mui/material/Container'
 
 const Moviepage = () => {
   const {id}=useParams()
-  console.log(id);
   return (
     <>
     <StyledEngineProvider injectFirst>

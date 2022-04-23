@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import jwt, { decode } from 'jsonwebtoken'
 
 
 const auth = async (req, res, next) => {
@@ -10,7 +10,7 @@ const auth = async (req, res, next) => {
       if (token) {
          decodedData = jwt.verify(token, jwtSecret)
 
-         req.userId = decodedData?.uuid
+         req.userId = decodedData?.useruuid
          //req.userRole= decodedData?.role
       }
 

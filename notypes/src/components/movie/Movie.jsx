@@ -141,8 +141,8 @@ else
                            }
                   </Box>
                   <Box className='container-synopsis' component='div'>
-                     <Grid  container spacing={3} className='trailer-and-synopsis'>
-                        <Grid item xs={12} md={12} lg={7} component='div'>
+                     <Grid  container spacing={2} className='trailer-and-synopsis'>
+                        <Grid item xs={12} sm={6} md={7} lg={7} component='div'>
                            <Typography className='overview-title' component='h6'>Synopsis</Typography>
                            <Divider flexItem/>
                            <Typography className='synopsis' component='p'>
@@ -150,7 +150,7 @@ else
                            </Typography>
                         </Grid>
                         {movie.trailer!=null?   
-                        <Grid item xs={12} md={12} lg={5} component='div' className='trailer'
+                        <Grid item  xs={12} sm ={6} md={5} lg={5} component='div' className='trailer'
                          sx={{backgroundImage:`url(${`https://i.ytimg.com/vi/${movie.trailer}/mqdefault.jpg`})`}}>
                            <Button onClick={handleOpenTrailer} >
                               <PlayCircleOutlineIcon fontSize='large' />
@@ -188,8 +188,9 @@ else
                               aria-describedby="formWatchlist"
                               >
                               <Box className='watchformmodal'>
-                                 <Box  sx={{width:'70vw',height:'70vh'}} component="div">
-                                    <WatchlistForm id={movieid} type={'movie'} handleCloseWatchForm={handleCloseWatchForm} title={movie.title}/>
+                                 <Box  sx={{width:'70vw',height:'90vh'}} component="div">
+                                    <WatchlistForm movieid={parseInt(movieid)} type={'movie'}
+                                     handleCloseWatchForm={handleCloseWatchForm} title={movie.title} episodesTotal={1}/>
                                  </Box>
                               </Box>
                      </Modal> 
