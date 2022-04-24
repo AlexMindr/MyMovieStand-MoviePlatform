@@ -154,28 +154,68 @@
 .bottom-button{
     align-items: center;
     justify-self: flex-start;
-    flex:20%;
-    margin-left: 0.25rem;
+    flex:50%;
+    margin-left: 0.15rem;
 }
 .cardButton{
-    
-    border-radius: 0.5em;
-    min-width: 2em;
+    margin-top: 1px;
+    width: 100px;
     padding: 0;
-    color:rgb(23, 210, 2);
+    color:white;
+    text-transform: none;
+    background-color: rgb(192, 55, 251);
+    
 }
+
+.movielist-userscore {
+    border: none;
+    width: 35px;
+    color:rgb(206, 17, 55);
+    font-size: 0.85rem;
+    padding: 0;
+    overflow: hidden;
+    z-index: 10;
+ }
+
+ .movielist-userscore-content {
+    display: block;
+    position: relative;
+    /* justify-content: center;
+    align-items: center; */
+    background: #ffffff;
+    width: 20px;
+    padding: 1px 1px 1px 0;
+    /* border: solid 1px #000; */
+    border-left: none !important;
+    left:15px;
+    height:100%;
+ }
+ .movielist-userscore-content:before {
+   content: "";
+   position: absolute;
+   width: 26px;
+   height: 85%;
+   z-index: -1;
+   top: 0;
+   left: -8px;
+   /* border: 1px solid #000; */
+   background: #ffffff;
+   transform: rotate(-45deg);
+
+   }
+ 
 
 .cardButton:hover{
     
     color:rgb(210, 179, 2);
 }
 
+
 .bottom-info{
- flex:80%;
+ flex:50%;
  display:flex;
  font-weight: bold;
- column-gap: 3em;
- margin-left: 20%;
+ column-gap: 2em;
  align-items: center;
 }
 .bottom-info div:nth-child(2){

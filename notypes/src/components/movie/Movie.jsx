@@ -8,9 +8,11 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import imageUnknown from '../../images/unknown.jpg'
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import CircularProgress from '@mui/material/CircularProgress';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import {Link} from 'react-router-dom'
 import {useSelector} from 'react-redux'
 import WatchlistForm from '../watchlist/WatchlistForm';
+import StarIcon from '@mui/icons-material/Star';
 
 function numFormatter(num) {
    if(num > 999 && num < 1000000){
@@ -31,19 +33,48 @@ const Movie = ({movieid,children}) => {
    const [credits,setCredits]=useState(null)
    const [openTrailer, setOpenTrailer] = useState(false);
    const [openWatchForm, setOpenWatchForm] = useState(false);
-   
+   const [wlData,setWlData]=useState(null)
+   const {watchlist}= useSelector(state=>state.watchlistReducer)
    const {user}=useSelector(state=>state.userReducer)
+   //const images=useRef(null);
    
    
    const handleOpenTrailer = () => setOpenTrailer(true);
    const handleCloseTrailer = () => setOpenTrailer(false);
    const handleOpenWatchForm = () => setOpenWatchForm(true);
    const handleCloseWatchForm = () => setOpenWatchForm(false);
-   //const images=useRef(null);
    
+   useEffect(()=>{
+      if(watchlist){
+        const wlFill=watchlist.filter(item=>item.movieid===movieid)
+        
+        if (wlFill.length>0){
+            setWlData({...wlFill[0]})
+            switch (wlFill[0].status){
+               case 'Watching':
+                  setBgColor('rgb(153, 255, 51)')
+                  break;
+               case 'Completed':
+                  setBgColor('rgb(79, 116, 227)')
+                  break;
+               case 'Plan to watch':
+                  setBgColor('rgb(204, 204, 204)')
+                  break;
+               case 'On-hold':
+                  setBgColor('rgb(240, 230, 140)')
+                  break;
+               case 'Dropped':
+                  setBgColor('rgb(244, 138, 160)')
+                  break;
+               default:
+                  setBgColor('rgb(224, 155, 63)')
+            }
+        }
+      }
+   },[movieid,watchlist])
+
    
    useEffect(() => {
-      //console.log("child component mounted");
       
       async function getData(){
          const res= await getMovie(movieid);
@@ -175,9 +206,11 @@ else
                   </Box>
                   <Divider flexItem/>
                   {user?
-                  //TODO mask my rating/status or blur if they arent in my list
-                  <Box component='div'>
-                     <Button onClick={handleOpenWatchForm}>Add to list</Button>
+                  <>
+                  {/* //TODO mask my rating/status or blur if they arent in my list */}
+                  <Box component='div' className='movie-add-edit'>
+                     {wlData===null?<>
+                     <Button onClick={handleOpenWatchForm}><AddCircleIcon/>Add to list</Button>
                      <Modal
                               open={openWatchForm}
                               onClose={(e) => {
@@ -193,10 +226,36 @@ else
                                      handleCloseWatchForm={handleCloseWatchForm} title={movie.title} episodesTotal={1}/>
                                  </Box>
                               </Box>
-                     </Modal> 
-                     <Typography component='span'>My rating</Typography>
-                     <Typography component='span'>My status</Typography>
+                     </Modal>
+                     </>
+                     :
+                     <>
+                     <Button onClick={handleOpenWatchForm} sx={{color:'rgb(200, 0, 0)'}}>Edit entry</Button>
+                     <Modal
+                              open={openWatchForm}
+                              onClose={(e) => {
+                                 e.preventDefault();
+                                 handleCloseWatchForm();
+                              }}
+                              aria-labelledby={'edit'+movie.title}
+                              aria-describedby="formWatchlist"
+                              >
+                              <Box className='watchformmodal'>
+                                 <Box  sx={{width:'70vw',height:'90vh'}} component="div">
+                                    <WatchlistForm movieid={parseInt(movieid)} type={'movie'}
+                                     handleCloseWatchForm={handleCloseWatchForm} title={movie.title} episodesTotal={1}/>
+                                 </Box>
+                              </Box>
+                     </Modal>
+                     
+                     <Typography component='span' className='movie-wl-rating'>
+                        <StarIcon className='icn' sx={{color:'rgb(229, 187, 0)'}}/>{wlData.rating}&nbsp;
+                     </Typography>
+                     <Typography component='span' className='movie-wl-status'>&nbsp;{wlData.status}&nbsp;</Typography>
+                     </>
+                     }
                   </Box>
+                  </>
                   :
                   //TODO style/verify
                   <Box>

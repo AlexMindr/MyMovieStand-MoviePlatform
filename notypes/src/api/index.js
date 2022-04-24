@@ -20,7 +20,7 @@ export const login = (formValues) => api.post("/user/login", formValues);
 export const signup = (formValues) => api.post("/user/signup", formValues);
 
 
-export const getWatchlist = () => api.get("/watchlist/all");
+export const getWatchlist = (username) => api.get(`/watchlist/${username}`);
 export const getWatchlistInit = () => api.get("/watchlist");
 export const createWatchlistItem = (formValues) => api.post("/watchlist",formValues);
 export const updateWatchlistItem = (formValues) => api.put("/watchlist",formValues);

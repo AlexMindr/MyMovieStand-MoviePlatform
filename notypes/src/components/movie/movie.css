@@ -157,7 +157,7 @@
 }
 
 .trailer{
-    
+    display:flex;
     height: 100%;
     width: 100%;
     box-sizing: border-box;
@@ -165,30 +165,17 @@
     background-repeat: no-repeat;
     background-size: auto 100%;
     background-position-x: center;
-    /*min-width: 175px;
-    max-width: min(95%,350px);
-    max-height:min(95%,350px); 
-    min-height: 200px;*/
     margin-top: 2rem;
     margin-bottom: 1rem;
-    /*margin-left: 0.5rem;*/
-     
+    justify-content: center;
+    align-items: center;     
 }
-/* .trailer button img{
-    opacity: 1;
-    position: absolute;
-    padding:0;
-    z-index:-1;
-}*/
+
 .trailer button{
     color:rgb(255, 1, 141);
-    /* min-width: 80px;
-    max-width: min(95%,350px);
-    max-height:min(95%,500px); 
-    min-height: 150px;  */
     padding-left:0 !important;
     padding-top:0 !important;
-    width: 100px;
+    width: 90px;
     height: 150px;
     /*width:clamp(80px,100px + 10vw, 350px);
     height: clamp(100px, 150px + 10vh,450px);
@@ -196,10 +183,7 @@
     height:clamp(250px,80% + 100px , 450px); */
     transition: none;
     position: relative;
-    left:38.5%;
-    margin-top: -0.5rem;
     overflow-x: hidden;
-    
     
 } 
 .trailermodal{
@@ -225,6 +209,39 @@
     
     
 }
+
+.movie-add-edit{
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 20px;
+    align-items: center;
+    justify-content: left;
+    
+}
+
+.movie-wl-rating{
+    border-radius: 10px;
+    border-width: 2px 4px;
+    border-style: solid;
+    border-color: rgb(255, 133, 133);
+    background-color: rgb(231, 217, 199);
+    color:rgb(229, 69, 0); 
+    
+}
+.movie-wl-rating .icn{
+    vertical-align: top;
+}
+
+.movie-wl-status{
+    border-radius: 5px;
+    border-width: 2px 2px;
+    border-style: solid;
+    border-color: rgb(50, 205, 197);
+    background-color: rgb(231, 217, 199);
+    color:rgb(229, 0, 92);
+    
+}
+
 
 .images{
     width: 95%;

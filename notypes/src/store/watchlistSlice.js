@@ -22,7 +22,7 @@ export const watchlistSlice = createSlice({
         },
         deletewlItem: (state,action) => {
             state.watchlist= state.watchlist.filter((watchlistItem)=> 
-            watchlistItem.movieid!==action.payload.watchlistItem.movieid)
+            watchlistItem.movieid!==action.payload.movieid)
         },
         getWatchlist:(state,action) => {
             state.watchlist=[...action.payload.watchlist]
@@ -45,6 +45,17 @@ export const actionGetWl = () => async dispatch => {
 
 }
 
+export const actionDelWlItem = (formData) => async dispatch => {
+    apidelWl()
+    .then(res=>{
+        dispatch(deletewlItem(formData))
+    })
+    .catch(err=>{
+        console.error(err)
+    })
+
+}
+
 export const actionCreateOrUpdateItem = (formData,action) => async dispatch => {
     
     if (action==='create')
@@ -52,7 +63,7 @@ export const actionCreateOrUpdateItem = (formData,action) => async dispatch => {
         .then(res=>{
             const wlItem=formData
             dispatch(addwlItem(wlItem))
-            console.log('bad')
+            
         })
         .catch(err=>{
             console.error(err)
@@ -60,7 +71,7 @@ export const actionCreateOrUpdateItem = (formData,action) => async dispatch => {
     if (action==='update')
         apiputWl(formData)
         .then(res=>{
-            console.log('here')
+            
             const wlItem=formData
             dispatch(updatewlItem(wlItem))
         })

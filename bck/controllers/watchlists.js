@@ -23,10 +23,12 @@ const getWatchlistInit = async (req, res) => {
 
 
 const getWatchlist = async (req, res) => {
-    const uuid=req.userId
-    
+    //const uuid=req.userId
+    const {username}=req.params;
     try {
-        const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+        // const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+        const {userid}= await User.findOne({attributes:['userid'],where:{username}});
+      
       
         const watchlist = await Watchlist.findAll({
             attributes:['status','rating','episodes','movieid'],

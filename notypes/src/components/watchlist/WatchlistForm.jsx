@@ -104,6 +104,10 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
                      <Button type="submit"  variant="contained" color="primary" className='submit-watchlist'>
                         Submit
                      </Button>
+                     {/* //TODO ADD logic to delete */}
+                     <Button variant="contained" color="primary" className='submit-watchlist'>
+                        Delete
+                     </Button>
               </Box>
                
                 

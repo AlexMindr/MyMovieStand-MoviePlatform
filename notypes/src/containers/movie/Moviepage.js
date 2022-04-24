@@ -12,7 +12,7 @@ const Moviepage = () => {
     <StyledEngineProvider injectFirst>
       <Container component='div' className='container-movie'>    
   
-        <Movie movieid={id}/>
+        <Movie movieid={parseInt(id)}/>
       </Container>
     </StyledEngineProvider>
     </>
