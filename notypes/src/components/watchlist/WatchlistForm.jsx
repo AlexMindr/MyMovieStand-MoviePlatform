@@ -12,7 +12,7 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
   const [isCreateOrUpdate, setIsCreateOrUpdate]= useState('create')
   const dispatch = useDispatch()
   const {watchlist}= useSelector(state=>state.watchlistReducer)
-  const [formData, setFormData] = useState({status:'',rating:'',episodes:null,movieid})
+  const [formData, setFormData] = useState({status:'',rating:null,episodes:null,movieid})
   
     const handleSubmit = async (e) => {
       e.preventDefault()
@@ -39,7 +39,7 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
         const formFill=watchlist.filter(item=>item.movieid===movieid)
         
         if (formFill.length>0){
-            setFormData({status:formFill[0].status,rating:formFill[0].rating,episodes:formFill[0].episodes,movieid})
+            setFormData({status:formFill[0].status,rating:formFill[0].rating?formFill[0].rating:null,episodes:formFill[0].episodes,movieid})
             setIsCreateOrUpdate('update')
         }
       }

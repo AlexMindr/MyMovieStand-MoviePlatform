@@ -1,0 +1,39 @@
+/* .watchlist-table-rows{
+    display:flex;
+
+} */
+/* .cell--title button{
+    /* justify-content: right !important; */
+    
+
+
+.watching{
+    background-color: silver;
+    color:rgb(88, 209, 43);
+}
+.completed{
+    background-color: silver;
+    color:rgb(51, 99, 242);
+}
+.plantowatch{
+    background-color: silver;
+    color:rgb(102, 102, 102);
+}
+.dropped{
+    background-color: silver;
+    color:rgb(243, 102, 130);
+}
+.onhold{
+    background-color: silver;
+    color:rgb(238, 224, 103);
+}
+
+
+.cell--img img{
+    width: auto;
+    height: 69px;
+}
+
+.cell--center{
+    justify-content: center !important;
+}

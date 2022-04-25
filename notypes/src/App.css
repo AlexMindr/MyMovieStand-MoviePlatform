@@ -34,6 +34,11 @@
   
 }
 
+a,a:visited { 
+  text-decoration: none !important;  
+  color:rgb(4, 39, 238)
+}
+
 @media only screen and (max-width:900px){
   .app__content{
     margin-top:6rem ;

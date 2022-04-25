@@ -1,0 +1,12 @@
+.loading-watchlist{
+    display:flex;
+    position:relative;
+    top:30vh;
+    height: 500px;
+    left:50%;
+    overflow-y: hidden;
+  }
+  
+  .loading-watchlist svg{
+   color:blueviolet;
+  }

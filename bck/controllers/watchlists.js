@@ -32,17 +32,20 @@ const getWatchlist = async (req, res) => {
       
         const watchlist = await Watchlist.findAll({
             attributes:['status','rating','episodes','movieid'],
+            
             where:{
               userid
             }, 
             include:{
             model:Movie,
-            attributes:['title','release_date'],
-            /*through:{
-              attributes:[]
-            }*/
-          }});
-  
+            attributes:['title','release_date','poster_path','uscertification'],
+            },
+            order:[
+              [Movie,'title','ASC'],
+              ['rating','DESC']
+            ],
+          });
+          console.log(watchlist.map(wl=>wl.Movie.title))
       res.status(200).json({watchlist});
     } catch (error) {
       res.status(404).json({ message: error.message });
