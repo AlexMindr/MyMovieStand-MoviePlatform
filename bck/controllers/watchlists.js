@@ -45,7 +45,7 @@ const getWatchlist = async (req, res) => {
               ['rating','DESC']
             ],
           });
-          console.log(watchlist.map(wl=>wl.Movie.title))
+          
       res.status(200).json({watchlist});
     } catch (error) {
       res.status(404).json({ message: error.message });

@@ -1,10 +1,11 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useMemo} from 'react'
 import './watchlist.css'
 import WatchlistForm from './WatchlistForm'
 import { Box,Button,Modal } from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, gridStringOrNumberComparator } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
-
+import {default as useWindowDimensions} from '../../auxcomponents/hooks/windowDimensions'
+import StarIcon from '@mui/icons-material/Star';
 //TODO verificat daca row poate avea param care nu sunt in col
 
 function rows (watchlist){
@@ -12,34 +13,48 @@ function rows (watchlist){
     var rowsWl=[]
     
     for (let i=0;i<watchlist.length;i++){
-        console.log(watchlist[i].rating)
         rowsWl.push(
             {id:i+1,
-            title:{title:watchlist[i].Movie.title,movieid:watchlist[i].movieid},
+            title:watchlist[i].Movie.title,
             status:watchlist[i].status,
             rating:watchlist[i].rating!==null &&watchlist[i].rating!==0?watchlist[i].rating:null,
             certification:watchlist[i].Movie.uscertification,
             poster:watchlist[i].Movie.poster_path,
-            edit:{movieid:watchlist[i].movieid,title:watchlist[i].Movie.title}
+            movieid:watchlist[i].movieid
             })
     }
     return rowsWl
 }
 
-//TODO handle sort la title
+const titleSortComparator = (v1, v2, param1, param2) => {
+    
+    return gridStringOrNumberComparator(v1.title, v2.title, param1, param2);
+  };
+  
+
+//TODO daca am timp filtrare
 
 
 const Watchlist = ({watchlist}) => {
     const [openWatchForm, setOpenWatchForm] = useState(false);
+    const { width } = useWindowDimensions();
+
     const handleOpenWatchForm = () => setOpenWatchForm(true);
     const handleCloseWatchForm = () => setOpenWatchForm(false);
 
-    const columns = [
-        { field: 'id', headerName: '', width: 10 },
+    
+    const columns = useMemo(() =>
+     [ 
+        {    field: 'id',
+             headerName: '',
+             width: 20,
+             sortable:false,
+             disableColumnMenu: true,
+        },
         {
             field:'poster',
             headerName:'Image',
-            width:80,
+            width:70,
             renderCell: (params) => <img src={`https://image.tmdb.org/t/p/original/${params.value}`} alt='poster' />,
             cellClassName: (params) => {
               if (params.value == null) {
@@ -48,30 +63,38 @@ const Watchlist = ({watchlist}) => {
               return ('cell--img');
             },
             sortable:false,
-            filtarable:false,            
+            disableColumnMenu: true,           
         },
         {
           field: 'title',
           headerName: 'Title',
           flex: 1,
-          renderCell: (params) => <>
+          valueGetter: (params) => ({
+            title: params.row.title,
+            movieid:params.row.movieid,
+          }),
+          renderCell: (params) =>
+             <>
               <Link to={`/movies/${params.value.movieid}`}>
-                  {params.value.title}
+                  {
+                    params.value.title.length>20?
+                        params.value.title.substring(0,20)+'...'
+                        :
+                        params.value.title
+                  }
               </Link>
-              {/* <Button variant='text'>
-                  Edit
-              </Button> */}
              </>
           ,
           cellClassName: (params) => {
               return 'cell--title'
           },
+          sortComparator:titleSortComparator,
         },
-        
         {
           field: 'status',
           headerName: 'Status',
-          width: 130,
+          headerAlign:'center',
+          width: 100,
           cellClassName: (params) => {
               if (params.value == null) {
                 return '';
@@ -98,7 +121,7 @@ const Watchlist = ({watchlist}) => {
           headerName: 'Score',
           type: 'number',
           headerAlign:'center',
-          width: 80,
+          width: 60,
           cellClassName: (params) => {
               if (params.value == null) {
                 return '';
@@ -122,6 +145,10 @@ const Watchlist = ({watchlist}) => {
           field:'edit',
           headerName:'',
           width:70,
+          valueGetter: (params) => ({
+            title: params.row.title,
+            movieid:params.row.movieid,
+          }),
           renderCell: (params) => <>
               <Button variant='text' onClick={handleOpenWatchForm}>
                   Edit
@@ -144,27 +171,145 @@ const Watchlist = ({watchlist}) => {
               </Modal>
              </>,
           sortable:false,
-          filtarable:false,
+          disableColumnMenu: true,
           
         },
       
-      ];
+      ],[openWatchForm]);
       
 
+      const columns2 = useMemo(() =>
+     [ 
+        
+        {
+            field:'poster',
+            headerName:'Image',
+            width:100,
+            renderCell: (params) => <img src={`https://image.tmdb.org/t/p/original/${params.value}`} alt='poster' />,
+            cellClassName: (params) => {
+              if (params.value == null) {
+                return '';
+              }
+              return ('cell--img');
+            },
+            sortable:false,
+            disableColumnMenu: true,           
+        },
+        {
+          field: 'info',
+          headerName: 'Movie Info',
+          flex: 1,
+          valueGetter: (params) => ({
+            title: params.row.title,
+            movieid:params.row.movieid,
+            status:params.row.status,
+            score:params.row.rating,
+            certification:params.row.certification
+          }),
+          renderCell: (params) =>
+             <Box component='div' className='cell--contentsmall'>
+              <Link className='cell--title' to={`/movies/${params.value.movieid}`}>
+                  {
+                    params.value.title.length>40?
+                        params.value.title.substring(0,40)+'...'
+                        :
+                        params.value.title
+                  }
+              </Link>
+              <div><StarIcon sx={{color:'gold',verticalAlign:'top'}}/>&nbsp;{params.value.score?params.value.score:'-'}</div>
+              <div>{params.value.status}</div>
+              <div>{params.value.certification}</div>
+             </Box>
+          ,
+          cellClassName: (params) => {
+            if (params.value.status == null) {
+              return '';
+            }
+            else
+                 switch (params.value.status){
+                        case 'Completed':
+                            return ('cell--status-completed');
+                        case 'Plan to watch':
+                            return ('cell--status-plantowatch');
+                        case 'Watching':
+                            return ('cell--status-watching');
+                        case 'Dropped':
+                            return ('cell--status-dropped');
+                        case 'On-hold':
+                            return ('cell--status-onhold');
+                        default:
+                            return ('cell--status');
+                }
+          },
+          sortComparator:titleSortComparator,
+        },
+        
+        {
+          field:'edit',
+          headerName:'',
+          width:60,
+          valueGetter: (params) => ({
+            title: params.row.title,
+            movieid:params.row.movieid,
+          }),
+          renderCell: (params) => <>
+              <Button variant='text' onClick={handleOpenWatchForm}>
+                  Edit
+              </Button> 
+              <Modal
+                  open={openWatchForm}
+                  onClose={(e) => {
+                      e.preventDefault();
+                      handleCloseWatchForm();
+                  }}
+                  aria-labelledby={'add'+params.value.title}
+                  aria-describedby="formWatchlist"
+                  >
+                  <Box className='watchformmodal'>
+                      <Box  sx={{width:'70vw',height:'90vh'}} component="div">
+                      <WatchlistForm movieid={parseInt(params.value.movieid)} type={'movie'}
+                          handleCloseWatchForm={handleCloseWatchForm} title={params.value.title} episodesTotal={1}/>
+                      </Box>
+                  </Box>
+              </Modal>
+             </>,
+          sortable:false,
+          disableColumnMenu: true,
+          cellClassName: (params) => {
+            if (params.value == null) {
+              return '';
+            }
+            return ('cell--edit');
+          },
+        },
+      
+      ],[openWatchForm]);
 
     
 return (
     <Box component='div'>
-        {watchlist && 
         <Box component='div' style={{height:'100vh',width:'100%'}}>
-            <DataGrid
-            rows={rows(watchlist)}
-            columns={columns}
-            disableSelectionOnClick
-            rowHeight={70}
-            />
-        </Box>
+            {watchlist && width>735?
+                <DataGrid
+                rows={rows(watchlist)}
+                columns={columns.map(
+                    (col)=> col.field === 'poster' || col.field==='id' || col.field==='edit' || col.field==='title' ? { ...col, filterable: false } : col,
+                )}
+                disableSelectionOnClick
+                rowHeight={70}
+                />
+                
+            :
+                <DataGrid
+                rows={rows(watchlist)}
+                columns={columns2.map(
+                    (col)=>  col.field?{ ...col, filterable: false }:col
+                )}
+                disableSelectionOnClick
+                rowHeight={120}
+                />
         }
+        </Box>
     
     </Box>
   )
