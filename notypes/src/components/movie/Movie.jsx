@@ -112,7 +112,7 @@ if(movie===null)
 else
    return (
  
-   <Box className='article-movie' sx={{ flexGrow: 1 }} component='article'>
+   <Box className='article-movie' sx={{ flexGrow: 1 }} component='div'>
       
       <Grid container spacing={1} className='container-grid' 
       sx={{backgroundImage:`url(${`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}),linear-gradient(to bottom, #f0f0f0, #57525a)`}}>

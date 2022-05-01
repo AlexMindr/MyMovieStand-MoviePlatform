@@ -5,7 +5,7 @@ const {Genre}=db;
 
 const getGenres = async (req, res) => {
     try {
-        const genres = await Genre.findAll();
+        const genres = await Genre.findAll({attributes:['name']});
   
       res.status(200).json(genres);
     } catch (error) {

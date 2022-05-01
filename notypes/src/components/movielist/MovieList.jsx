@@ -146,8 +146,8 @@ const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,re
                               </Box>
                   </Modal>
                {wlData && wlData.rating?
-               <div class="movielist-userscore">
-                   <div class="movielist-userscore-content">&nbsp;{wlData.rating}&nbsp;</div>
+               <div className="movielist-userscore">
+                   <div className="movielist-userscore-content">&nbsp;{wlData.rating}&nbsp;</div>
                </div>
                :
                <></>

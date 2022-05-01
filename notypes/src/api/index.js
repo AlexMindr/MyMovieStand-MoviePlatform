@@ -26,6 +26,8 @@ export const createWatchlistItem = (formValues) => api.post("/watchlist",formVal
 export const updateWatchlistItem = (formValues) => api.put("/watchlist",formValues);
 export const deleteWatchlistItem = (formValues) => api.delete("/watchlist",formValues);
 
+export const getGenres = () => api.get(`/genres`);
+
 
 const apikey ='api_key=d05a8d2156e4230aded1c48bf6f75b82'
 
