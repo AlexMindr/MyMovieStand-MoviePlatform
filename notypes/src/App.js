@@ -11,6 +11,7 @@ import { actionGetWl } from './store/watchlistSlice';
 
 //TODO overflow:elipsis pt titlurile lungi?
 //TODO switch countries with auto-complete countries from mui autocomplete
+//TODO rating mui ?
 export default function App() {
   const dispatch=useDispatch()
   const {user} =useSelector(state=>state.userReducer)

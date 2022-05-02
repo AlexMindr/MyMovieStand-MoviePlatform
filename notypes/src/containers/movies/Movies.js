@@ -4,7 +4,6 @@ import './movies.css'
 import { getMovies,getGenres } from '../../api';
 import CircularProgress from '@mui/material/CircularProgress';
 import Pagination from '@mui/material/Pagination';
-import  Grid  from '@mui/material/Grid';
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import InputLabel from '@mui/material/InputLabel';
@@ -13,9 +12,10 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider'
 import Checkbox from '@mui/material/Checkbox';
-import { Typography,FormControlLabel,FormGroup } from '@mui/material';
-
-
+import { Typography,FormControlLabel,FormGroup,Button } from '@mui/material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 
 const Movies=()=>{
 
@@ -25,9 +25,8 @@ const Movies=()=>{
     const [order, setOrder] = useState('');
     const [sorterBy, setSorterBy]=useState('')
     const [genresChecked, setGenresChecked] = useState()
-    const [genres, setGenres]= useState()
-
-
+    const [genres, setGenres]= useState(null)
+    const [inputSearch, setInputSearch]=useState()
 
     const handleChangeOrder = (event) => {
         setOrder(event.target.value);
@@ -36,32 +35,27 @@ const Movies=()=>{
         setSorterBy(event.target.value);
     };
     const handleChangeGenres = (e) => {
-        setGenresChecked({ ...genresChecked, [e.target.name]: e.target.value });
-        console.log(genresChecked)
+        setGenresChecked({ ...genresChecked,[e.target.name]: e.target.checked });
     };
 
     const pageChange = (event, value) => {
         setPage(value);
     };
 
-    
     useEffect(() => {
-        
+        let initialState={}
         async function getGenresfrombck(){
            const res= await getGenres();
            setGenres(res.data);
-           let names=res.data.map((genre)=>genre.name)
-           //let initialState={}
-           //setGenresChecked({res.data.map((genre))})
-           }
-        
+           
+           res.data.forEach((genre)=>initialState[genre.name]=false)
+        }    
         getGenresfrombck();
-        //console.log(genres)
-     },[]);
+        setGenresChecked(initialState)
+    },[]);
 
 
     useEffect(() => {
-        //console.log("child component mounted");
         
         async function getData(){
            const res= await getMovies(page);
@@ -77,10 +71,46 @@ const Movies=()=>{
     return (
         <Container className='container-movies'>
             <div className='filter-items'>
-                <div className='filter-items-search'>
-                    <input></input>
+                <div className='search-filter'>
+                    <div className='search-filter-container'>
+                        <div className='icon'>
+                    
+                            <Button className='search' 
+                            //onClick={()=>searchToggle==='container2'?setSearchToggle('container2 active'):setSearchToggle('container2')}
+                            aria-label="submit search">
+                            <SearchIcon fontSize='medium' />
+                            </Button>
+                        </div>
+                        <div className="input">
+                            <input type="text" aria-label='search' placeholder="Search movie..." value={inputSearch} 
+                                onChange={(e)=>{setInputSearch(e.target.value);console.log(e.target.value)}}/>
+                            <Button className='clear'onClick={()=>setInputSearch('')} >
+                                <ClearIcon/>
+                            </Button>
+                        </div>
+                    </div>
                 </div>
                 <div className='filter-items-selects'>
+                    <div className="dropdown-selectgenres">
+                      <label className='dropdown-selectgenres-label'>Genres &nbsp;&nbsp;&nbsp;<ArrowDropDownIcon fontSize='small' 
+                      sx={{verticalAlign:'bottom'}}/></label>
+                        <div className="dropdown-selectgenres-content">
+                            <FormGroup >
+                            {genres && genres.map((genre)=>
+                            <FormControlLabel key={genre.genreid} control={
+                                <Checkbox name={genre.name} 
+                                value={genresChecked[genre.name]?genresChecked[genre.name]:''}
+                                checked={genresChecked[genre.name]?genresChecked[genre.name]:false}
+                                onChange={handleChangeGenres} 
+                                inputProps={{ 'area-labeled': 'controlled' }} 
+                                />
+                            } label={genre.name} />
+                            )}
+                            </FormGroup>
+                        
+                    </div>
+                    </div>
+                    <Divider orientation='vertical' flexItem/>
                     <Box sx={{minWidth:100}} component='div'>
                         <FormControl variant='standard' fullWidth className='select-item'>
                             <InputLabel id="input-sorter">Sort by</InputLabel>
@@ -119,14 +149,23 @@ const Movies=()=>{
             </div>
             <div className='movie-content-box'>
             <div className='meniuleft'>
-                    <Typography variant='h3'>Select Genres</Typography>
+                    <Typography variant='h5' component='h3' >Select Genres</Typography>
+                    <FormGroup >
                     {genres && genres.map((genre)=>
-                        <FormGroup key={genre.name}>
-                        <FormControlLabel control={
-                            <Checkbox name={genre.name}  onChange={handleChangeGenres} />
+                        <FormControlLabel key={genre.genreid} control={
+                            <Checkbox name={genre.name} 
+                            value={genresChecked[genre.name]?genresChecked[genre.name]:''}
+                             checked={genresChecked[genre.name]?genresChecked[genre.name]:false}
+                             onChange={handleChangeGenres} 
+                             inputProps={{ 'area-labeled': 'controlled' }} 
+                             />
                         } label={genre.name} />
-                        </FormGroup>
-                    )}   
+                       
+                        
+                    )}
+                    </FormGroup>
+                      
+  
                 </div>
                 <div className='container-movies-content'>
                 {
@@ -149,6 +188,7 @@ const Movies=()=>{
                             )
                         }
                         </ul>
+                        
                 </div>
                     }
                     {movies!==null?
