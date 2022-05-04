@@ -1,7 +1,6 @@
 .container-movies{
     width: 100%;
     margin-top:0.2rem;
-   
     /* margin-inline:2%; */
 }
 .filter-items{
@@ -212,7 +211,7 @@
   display:flex;
   position:relative;
   top:40%;
-  height: 500px;
+  height: 300px;
   left:50%;
   overflow-y: hidden;
 }

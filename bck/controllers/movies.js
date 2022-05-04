@@ -25,15 +25,22 @@ const getMoviesFiltered = async (req, res) => {
   const {order,sorter,checked,search}=req.query
   let checkedGenres=checked?checked.split(','):null
   
+
+//TODO tryfix
     await Movie.findAndCountAll({
         attributes:['movieid','title','release_date','poster_path','duration','overview','uscertification','rating','popularity','trailer','keywords','adult'], 
         limit,
         offset,
         distinct: true,
         include:{
-          required:false,
+          required:true,
           model:Genre,
           attributes:['name','genreid'],
+          where:{
+            name:checkedGenres?{ [Op.in]:checkedGenres}:{[Op.ne]:'empty'},
+            //try fixname:{[Op.all]:sequelize.literal(`SELECT name FROM Genres WHERE name in ${('Animation','Adventure')}`)}          
+          
+          },
           through:{
             attributes:[]
           }
@@ -41,23 +48,26 @@ const getMoviesFiltered = async (req, res) => {
          },
          
         where:{
-           '$name$':checkedGenres?{ [Op.in]:checkedGenres}:{[Op.ne]: 'empty'},
            [Op.or]:[
              {
                title:{
                 [Op.like]:search?`%${search}%`:`%`
                }
              },
-             {
+             search&&search.length>=3?{
                keywords:{
                 [Op.like]:search?`%${search}%`:`%`
                }
-             },
+             }:{
+              title:{
+                [Op.like]:search?`%${search}%`:`%`
+               }
+              },
            ]
           
         },
         order:[
-          sorter?[sorter==='duration'?sequelize.cast(sequelize.col('duration'),'integer'):sorter,order?order:'ASC']:['title','ASC']
+          sorter?[sorter==='duration'?sequelize.cast(sequelize.col('duration'),'integer'):sorter,order?order:'ASC']:['title',order?order:'ASC']
         ],
       })
       .then(data => {
@@ -68,6 +78,7 @@ const getMoviesFiltered = async (req, res) => {
 
       .catch(error=>{
         res.status(404).json({ message: error.message });
+        //console.log(error)
     })
 }
 

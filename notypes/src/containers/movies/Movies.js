@@ -1,7 +1,7 @@
-import React,{useEffect,useState} from 'react';
+import React,{useEffect,useState,useRef} from 'react';
 import {MovieList} from '../../components'
 import './movies.css'
-import { getMovies,getGenres } from '../../api';
+import { getMovies,getGenres,getMoviesFiltered } from '../../api';
 import CircularProgress from '@mui/material/CircularProgress';
 import Pagination from '@mui/material/Pagination';
 import Box from '@mui/material/Box'
@@ -12,21 +12,37 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider'
 import Checkbox from '@mui/material/Checkbox';
-import { Typography,FormControlLabel,FormGroup,Button,FormLabel,Radio,RadioGroup,Tooltip } from '@mui/material';
+import { Typography,FormControlLabel,FormGroup,Button } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 
-const Movies=()=>{
 
+
+const allValEq = (obj,valComp)=>{
+    let isvalComp=Object.values(obj).every(value => {
+    if (value === valComp) {
+      return true;
+    }
+  
+    return false;
+  });
+  return isvalComp
+
+}
+  
+
+
+const Movies=()=>{
+    //const genresCheckedInitial=useRef()
     const [movies,setMovies]=useState(null)
     const [page, setPage] = useState(1);
     const [totalPages,setTotalPages]=useState()
     const [order, setOrder] = useState('');
     const [sorter, setSorter]=useState('')
-    const [genresChecked, setGenresChecked] = useState()
+    const [genresChecked, setGenresChecked] = useState(null)
     const [genres, setGenres]= useState(null)
-    const [inputSearch, setInputSearch]=useState()
+    const [inputSearch, setInputSearch]=useState('')
 
     // const handleChangeRadio = (e) => {
     //     setGenresChecked({ ...genresChecked,[e.target.name]: e.target.value });
@@ -44,7 +60,9 @@ const Movies=()=>{
     const pageChange = (event, value) => {
         setPage(value);
     };
-
+    
+     
+    
     useEffect(() => {
         let initialState={}
         async function getGenresfrombck(){
@@ -55,24 +73,65 @@ const Movies=()=>{
         }    
         getGenresfrombck();
         setGenresChecked(initialState)
-        //console.log(initialState)
+        
     },[]);
 
 
     useEffect(()=> {
-       //TODO
-        // if(genres && genres.filter((genre)=>genresChecked[genre.name]===true))
-        // console.log('space',order,sorter,inputSearch,genresChecked)
-        // console.log('check',genres.filter((genre)=>genresChecked[genre.name]===true))
-    },[order,sorter,inputSearch,genresChecked,genres])
-
-    useEffect(() => {
-        
+        async function getDataFiltered(query){
+            let pg=1
+            const res= await getMoviesFiltered(pg,query);
+            setMovies(res.data.movies);
+            setTotalPages(res.data.totalPages)
+            setPage(pg)
+            }
         async function getData(){
-           const res= await getMovies(page);
-           setMovies(res.data.movies);
-           setTotalPages(res.data.totalPages)
-           }
+            let pg=1
+            const res= await getMovies(pg);
+            setMovies(res.data.movies);
+            setTotalPages(res.data.totalPages)
+            setPage(pg)
+            }
+        let toQuery={checked:null,order:null,sorter:null,search:null}
+        if(genresChecked && !allValEq(genresChecked,false)){
+            let checkedGen=''
+            for (const [key, value] of Object.entries(genresChecked)) {
+                if(value===true)
+                    checkedGen+=key+','
+              }
+            checkedGen=checkedGen.slice(0,-1)
+            if(checkedGen)
+                toQuery.checked=checkedGen
+        }      
+        if(sorter && sorter!=='')
+            toQuery.sorter=sorter
+        if(order && order!=='')
+            toQuery.order=order
+        if(inputSearch && inputSearch!=='')
+            toQuery.search=inputSearch
+        let query=''
+        if(!allValEq(toQuery,null)){
+            for (const [key, value] of Object.entries(toQuery)) {
+                if(value)
+                    query+=`${key}=${value}&`
+            }
+        query=query.slice(0,-1)
+        getDataFiltered(query);
+        }
+        
+        if(genresChecked && inputSearch==='' &&order==='' && sorter==='' && allValEq(genresChecked,false)){
+            getData()
+        }
+        
+
+    },[order,sorter,inputSearch,genresChecked,genres])
+    console.log(movies)
+    useEffect(() => {
+        async function getData(){
+            const res= await getMovies(page);
+            setMovies(res.data.movies);
+            setTotalPages(res.data.totalPages)
+            }    
         
         getData();
      },[page]);
@@ -221,6 +280,7 @@ const Movies=()=>{
                         <CircularProgress />
                     </div>
                     :
+                    movies.length>=1?
                     <div component='div' className='container-movies-div'>
                         <ul  className='container-movies-grid'>
                         {movies.map((movie) =>
@@ -234,9 +294,12 @@ const Movies=()=>{
                         }
                         </ul>
                         
-                </div>
+                    </div>
+                    :<div className='loading-movies'>
+                        <Typography variant='h4' sx={{fontStyle:'oblique', color:'#a3abb3'}}>No results</Typography>    
+                    </div>
                     }
-                    {movies!==null?
+                    {movies!==null&&movies.length>=1?
                     <div className='container-pagination'>
                         <Pagination count={totalPages} variant="outlined" shape="rounded" showFirstButton showLastButton onChange={pageChange}/>
                     </div>:

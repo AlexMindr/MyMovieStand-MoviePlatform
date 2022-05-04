@@ -12,7 +12,7 @@ import {
 
 const router = Router();
 
-router.get("/filter",getMoviesFiltered)
+router.get("/page=:page/filter",getMoviesFiltered)
 router.get("/page=:page", getMovies);
 router.get("/movie=:id",getMovie)
 router.post("/populate",populateMovies)
