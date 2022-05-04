@@ -16,15 +16,15 @@ export default function App() {
   const dispatch=useDispatch()
   const {user} =useSelector(state=>state.userReducer)
   useEffect(() => {
-  
+    if(user)
     dispatch(actionVerify())
     
-  }, [dispatch])
+  }, [dispatch,user])
 
   useEffect(() => {
     if(user)
       dispatch(actionGetWl())
-  })
+  },[user,dispatch])
   return (
     
     <>

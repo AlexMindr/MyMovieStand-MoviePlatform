@@ -1,9 +1,10 @@
 import axios from 'axios';
 import db from '../models/index.cjs';
 import fs from 'fs';
-//import { Op } from '@sequelize/core';
+import { Op } from '@sequelize/core';
 
-const {Movie,Moviegenre,Genre,User}=db;
+
+const {Movie,Moviegenre,Genre,User,sequelize,Sequelize}=db;
 
 const getPagination = (page, size) => {
   const limit = size ? +size : 21;
@@ -17,6 +18,58 @@ const getPagingData = (data, page, limit) => {
   const totalPages = Math.ceil(totalItems / limit);
   return {  movies, totalPages };
 };
+
+const getMoviesFiltered = async (req, res) => {
+  const {page}=req.params;
+  const { limit, offset } = getPagination(page-1);
+  const {order,sorter,checked,search}=req.query
+  let checkedGenres=checked?checked.split(','):null
+  
+    await Movie.findAndCountAll({
+        attributes:['movieid','title','release_date','poster_path','duration','overview','uscertification','rating','popularity','trailer','keywords','adult'], 
+        limit,
+        offset,
+        distinct: true,
+        include:{
+          required:false,
+          model:Genre,
+          attributes:['name','genreid'],
+          through:{
+            attributes:[]
+          }
+          
+         },
+         
+        where:{
+           '$name$':checkedGenres?{ [Op.in]:checkedGenres}:{[Op.ne]: 'empty'},
+           [Op.or]:[
+             {
+               title:{
+                [Op.like]:search?`%${search}%`:`%`
+               }
+             },
+             {
+               keywords:{
+                [Op.like]:search?`%${search}%`:`%`
+               }
+             },
+           ]
+          
+        },
+        order:[
+          sorter?[sorter==='duration'?sequelize.cast(sequelize.col('duration'),'integer'):sorter,order?order:'ASC']:['title','ASC']
+        ],
+      })
+      .then(data => {
+        const {movies,totalPages} = getPagingData(data, page, limit);
+        
+        res.status(200).json({movies,totalPages});
+      })
+
+      .catch(error=>{
+        res.status(404).json({ message: error.message });
+    })
+}
 
 
 const getMovies = async (req, res) => {
@@ -262,4 +315,4 @@ const populateMovies = async (req, res) => {
         res.status(404).json({ message: error.message });
       }
   };
-  export { getMovies, getMovie, populateMovies, createMovie, updateMovie, deleteMovie };
+  export { getMovies, getMovie, populateMovies, createMovie, updateMovie, deleteMovie,getMoviesFiltered };

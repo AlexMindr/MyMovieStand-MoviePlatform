@@ -110,6 +110,7 @@
   display: none;
   height: 100%;
   cursor: pointer;
+  min-width: 90px;
 }
 .dropdown-selectgenres-label {
   /* line-height: 2.5em; */
@@ -169,6 +170,15 @@
 .meniuleft h3{
   font-weight: bold;
   font-size: 1.2rem;
+  text-align: center;
+}
+
+/* .radio-search h4{
+  font-weight:600;
+  font-size: 1rem;
+} */
+.radio-search span{
+  font-size: 0.75rem;
 }
 .container-movies-content{
     flex:80%;
@@ -197,23 +207,6 @@
   text-decoration: none;  
 }
 
-
-/* .contained-movies{
-  display:flex;
-}
-.container-movies ul{
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  row-gap: 1rem;
-  column-gap: 2rem;
-    
-} 
-
-.container-movies ul>li {
-  list-style-type: none;
-  text-decoration: none;  
-}
-*/
 
 .loading-movies{
   display:flex;
@@ -250,7 +243,14 @@
   .dropdown-selectgenres {
     display: inline-block;
   }
-   
+  .search-filter{
+    margin-left:4vw ;
+    min-width: 300px;
+  }
+  .search-filter-container{
+  
+    min-width: 90%;
+  }   
 
 }
 @media only screen and (max-width: 930px){
@@ -339,4 +339,13 @@
   .dropdown-selectgenres {
     display: inline-block;
   }
+
+  .search-filter{
+    height: auto;
+    min-height: 30px;
+  }
+  .search-filter-container{
+    margin-left: 0;
+    height: auto;
+  }   
 }

@@ -12,7 +12,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider'
 import Checkbox from '@mui/material/Checkbox';
-import { Typography,FormControlLabel,FormGroup,Button } from '@mui/material';
+import { Typography,FormControlLabel,FormGroup,Button,FormLabel,Radio,RadioGroup,Tooltip } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -23,16 +23,19 @@ const Movies=()=>{
     const [page, setPage] = useState(1);
     const [totalPages,setTotalPages]=useState()
     const [order, setOrder] = useState('');
-    const [sorterBy, setSorterBy]=useState('')
+    const [sorter, setSorter]=useState('')
     const [genresChecked, setGenresChecked] = useState()
     const [genres, setGenres]= useState(null)
     const [inputSearch, setInputSearch]=useState()
 
+    // const handleChangeRadio = (e) => {
+    //     setGenresChecked({ ...genresChecked,[e.target.name]: e.target.value });
+    // };
     const handleChangeOrder = (event) => {
         setOrder(event.target.value);
     };
     const handleChangeSort = (event) => {
-        setSorterBy(event.target.value);
+        setSorter(event.target.value);
     };
     const handleChangeGenres = (e) => {
         setGenresChecked({ ...genresChecked,[e.target.name]: e.target.checked });
@@ -52,8 +55,16 @@ const Movies=()=>{
         }    
         getGenresfrombck();
         setGenresChecked(initialState)
+        //console.log(initialState)
     },[]);
 
+
+    useEffect(()=> {
+       //TODO
+        // if(genres && genres.filter((genre)=>genresChecked[genre.name]===true))
+        // console.log('space',order,sorter,inputSearch,genresChecked)
+        // console.log('check',genres.filter((genre)=>genresChecked[genre.name]===true))
+    },[order,sorter,inputSearch,genresChecked,genres])
 
     useEffect(() => {
         
@@ -82,8 +93,8 @@ const Movies=()=>{
                             </Button>
                         </div>
                         <div className="input">
-                            <input type="text" aria-label='search' placeholder="Search movie..." value={inputSearch} 
-                                onChange={(e)=>{setInputSearch(e.target.value);console.log(e.target.value)}}/>
+                            <input type="text" aria-label='search' placeholder="Search movie..." value={inputSearch?inputSearch:''} 
+                                onChange={(e)=>{setInputSearch(e.target.value)}}/>
                             <Button className='clear'onClick={()=>setInputSearch('')} >
                                 <ClearIcon/>
                             </Button>
@@ -92,9 +103,27 @@ const Movies=()=>{
                 </div>
                 <div className='filter-items-selects'>
                     <div className="dropdown-selectgenres">
-                      <label className='dropdown-selectgenres-label'>Genres &nbsp;&nbsp;&nbsp;<ArrowDropDownIcon fontSize='small' 
-                      sx={{verticalAlign:'bottom'}}/></label>
+                        {/* <Tooltip title="AND: Movies must have all the genres selected;
+                             OR: Movies must have at least one of the selected genres" placement="top" arrow> */}
+                            <label className='dropdown-selectgenres-label'>Genres &nbsp;&nbsp;&nbsp;<ArrowDropDownIcon fontSize='small' 
+                            sx={{verticalAlign:'bottom'}}/></label>
+                        {/* </Tooltip> */}
+                    
                         <div className="dropdown-selectgenres-content">
+                            {/* {genres && 
+                            <FormControl className='radio-search'>
+                            <RadioGroup
+                                aria-labelledby="radio-buttons-group-genres-top"
+                                name="radio"
+                                value={genresChecked.radio}
+                                onChange={handleChangeRadio}
+                                row
+                                >
+                                <FormControlLabel value="and" control={<Radio />} label="AND" />
+                                <FormControlLabel value="or" control={<Radio />} label="OR" />
+                            </RadioGroup>
+                            </FormControl>
+                            } */}
                             <FormGroup >
                             {genres && genres.map((genre)=>
                             <FormControlLabel key={genre.genreid} control={
@@ -117,15 +146,14 @@ const Movies=()=>{
                             <Select 
                             labelId="select-sorter-label"
                             id="select-sorter"
-                            value={sorterBy}
+                            value={sorter}
                             label="Sorter"
                             onChange={handleChangeSort}
                             >
-                                <MenuItem  value={'Date'}>Date</MenuItem>
-                                <MenuItem  value={'Score'}>Score</MenuItem>
-                                <MenuItem  value={'Popularity'}>Popularity</MenuItem>
-                                <MenuItem  value={'Duration'}>Duration</MenuItem>
-                                <MenuItem  value={'Certification'}>Certification</MenuItem>
+                                <MenuItem  value={'release_date'}>Date</MenuItem>
+                                <MenuItem  value={'rating'}>Score</MenuItem>
+                                <MenuItem  value={'popularity'}>Popularity</MenuItem>
+                                <MenuItem  value={'duration'}>Duration</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
@@ -149,7 +177,24 @@ const Movies=()=>{
             </div>
             <div className='movie-content-box'>
             <div className='meniuleft'>
-                    <Typography variant='h5' component='h3' >Select Genres</Typography>
+                    {/* <Tooltip title="AND: Movies must have all the genres selected;
+                             OR: Movies must have at least one of the selected genres" placement="bottom" arrow> */}
+                        <Typography variant='h5' component='h3' >Select Genres</Typography>
+                    {/* </Tooltip> */}
+                    {/* {genres && 
+                    <FormControl className='radio-search'>
+                        <RadioGroup
+                            aria-labelledby="radio-buttons-group-genres"
+                            name="radio"
+                            value={genresChecked.radio}
+                            onChange={handleChangeRadio}
+                            row
+                            >
+                            <FormControlLabel value="and" control={<Radio />} label="AND" />
+                            <FormControlLabel value="or" control={<Radio />} label="OR" />
+                        </RadioGroup>
+                    </FormControl>
+                    } */}
                     <FormGroup >
                     {genres && genres.map((genre)=>
                         <FormControlLabel key={genre.genreid} control={

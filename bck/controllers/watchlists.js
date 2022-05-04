@@ -31,7 +31,7 @@ const getWatchlist = async (req, res) => {
       
       
         const watchlist = await Watchlist.findAll({
-            attributes:['status','rating','episodes','movieid'],
+            attributes:['status','rating','episodes','movieid',],
             
             where:{
               userid
