@@ -2,7 +2,7 @@ import React,{ useState } from 'react'
 import './login.css'
 import { Button, Grid, Box,Typography } from '@mui/material'
 import Input from '../../auxcomponents/input/Input'
-import { useNavigate,Link } from 'react-router-dom'
+import { useNavigate,Link,useLocation  } from 'react-router-dom'
 import { actionLogin} from '../../store/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -14,24 +14,26 @@ const Login = () => {
     const [formData, setFormData] = useState(initialState)
     const [formError,setFormError]=useState(false)
     const dispatch = useDispatch()
- 
+    const location = useLocation()
+    const navigate = useNavigate()
+
+    const toRedirect = location.state?.from?.pathname || "/";
+     console.log(toRedirect)
     const handleSubmit = async (e) => {
       e.preventDefault()
-      dispatch(actionLogin(formData))
+      dispatch(actionLogin(formData,navigate,toRedirect))
       .then(res=>{
          if(res){
             setFormError(res)
             setFormData(initialState)
          }
-         else setFormError(false)
+         //else setFormError(false)
         })
       .catch(e=>{
          setFormError(e)
          setFormData(initialState)
       })
-     //de redirectionat la home/unde era inainte
-     
-  
+   
    }
  
     const handleChange = (e) => {

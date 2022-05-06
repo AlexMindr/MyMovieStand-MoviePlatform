@@ -7,8 +7,8 @@ import watchlistReducer from './watchlistSlice';
 
 
 const reducer = combineReducers({
-  userReducer,
-  watchlistReducer,
+  user:userReducer,
+  watchlist:watchlistReducer,
   //watchlistReducer,
 })
 

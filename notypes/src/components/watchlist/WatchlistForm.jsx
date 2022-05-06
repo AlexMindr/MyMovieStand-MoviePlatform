@@ -11,7 +11,7 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
   const [formError,setFormError]= useState(false)
   const [isCreateOrUpdate, setIsCreateOrUpdate]= useState('create')
   const dispatch = useDispatch()
-  const {watchlist}= useSelector(state=>state.watchlistReducer)
+  const {watchlist}= useSelector(state=>state.watchlist)
   const [formData, setFormData] = useState({status:'',rating:null,episodes:null,movieid})
   
     const handleSubmit = async (e) => {

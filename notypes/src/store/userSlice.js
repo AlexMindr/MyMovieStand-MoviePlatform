@@ -7,8 +7,9 @@ import { useDispatch } from 'react-redux';
 export const userSlice = createSlice({
     name: 'user',
     initialState: {
-        user:'',
-        token:'',
+        user:localStorage.getItem('profile')?JSON.parse(localStorage.getItem('profile'))?.user:'',
+        token:localStorage.getItem('profile')?JSON.parse(localStorage.getItem('profile'))?.token:'',
+        verifiedThisSession:false,
     },
     reducers: {
         logIn: (state, action) => {
@@ -32,6 +33,7 @@ export const userSlice = createSlice({
         tokenVerifySuccess:(state,action) => {
             state.user =  JSON.parse(localStorage.getItem('profile')).user
             state.token = action.payload.token
+            state.verifiedThisSession=true
         },
         tokenVerifyFailed:(state) => {
             state.user =  ''
@@ -48,10 +50,11 @@ export const actionVerify = () => async dispatch => {
     verifyToken()
     .then(res=>{
         const token = res.data
-        
         dispatch(tokenVerifySuccess(token))
+        
     })
     .catch(err=>{
+        console.error(err)
         dispatch(tokenVerifyFailed())
         //useNavigate('/')
     })
@@ -80,14 +83,14 @@ export const actionSignUp = (formData) => async dispatch => {
         
 }
 
-export const actionLogin = (formData) => async dispatch => {
+export const actionLogin = (formData,navigate,from) => async dispatch => {
         
         
     try{
     await apilogIn(formData)
     .then(res=>{
         dispatch(logIn(res.data))
-            
+        navigate(from, { replace: true });
     })}
     catch(err)  {
         const message=err.response.data.message

@@ -34,8 +34,8 @@ const Movie = ({movieid,children}) => {
    const [openTrailer, setOpenTrailer] = useState(false);
    const [openWatchForm, setOpenWatchForm] = useState(false);
    const [wlData,setWlData]=useState(null)
-   const {watchlist}= useSelector(state=>state.watchlistReducer)
-   const {user}=useSelector(state=>state.userReducer)
+   const {watchlist}= useSelector(state=>state.watchlis)
+   const {user}=useSelector(state=>state.user)
    //const images=useRef(null);
    
    

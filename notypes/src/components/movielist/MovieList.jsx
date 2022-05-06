@@ -17,8 +17,8 @@ const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,re
    const [openWatchForm, setOpenWatchForm] = useState(false);
    const [openLoginRedirect,setOpenLoginRedirect]=useState(false);
    const [wlData,setWlData]=useState(null)
-   const {watchlist}= useSelector(state=>state.watchlistReducer)
-   const {user}=useSelector(state=>state.userReducer)
+   const {watchlist}= useSelector(state=>state.watchlist)
+   const {user}=useSelector(state=>state.user)
    
    
    const handleOpen = () => setOpen(true);
@@ -56,6 +56,7 @@ const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,re
             }
         }
       }
+      console.log("//TODO verificat daca merge cum  trebuie")
    },[movieid,watchlist])
 
 

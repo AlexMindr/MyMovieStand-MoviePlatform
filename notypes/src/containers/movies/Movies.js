@@ -125,7 +125,8 @@ const Movies=()=>{
         
 
     },[order,sorter,inputSearch,genresChecked,genres])
-    console.log(movies)
+
+    
     useEffect(() => {
         async function getData(){
             const res= await getMovies(page);

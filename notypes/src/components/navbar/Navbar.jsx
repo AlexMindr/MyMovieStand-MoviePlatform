@@ -15,7 +15,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import {actionLogOut} from '../../store/userSlice'
 import {stringAvatar} from '../../auxcomponents/avatar/Avatarfct'
-
+import { setAfterLogout } from '../../store/watchlistSlice';
 
 const Navbar = () => {
 
@@ -28,7 +28,7 @@ const Navbar = () => {
   const [inputSearch,setInputSearch]=useState();
   const [isLoggedIn,setIsLoggedIn]=useState(false);
   const [show, setShow] = useState(true)
-  const {user}=useSelector(state=>state.userReducer)
+  const {user}=useSelector(state=>state.user)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   var activeStyle = "active-link";
@@ -36,6 +36,7 @@ const Navbar = () => {
 
   const handleLogout = () =>{
     dispatch(actionLogOut())
+    dispatch(setAfterLogout())
     navigate('/')
   }
 

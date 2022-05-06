@@ -9,7 +9,8 @@ import {
 export const watchlistSlice = createSlice({
     name: 'watchlist',
     initialState: {
-        watchlist:[]
+        watchlist:[],
+        fetchedThisSession:false,
     },
     reducers: {
         addwlItem: (state, action) => {
@@ -26,12 +27,16 @@ export const watchlistSlice = createSlice({
         },
         getWatchlist:(state,action) => {
             state.watchlist=[...action.payload.watchlist]
-            
+            state.fetchedThisSession=true
+        },
+        setAfterLogout:(state)=> {
+            state.fetchedThisSession=false
+            state.watchlist=[]
         },
 
     },
 })
-export const { addwlItem,updatewlItem,deletewlItem,getWatchlist } = watchlistSlice.actions;
+export const { addwlItem,updatewlItem,deletewlItem,getWatchlist,setAfterLogout } = watchlistSlice.actions;
 
 export const actionGetWl = () => async dispatch => {
     apigetWlInit()
