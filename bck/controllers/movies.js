@@ -24,8 +24,8 @@ const getMoviesFiltered = async (req, res) => {
   const { limit, offset } = getPagination(page-1);
   const {order,sorter,checked,search}=req.query
   let checkedGenres=checked?checked.split(','):null
-  
 
+ 
 //TODO tryfix
     await Movie.findAndCountAll({
         attributes:['movieid','title','release_date','poster_path','duration','overview','uscertification','rating','popularity','trailer','keywords','adult'], 
@@ -38,8 +38,9 @@ const getMoviesFiltered = async (req, res) => {
           attributes:['name','genreid'],
           where:{
             name:checkedGenres?{ [Op.in]:checkedGenres}:{[Op.ne]:'empty'},
-            //try fixname:{[Op.all]:sequelize.literal(`SELECT name FROM Genres WHERE name in ${('Animation','Adventure')}`)}          
-          
+            //{[Op.all]:sequelize.literal(`SELECT name FROM Genres WHERE name in ${('Animation','Adventure')}`)}          
+            //name:sequelize.literal(`SELECT name FROM Genres WHERE name in (${test})`,)
+            
           },
           through:{
             attributes:[]

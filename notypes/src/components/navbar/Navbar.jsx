@@ -17,6 +17,15 @@ import {actionLogOut} from '../../store/userSlice'
 import {stringAvatar} from '../../auxcomponents/avatar/Avatarfct'
 import { setAfterLogout } from '../../store/watchlistSlice';
 
+let notifications=[{id:1,content:"texttext",read:false},{id:2,content:"texttext2",read:true}]
+function getUnreadNotif(notifications){
+  let unreadNotif=notifications.filter(notif=>notif.read===false)
+  return unreadNotif 
+
+}
+
+
+
 const Navbar = () => {
 
   const [menuBars, setMenuBars]=useState(false);
@@ -122,11 +131,18 @@ const Navbar = () => {
                 </div>
                 <Divider orientation="vertical" flexItem  />
                 <div className="dropdown-submenu">
-                  <NavLink to={`/notifications`}>
-                    <Button><CircleNotificationsIcon fontSize='large'/></Button>
-                  </NavLink>
+                    <Button><CircleNotificationsIcon fontSize='large'/></Button> 
+                    {notifications.length>0 && getUnreadNotif(notifications).length>0?
+                    <span className='notification-length-unread'>
+                      {getUnreadNotif(notifications).length}
+                    </span>
+                    :
+                    <></>}
                   <div className="dropdown-content">
-                    {/*Notifications list */}
+                    {getUnreadNotif(notifications).map(notif=>
+                      <div key={notif.id}>{notif.content}</div>
+                      )}
+                     <NavLink to={`/notifications`}>Se all notifications</NavLink>
                   </div>
                 </div>
                 <Divider orientation="vertical" flexItem  />

@@ -30,6 +30,10 @@ export const deleteWatchlistItem = (formValues) => api.delete("/watchlist",formV
 
 export const getGenres = () => api.get(`/genres`);
 
+export const addNotification = (content) => api.post("/notifications/add",content)
+export const getNotification = () => api.get("/notifications/get")
+export const deleteNotification = (deleteIds) => api.delete("/notifications/delete",deleteIds)
+export const updateNotification = (updateId) => api.put("/notifications/update",updateId)
 
 const apikey ='api_key=d05a8d2156e4230aded1c48bf6f75b82'
 

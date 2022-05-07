@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux'
 import userReducer from './userSlice';
 import watchlistReducer from './watchlistSlice';
+import notificationReducer from './notificationSlice';
 //import userReducer from './watchlistSlice';
 
 
@@ -9,7 +10,7 @@ import watchlistReducer from './watchlistSlice';
 const reducer = combineReducers({
   user:userReducer,
   watchlist:watchlistReducer,
-  //watchlistReducer,
+  notification:notificationReducer,
 })
 
 const store = configureStore({

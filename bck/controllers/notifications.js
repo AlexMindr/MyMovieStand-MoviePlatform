@@ -7,8 +7,8 @@ const {Notification,User}=db;
 const getNotif = async (req, res) => {
     
     try {
-        const {userId}=req.userId
-        const userid= await User.findOne({where:userId})
+        const uuid=req.userId
+        const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
         const notifications = await Notification.findAll({where:userid});
   
       res.status(200).json(notifications);
@@ -19,14 +19,15 @@ const getNotif = async (req, res) => {
 
 const addNotif = async (req, res) => {
     try {
-        const {userId}=req.userId;
         const {content}=req.body;
-        const userid= await User.findOne({where:userId})
-        
+        const uuid=req.userId
+        const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+
         const newNotif=await Notification.create(
         {   
             userid,
             content,
+            read:false,
             createdAt:new Date(),
             updatedAt:new Date()
         }
@@ -41,9 +42,9 @@ const addNotif = async (req, res) => {
 
 const deleteSelected = async (req, res) => {
     try {
-    const {userId}=req.userId;
     const {deleteIds}=req.body;
-    const userid= await User.findOne({where:userId})
+    const uuid=req.userId
+    const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
     
 
     deleteIds=deleteIds.split(',');
@@ -54,9 +55,11 @@ const deleteSelected = async (req, res) => {
                 userid
             }})})
   
-    const updatedNotifications = await Notification.findAll({where:userid});
+    //const updatedNotifications = await Notification.findAll({where:userid});
    
-    res.status(201).json(updatedNotifications);
+    //res.status(201).json(updatedNotifications);
+    res.status(201).json("Success");
+    
     } catch (error) {
       res.status(403).json({ message: error.message });
     }
@@ -66,10 +69,10 @@ const deleteSelected = async (req, res) => {
 
   const updateNotif  = async (req, res) => {
     try {
-    const {userId}=req.userId;
-    const {updateId}=req.body;
-    const userid= await User.findOne({where:userId})
     
+    const {updateId}=req.body;
+    const uuid=req.userId
+    const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
 
     await Notification.update(
     {
@@ -81,9 +84,11 @@ const deleteSelected = async (req, res) => {
         userid
     }})
 
-    const updatedNotifications = await Notification.findAll({where:userid});
+    //const updatedNotifications = await Notification.findAll({where:userid});
    
-    res.status(201).json(updatedNotifications);
+    //res.status(201).json(updatedNotifications);
+    res.status(201).json("Success");
+    
     } catch (error) {
       res.status(403).json({ message: error.message });
     }

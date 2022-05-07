@@ -82,6 +82,25 @@
     margin-inline:0.5rem;
 }
 
+.notification-length-unread{
+    position:absolute;
+    border-radius: 20px;
+    background-color: red;
+    color:white;
+    font-weight: 500;
+    font-size: 0.9rem;
+    min-width: 15px;
+    line-height: 1;
+    padding: 3px 6px;
+    height: 20px;
+    z-index: 1;
+    transition: transform 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    top: 0px;
+    right:0px;
+    transform: scale(1) translate(-10%, 30%);
+    transform-origin: 100% 0%; 
+}
+
 .dropdown-submenu {
     position: relative;
     display: inline-block;

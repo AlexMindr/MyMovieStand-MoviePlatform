@@ -10,6 +10,7 @@
 }
 .cell--status{
     justify-content: center !important;
+    font-size: 90%;
 }
 .watching{
     background-color: silver;

@@ -5,12 +5,13 @@ import {
  getNotif,
  updateNotif
 } from "../controllers/notifications.js";
+import auth from "../middleware/auth.js";
 
 const router = Router();
 
-router.post("/add", addNotif);
-router.get("/get", getNotif);
-router.delete("/delete",deleteSelected);
-router.put("/update",updateNotif);
+router.post("/add",auth, addNotif);
+router.get("/get", auth,getNotif);
+router.delete("/delete",auth,deleteSelected);
+router.put("/update",auth,updateNotif);
 
 export default router;
