@@ -6,7 +6,8 @@ import {
  resetPass,
  changePass,
  deleteAdm,
- verifyToken
+ verifyToken,
+ getProfile,
 } from "../controllers/users.js";
 
 const router = Router();
@@ -18,4 +19,5 @@ router.put("/update",update);
 router.put("/reset",resetPass);
 router.put("/change",changePass);
 router.delete("/delete/:id",deleteAdm)
+router.get("/profile/:username",getProfile);
 export default router;

@@ -5,6 +5,23 @@ import crypto from "crypto";
 //import { Op } from '@sequelize/core';
 const {User,Notification}=db;
 
+
+const getProfile = async(req,res) => {
+  try{
+  const {username} =req.params
+  const profileUser = await User.findOne({
+    attributes:['fullname','dateofbirth','location','role','email','username'],
+    where:{username}
+  });
+
+  res.status(200).json({ profileUser });
+  } catch (error) {
+  res.status(400).json({ error });
+ }
+}
+
+
+
 const verifyToken= async(req,res)=>{
   const jwtSecret=process.env.JWT_SECRET;
    try {
@@ -247,4 +264,4 @@ const changePass = async (req, res) => {
 
 
 
-export { login, signup, update, resetPass, deleteAdm, changePass,verifyToken };
+export { login, signup, update, resetPass, deleteAdm, changePass,verifyToken,getProfile };

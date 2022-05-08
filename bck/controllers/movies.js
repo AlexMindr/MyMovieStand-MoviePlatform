@@ -1,18 +1,17 @@
 import axios from 'axios';
 import db from '../models/index.cjs';
 import fs from 'fs';
-import { Op } from '@sequelize/core';
-
+import { Op,QueryTypes } from '@sequelize/core';
 
 const {Movie,Moviegenre,Genre,User,sequelize,Sequelize}=db;
 
-const getPagination = (page, size) => {
+function getPagination(page, size) {
   const limit = size ? +size : 21;
   const offset = page? page * limit : 0;
   return { limit, offset };
 };
 
-const getPagingData = (data, page, limit) => {
+function getPagingData(data, page, limit) {
   const { count: totalItems, rows: movies } = data;
   const currentPage = page ? +page : 0;
   const totalPages = Math.ceil(totalItems / limit);
@@ -24,9 +23,17 @@ const getMoviesFiltered = async (req, res) => {
   const { limit, offset } = getPagination(page-1);
   const {order,sorter,checked,search}=req.query
   let checkedGenres=checked?checked.split(','):null
-
- 
-//TODO tryfix
+  let moviefiltergenres=[]
+  if(checkedGenres!==null){
+  const movieids =await sequelize.query(
+    "SELECT movies.movieid FROM (movies INNER JOIN moviegenres using(movieid) INNER JOIN genres using(genreid)) WHERE lower(genres.name) in (?) GROUP BY movieid HAVING COUNT(genres.name) >= ?",
+    {
+      replacements: [checkedGenres.flatMap((x) => x.toLocaleLowerCase()),checkedGenres.length],
+      type: QueryTypes.SELECT
+    }
+  );
+  movieids.map((item)=>moviefiltergenres.push(item.movieid))
+  }
     await Movie.findAndCountAll({
         attributes:['movieid','title','release_date','poster_path','duration','overview','uscertification','rating','popularity','trailer','keywords','adult'], 
         limit,
@@ -36,18 +43,10 @@ const getMoviesFiltered = async (req, res) => {
           required:true,
           model:Genre,
           attributes:['name','genreid'],
-          where:{
-            name:checkedGenres?{ [Op.in]:checkedGenres}:{[Op.ne]:'empty'},
-            //{[Op.all]:sequelize.literal(`SELECT name FROM Genres WHERE name in ${('Animation','Adventure')}`)}          
-            //name:sequelize.literal(`SELECT name FROM Genres WHERE name in (${test})`,)
-            
-          },
           through:{
             attributes:[]
-          }
-          
+          },
          },
-         
         where:{
            [Op.or]:[
              {
@@ -64,7 +63,8 @@ const getMoviesFiltered = async (req, res) => {
                 [Op.like]:search?`%${search}%`:`%`
                }
               },
-           ]
+           ],
+           movieid:checkedGenres?{[Op.in]:moviefiltergenres}:{[Op.ne]:0}
           
         },
         order:[

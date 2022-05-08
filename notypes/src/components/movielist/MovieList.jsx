@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react';
 import './movielist.css'
 import moment from 'moment'
 import { Divider,Box,Card, CardContent, CardMedia, Button, Typography,Modal } from '@mui/material'
-import {Link} from 'react-router-dom'
+import {Link,useLocation } from 'react-router-dom'
 import {PersonOutline,StarBorderPurple500Outlined} from '@mui/icons-material';
 import { StyledEngineProvider } from '@mui/material/styles';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -19,7 +19,7 @@ const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,re
    const [wlData,setWlData]=useState(null)
    const {watchlist}= useSelector(state=>state.watchlist)
    const {user}=useSelector(state=>state.user)
-   
+   const location = useLocation()
    
    const handleOpen = () => setOpen(true);
    const handleClose = () => setOpen(false);
@@ -56,10 +56,10 @@ const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,re
             }
         }
       }
-      console.log("//TODO verificat daca merge cum  trebuie")
+      //console.log("//TODO verificat daca merge cum  trebuie")
    },[movieid,watchlist])
 
-
+   
    return (
     <StyledEngineProvider injectFirst>
     <Card className='card' sx={{ bgcolor:bgColor  }}>
@@ -169,7 +169,7 @@ const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,re
                               >
                               <Box className='watchformmodal'>
                                  <Box  sx={{width:'70vw',height:'50vh'}} component="div">
-                                    <Link to='/login'>Login into your account to add movie to your list</Link>
+                                    <Link to='/login' state={{ from: location }}>Login into your account to add movie to your list</Link>
             
                                  </Box>
                               </Box>

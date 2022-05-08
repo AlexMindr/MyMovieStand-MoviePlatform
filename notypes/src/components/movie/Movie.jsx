@@ -9,7 +9,7 @@ import imageUnknown from '../../images/unknown.jpg'
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import CircularProgress from '@mui/material/CircularProgress';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import {Link} from 'react-router-dom'
+import {Link,useLocation} from 'react-router-dom'
 import {useSelector} from 'react-redux'
 import WatchlistForm from '../watchlist/WatchlistForm';
 import StarIcon from '@mui/icons-material/Star';
@@ -34,8 +34,9 @@ const Movie = ({movieid,children}) => {
    const [openTrailer, setOpenTrailer] = useState(false);
    const [openWatchForm, setOpenWatchForm] = useState(false);
    const [wlData,setWlData]=useState(null)
-   const {watchlist}= useSelector(state=>state.watchlis)
+   const {watchlist}= useSelector(state=>state.watchlist)
    const {user}=useSelector(state=>state.user)
+   const location = useLocation()
    //const images=useRef(null);
    
    
@@ -91,7 +92,7 @@ const Movie = ({movieid,children}) => {
    },[movieid]);
       
       
-    
+    //console.log(location.pathname)
 //ramas homepage,tmdb link, imdb link 
   
       //de pus culoare cand adaugam in lista la element etc.   
@@ -259,7 +260,7 @@ else
                   :
                   //TODO style/verify
                   <Box>
-                     <Link to='/login'>Login to add movie to your list</Link>
+                     <Link to='/login' state={{ from: location }}>Login to add movie to your list</Link>
                   </Box>
                   }   
             </Grid>
