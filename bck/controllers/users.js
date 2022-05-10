@@ -2,19 +2,44 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import db from '../models/index.cjs';
 import crypto from "crypto";
-//import { Op } from '@sequelize/core';
-const {User,Notification}=db;
+import { Op } from '@sequelize/core';
+const {User,Notification,Watchlist}=db;
 
-
+async function watchListStatus(wlName,id){
+  let wl = await Watchlist.count({
+    attributes:['status'],
+    where:{
+      userid:id,
+      status:wlName?{[Op.eq]:wlName}:{[Op.not]:null}
+      //status:{[Op.eq]:wlName}
+    }
+  })
+  return wl;
+  
+}
 const getProfile = async(req,res) => {
+  
+  
+  
   try{
   const {username} =req.params
   const profileUser = await User.findOne({
-    attributes:['fullname','dateofbirth','location','role','email','username'],
+    attributes:['fullname','dateofbirth','location','role','email','username','userid','createdAt'],
     where:{username}
   });
+  if(profileUser){
+    const watching=await watchListStatus('Watching',profileUser.userid);
+    const completed=await watchListStatus('Completed',profileUser.userid)
+    const dropped=await watchListStatus('Dropped',profileUser.userid)
+    const plantowatch=await watchListStatus('Plan to watch',profileUser.userid)
+    const onhold=await watchListStatus('On-hold',profileUser.userid)
+    const totalStatus=await watchListStatus('',profileUser.userid)
+    const joined=profileUser.createdAt
+    res.status(200).json({ profileUser,watching,completed,dropped,plantowatch,onhold,totalStatus,joined});
+  }
+  else {res.status(400).json({ message:"Profile does not exist" });}
 
-  res.status(200).json({ profileUser });
+  
   } catch (error) {
   res.status(400).json({ error });
  }

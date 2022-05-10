@@ -7,8 +7,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { useDispatch,useSelector } from 'react-redux';
 import { actionVerify } from './store/userSlice';
 import { actionGetWl } from './store/watchlistSlice';
-import {default as PageAuth} from './components/routerchecks/PageAuth'
-import {default as PageRedirect} from './components/routerchecks/PageRedirect'
+import {default as PageAuth} from './auxcomponents/routerchecks/PageAuth'
+import {default as PageRedirect} from './auxcomponents/routerchecks/PageRedirect'
 
 
 //TODO overflow:elipsis pt titlurile lungi?

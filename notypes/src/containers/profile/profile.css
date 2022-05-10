@@ -1,0 +1,13 @@
+.container-profile{
+    border:2px solid rgb(212, 167, 254);
+}
+.profile-title-item{
+    background-color: rgb(208, 208, 208);
+}
+.profile-title-item h3{
+    font-weight: bold;
+    color:rgb(74, 74, 74)
+}
+/* .profile-avatar-item{
+    justify-content: center;
+} */

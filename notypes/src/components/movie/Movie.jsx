@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react';
 import './movie.css'
 import {getMovie,getImages,getCredits} from '../../api';
 import moment from 'moment'
-import { Divider,Box, Button, Typography,Grid,ImageList,ImageListItem,Modal,Container,Paper } from '@mui/material'
+import { Divider,Box, Button, Typography,Grid,ImageList,ImageListItem,Modal,Paper } from '@mui/material'
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import imageUnknown from '../../images/unknown.jpg'
