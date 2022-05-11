@@ -4,7 +4,9 @@ import jwt, { decode } from 'jsonwebtoken'
 const auth = async (req, res, next) => {
    const jwtSecret=process.env.JWT_SECRET;
    try {
-      const token = req.headers.authorization.split(" ")[1];
+      if(req.headers.authorization){
+
+      const token =req.headers.authorization.split(" ")[1];
 
       let decodedData;
       if (token) {
@@ -12,6 +14,8 @@ const auth = async (req, res, next) => {
 
          req.userId = decodedData?.useruuid
          //req.userRole= decodedData?.role
+  
+      }
       }
 
       next();

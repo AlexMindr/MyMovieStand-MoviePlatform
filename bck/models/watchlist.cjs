@@ -36,6 +36,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER.UNSIGNED,
 
     },
+    favourite:{
+      type: DataTypes.BOOLEAN,
+      defaultValue:false,
+    },
   }, {
     sequelize,
     tableName:'watchlists',

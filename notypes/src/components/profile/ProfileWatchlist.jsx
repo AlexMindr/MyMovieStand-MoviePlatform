@@ -9,8 +9,8 @@ const ProfileWatchlist = ({status}) => {
     if(status)
     return (
     <Box className='profile-status-div'>
-        <Typography component='h4' variant='h5'>Statistics</Typography>
-        <Divider/>
+        <Typography component='h4' variant='h5'>Movie Statistics</Typography>
+        <Divider flexItem/>
          
          <div className='profile-status-list'>  
             <ul>
@@ -43,7 +43,7 @@ const ProfileWatchlist = ({status}) => {
         
     </Box>
     )
-   else return<></>
+    return (<div><CircularProgress/></div>)
 }
 
 export default ProfileWatchlist

@@ -2,7 +2,7 @@ import React, {useState,useEffect} from 'react';
 import './App.css';
 import {Routes, Route, BrowserRouter as Router,Outlet,useLocation,useNavigate} from 'react-router-dom';
 import {Navbar} from './components';
-import {Footer,Home,Movies,Errorpage,Moviepage,Login,Signup,Watchlistpage,Profile} from './containers'
+import {Footer,Home,Movies,Errorpage,Moviepage,Login,Signup,Watchlistpage,Profile,Editprofile} from './containers'
 import CssBaseline from '@mui/material/CssBaseline';
 import { useDispatch,useSelector } from 'react-redux';
 import { actionVerify } from './store/userSlice';
@@ -59,13 +59,16 @@ export default function App() {
                   <Login />
                 </PageRedirect>
               }/>
-              {/* <Route path='/login' element={<Login/>}/>
-              <Route path='/signup' element={<Signup/>}/> */}
               <Route path='/profile/:username' element={ 
                 <PageAuth>
                   <Profile />
                 </PageAuth>
-              }/> 
+              }/>
+              <Route path='/profile/edit' element={ 
+                <PageAuth>
+                  <Editprofile />
+                </PageAuth>
+              }/>  
               <Route path='*' element={<Errorpage/>}/>
             </Routes>
 

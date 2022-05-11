@@ -285,14 +285,6 @@
                     "field": "changecode",
                     "seqType": "Sequelize.STRING"
                 },
-                "gender": {
-                    "field": "gender",
-                    "seqType": "Sequelize.STRING"
-                },
-                "bio": {
-                    "field": "bio",
-                    "seqType": "Sequelize.STRING(1200)"
-                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -326,13 +318,6 @@
                 "episodes": {
                     "field": "episodes",
                     "seqType": "Sequelize.INTEGER.UNSIGNED"
-                },
-                "favourite": {
-                    "defaultValue": {
-                        "value": false
-                    },
-                    "field": "favourite",
-                    "seqType": "Sequelize.BOOLEAN"
                 },
                 "createdAt": {
                     "allowNull": false,
@@ -376,6 +361,6 @@
     },
     "path": "E:\\ProiecteVSCode\\Licenta\\notypesfrbck\\bck\\migrations\\_current.json",
     "backupPath": "E:\\ProiecteVSCode\\Licenta\\notypesfrbck\\bck\\migrations\\_current_bak.json",
-    "exists": true,
-    "revision": 2
+    "exists": false,
+    "revision": 1
 }

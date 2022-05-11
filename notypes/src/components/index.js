@@ -7,3 +7,5 @@ export { default as SignupForm} from './signup/SignupForm';
 export { default as Watchlist} from './watchlist/Watchlist';
 export { default as ProfileAvatar} from './profile/ProfileAvatar'
 export { default as ProfileWatchlist} from './profile/ProfileWatchlist'
+export { default as ProfileBio} from './profile/ProfileBio'
+export { default as ProfileFav} from './profile/ProfileFav'

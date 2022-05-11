@@ -8,16 +8,21 @@ import {
  deleteAdm,
  verifyToken,
  getProfile,
+ getSimpleProfile,
 } from "../controllers/users.js";
+import auth from '../middleware/auth.js'
+
 
 const router = Router();
 
 router.get("/verify", verifyToken);
+router.get("/profile/:username",getProfile);
+router.get("/myprofile",auth,getSimpleProfile);
 router.post("/signup", signup);
 router.post("/login", login);
-router.put("/update",update);
+router.put("/update",auth,update);
 router.put("/reset",resetPass);
 router.put("/change",changePass);
 router.delete("/delete/:id",deleteAdm)
-router.get("/profile/:username",getProfile);
+
 export default router;

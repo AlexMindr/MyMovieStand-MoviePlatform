@@ -7,3 +7,4 @@ export {default as Login} from './login/Login'
 export {default as Signup} from './signup/Signup'
 export {default as Watchlistpage} from './watchlist/Watchlistpage';
 export {default as Profile} from './profile/Profile';
+export {default as Editprofile} from './editprofile/Editprofile';

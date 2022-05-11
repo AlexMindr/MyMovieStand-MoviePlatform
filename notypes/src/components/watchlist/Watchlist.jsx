@@ -6,7 +6,6 @@ import { DataGrid, gridStringOrNumberComparator } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import {default as useWindowDimensions} from '../../auxcomponents/hooks/windowDimensions'
 import StarIcon from '@mui/icons-material/Star';
-//TODO verificat daca row poate avea param care nu sunt in col
 
 function rows (watchlist){
    
@@ -32,10 +31,9 @@ const titleSortComparator = (v1, v2, param1, param2) => {
   };
   
 
-//TODO daca am timp filtrare
 
 
-const Watchlist = ({watchlist}) => {
+const Watchlist = ({watchlist,myProfile}) => {
     const [openWatchForm, setOpenWatchForm] = useState(false);
     const { width } = useWindowDimensions();
 
@@ -140,7 +138,6 @@ const Watchlist = ({watchlist}) => {
               return 'cell--center';
           }
         },
-      
         {
           field:'edit',
           headerName:'',
@@ -292,7 +289,7 @@ return (
             {watchlist && width>735?
                 <DataGrid
                 rows={rows(watchlist)}
-                columns={columns.map(
+                columns={columns.filter((col)=> myProfile?col:col.field !== 'edit').map(
                     (col)=> col.field === 'poster' || col.field==='id' || col.field==='edit' || col.field==='title' ? { ...col, filterable: false } : col,
                 )}
                 disableSelectionOnClick
@@ -302,7 +299,7 @@ return (
             :
                 <DataGrid
                 rows={rows(watchlist)}
-                columns={columns2.map(
+                columns={columns2.filter((col)=> myProfile?col:col.field !== 'edit').map(
                     (col)=>  col.field?{ ...col, filterable: false }:col
                 )}
                 disableSelectionOnClick

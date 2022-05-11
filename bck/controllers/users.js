@@ -17,16 +17,16 @@ async function watchListStatus(wlName,id){
   return wl;
   
 }
+
 const getProfile = async(req,res) => {
-  
-  
   
   try{
   const {username} =req.params
   const profileUser = await User.findOne({
-    attributes:['fullname','dateofbirth','location','role','email','username','userid','createdAt'],
+    attributes:['fullname','dateofbirth','location','role','email','username','userid','createdAt','gender','bio'],
     where:{username}
   });
+
   if(profileUser){
     const watching=await watchListStatus('Watching',profileUser.userid);
     const completed=await watchListStatus('Completed',profileUser.userid)
@@ -41,11 +41,30 @@ const getProfile = async(req,res) => {
 
   
   } catch (error) {
-  res.status(400).json({ error });
+  res.status(400).json({ error:error.message });
  }
 }
 
 
+const getSimpleProfile = async(req,res) => {
+  
+  try{
+  const useruuid =req.userId
+  const profileUser = await User.findOne({
+    attributes:['fullname','dateofbirth','location','gender','bio'],
+    where:{useruuid}
+  });
+
+  if(profileUser){
+    res.status(200).json({ profileUser});
+  }
+  else {res.status(400).json({ message:"Profile does not exist" });}
+
+  
+  } catch (error) {
+  res.status(500).json({ error:error.message });
+ }
+}
 
 const verifyToken= async(req,res)=>{
   const jwtSecret=process.env.JWT_SECRET;
@@ -65,6 +84,7 @@ const verifyToken= async(req,res)=>{
     res.status(400).json({ error });
    }
 }
+
 const login = async (req, res) => {
   const jwtSecret=process.env.JWT_SECRET;
   try {
@@ -88,12 +108,12 @@ const login = async (req, res) => {
       expiresIn: "7d",
     });
 
-    let fullname,email,dateofbirth,location,role,result
+    let fullname,email,dateofbirth,location,role,result,bio,gender
     ({fullname,email,dateofbirth,location,role}=currentUser); 
     if(role==='admin')
-       result={username,fullname,email,dateofbirth,location,role};
+       result={username,fullname,email,dateofbirth,location,bio,gender,role};
     else
-       result={username,fullname,email,dateofbirth,location};
+       result={username,fullname,email,dateofbirth,bio,gender,location};
     
     res.status(200).json({ result, token });
   } catch (error) {
@@ -108,7 +128,7 @@ const signup = async (req, res) => {
     const jwtSecret=process.env.JWT_SECRET;
     const saltHash=parseInt(process.env.SALT);
     
-    var { username, password,dateofbirth,location,email,confirmPassword,firstName,lastName } = req.body;
+    var { username, password,dateofbirth,location,email,confirmPassword,firstName,lastName,gender } = req.body;
 
     User.findOne({ where:{username}})
     .then(async (data) => {
@@ -133,6 +153,7 @@ const signup = async (req, res) => {
           fullname,
           dateofbirth,
           location,
+          bio,
           role:'user',
           createdAt: new Date(),
           updatedAt: new Date()
@@ -161,11 +182,11 @@ const signup = async (req, res) => {
 
 
 const update = async (req, res) => {
-  
+  const saltHash=parseInt(process.env.SALT);
   try {
-    const { useruuid } = req.userId;
+    const  useruuid  = req.userId;
     //if new pass not null, change pass
-    const {firstName,lastName,emailupdt,dateofbirthupdt,locationupdt,oldPass,newPass}=req.body
+    const {firstName,lastName,emailupdt,dateofbirthupdt,locationupdt,bioupdt,genderupdt,oldPass,newPass}=req.body
 
     const checkPass= await User.findOne({attributes:['password'],where:uuid})    
     
@@ -173,16 +194,18 @@ const update = async (req, res) => {
 
     if (!isCorrectPass)
       return res.status(400).json({ message: "Password was incorrect." });
-    var updatePass
+    var updatePass=null
     if (newPass){
       updatePass= await bcrypt.hash(newPass, saltHash);
     }
     const updatedUser = await User.update({
         fullname:firstName+' '+lastName,
         email:emailupdt,
-        dateofbirth,
-        location:locationupdt,  
-        password:updatePass,
+        dateofbirth:dateofbirthupdt,
+        location:locationupdt,
+        bio:bioupdt,
+        gender:genderupdt,  
+        password:updatePass?updatePass:checkPass,
         updatedAt:new Date()
       },{
         where:{
@@ -289,4 +312,4 @@ const changePass = async (req, res) => {
 
 
 
-export { login, signup, update, resetPass, deleteAdm, changePass,verifyToken,getProfile };
+export { login, signup, update, resetPass, deleteAdm, changePass,verifyToken,getProfile,getSimpleProfile };

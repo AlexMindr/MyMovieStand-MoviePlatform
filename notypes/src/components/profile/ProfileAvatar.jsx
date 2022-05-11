@@ -7,30 +7,32 @@ import { Link } from 'react-router-dom'
 
 const ProfileAvatar = ({profile,joined}) => {
   
-
-  if(profile)
-  
-  return (
-   
-      <Box className='profile-avatar-container'>
+if(profile)
+return (
+     
+      <Box className='profile-avatar-div' component='div'>
     
         <Avatar {...stringAvatar(profile.fullname)} className='profile-avatar' />
         <div className='profile-avatar-info'>
           <ul>
             <li>
-              <span className='profile-avatar-list-title'>Name &nbsp;&nbsp;&nbsp;</span>
+              <span className='profile-avatar-list-title'>Name </span>
               <span className='profile-avatar-list-content'>{profile.fullname}</span>
             </li>
             <li>
-              <span className='profile-avatar-list-title'>Location &nbsp;&nbsp;&nbsp;</span>
+              <span className='profile-avatar-list-title'>Gender</span>
+              <span className='profile-avatar-list-content'>{profile.gender?profile.gender:'-'}</span>
+            </li>
+            <li>
+              <span className='profile-avatar-list-title'>Location </span>
               <span className='profile-avatar-list-content'>{profile.location?profile.location:'-'}</span>
             </li>
             <li>
-              <span className='profile-avatar-list-title'>Birthday &nbsp;&nbsp;&nbsp;</span>
+              <span className='profile-avatar-list-title'>Birthday </span>
               <span className='profile-avatar-list-content'>{profile.dateofbirth?profile.dateofbirth:'-'}</span>
             </li>
             <li>
-              <span className='profile-avatar-list-title'>Joined &nbsp;&nbsp;&nbsp;</span>
+              <span className='profile-avatar-list-title'>Joined </span>
               <span className='profile-avatar-list-content'>{ moment(joined).format("MMM Do YY")}</span>
             </li>
           </ul>
@@ -43,10 +45,10 @@ const ProfileAvatar = ({profile,joined}) => {
         </Link>
         </div>
       </Box>
-    
-  )
-  else 
-  return(<div><CircularProgress/></div>)
+      
+      
+      )
+  return (<div><CircularProgress/></div>)
 }
 
 export default ProfileAvatar

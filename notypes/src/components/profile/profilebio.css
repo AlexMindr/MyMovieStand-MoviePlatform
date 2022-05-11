@@ -1,0 +1,22 @@
+.profile-bio-div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100px;
+}
+
+.profile-bio-div h4{
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.profile-bio-text{
+    text-align: justify;
+    text-indent: 7px;
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+
+.profile-bio-text .bio-null{
+    font-style: italic;
+}

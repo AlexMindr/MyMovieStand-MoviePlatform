@@ -9,7 +9,7 @@ const getWatchlistInit = async (req, res) => {
         const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
       
         const watchlist = await Watchlist.findAll({
-            attributes:['status','rating','episodes','movieid'],
+            attributes:['status','rating','episodes','movieid','favourite'],
             where:{
               userid
             }, 
@@ -57,7 +57,9 @@ const createWatchlistEntry = async (req, res) => {
   const {status,episodes,rating,movieid}=req.body
   try {
       const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
-      
+      //const countFav = await Watchlist.count({attributes:['favourite'],where:userid})
+
+     
       await Watchlist.create(
         {
             userid:userid,
@@ -71,6 +73,8 @@ const createWatchlistEntry = async (req, res) => {
       );
 
       res.status(201).json("Success");
+      
+      
     } catch (error) {
       res.status(403).json({ message: error.message });
     }
@@ -123,5 +127,55 @@ const updateWatchlistEntry = async (req, res) => {
       }
     };
   
+  const addFavourite = async (req, res) => {
+    const uuid=req.userId
+    const {movieid}=req.body
+    try {
+        
+        const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+        
+        await Watchlist.update(
+          {
+              favourite:true,
+              updatedAt:new Date()
+          },
+          {where: {
+            userid,
+            movieid
+          }}
+        );
+  
+        res.status(201).json("Success");
+      } catch (error) {
+        res.status(403).json({ message: error.message });
+      }
+    };
 
-  export {getWatchlist, createWatchlistEntry, updateWatchlistEntry, deleteWatchlistEntry, getWatchlistInit};
+  const removeFavourite = async (req, res) => {
+    const uuid=req.userId
+    const {movieid}=req.body
+    try {
+        
+        const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+        
+        await Watchlist.update(
+          {
+              favourite:false,
+              updatedAt:new Date()
+          },
+          {where: {
+            userid,
+            movieid
+          }}
+        );
+  
+        res.status(201).json("Success");
+      } catch (error) {
+        res.status(403).json({ message: error.message });
+      }
+    };  
+    
+
+
+
+  export {getWatchlist, createWatchlistEntry, updateWatchlistEntry, deleteWatchlistEntry, getWatchlistInit,addFavourite,removeFavourite};

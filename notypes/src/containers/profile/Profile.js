@@ -1,12 +1,12 @@
 import React,{useEffect,useState} from 'react'
 import './profile.css'
 import { useParams } from 'react-router-dom'
-import {ProfileAvatar,ProfileWatchlist} from '../../components'
+import {ProfileAvatar,ProfileWatchlist,ProfileBio,ProfileFav} from '../../components'
 import { getProfile } from '../../api'
 import { useSelector} from 'react-redux'
-import { Container,Grid,Box,Typography,StyledEngineProvider } from '@mui/material'
-
-
+import { Container,Grid,Box,Typography,StyledEngineProvider,Button } from '@mui/material'
+import { Link } from 'react-router-dom'
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const Profile = () => {
   
@@ -21,7 +21,7 @@ const Profile = () => {
   useEffect(() => {
     
     async function getData(){
-       const res= await getProfile(username);
+       const res= await getProfile(username)
        const {profileUser,joined}=res.data;
        setProfile(profileUser);
        setJoined(joined)
@@ -38,7 +38,7 @@ const Profile = () => {
     else
       setMyProfile(false)
   },[user,profile])
-
+  if(profile)
   return (
     <StyledEngineProvider injectFirst>
     <Container className='container-profile'>
@@ -46,18 +46,30 @@ const Profile = () => {
             <Grid container spacing={1} className=''>
                 <Grid item className='profile-title-item'  xs={12} md={12}>
                   <Typography component='h3' variant='h4'>{myProfile?'My':user.username+"'s"} profile</Typography>
+                  {myProfile?
+                  <Link className='profile-editprofile' to='/profile/edit'>
+                    <SettingsIcon fontSize='small' sx={{verticalAlign:'sub'}}/>
+                    <span>Edit info</span>
+                  </Link>
+                  :
+                  <></>}
                 </Grid>
                 <Grid item className='profile-avatar-item'  xs={12} md={6}>
                   <ProfileAvatar profile={profile} joined={joined}/>
                 </Grid>
                 <Grid item className=''  xs={12} md={6}>
+                  <ProfileBio bio={profile.bio}/>
                   <ProfileWatchlist status={status} />
+                </Grid>
+                <Grid item className=''  xs={12} md={12}>
+                  <ProfileFav /*movies={}*//>
                 </Grid>
             </Grid>
          </Box>
     </Container>
     </StyledEngineProvider>
     )
+    return (<div>That profile does not exist!</div>)
 }
 
 export default Profile

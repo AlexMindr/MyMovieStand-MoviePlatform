@@ -59,6 +59,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     changecode: {
       type: DataTypes.STRING,
+    },
+    gender: {
+      type: DataTypes.STRING,
+    },
+    bio: {
+      type: DataTypes.STRING(1200),
     }
   }, {
     sequelize,

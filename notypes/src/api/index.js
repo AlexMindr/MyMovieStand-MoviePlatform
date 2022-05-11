@@ -18,9 +18,12 @@ export const getMoviesFiltered = (page,query)  => api.get(`/movies/page=${page}/
 
 
 export const verify = () => api.get("/user/verify");
+export const getProfile = (username) => api.get(`/user/profile/${username}`);
+export const getSimpleProfile = () => api.get(`/user/myprofile`);
 export const login = (formValues) => api.post("/user/login", formValues);
 export const signup = (formValues) => api.post("/user/signup", formValues);
-export const getProfile = (username) => api.get(`/user/profile/${username}`);
+export const update = (formValues) => api.put("/user/update", formValues);
+
 
 
 export const getWatchlist = (username) => api.get(`/watchlist/${username}`);

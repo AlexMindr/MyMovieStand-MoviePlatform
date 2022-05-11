@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 .profile-status-div h4{
     font-weight: bold;
@@ -14,50 +15,56 @@
 }
 .profile-status-list ul>li{
     font-size: 1.2rem;
-    box-sizing: border-box;
+    clear:both;
+    min-width: 200px;
     
 }
-
+.profile-status-list ul>li>span:nth-child(1){
+    float:left;
+    
+}
+.profile-status-list ul>li>span:nth-child(2){
+    float:right;
+    color:white;
+    text-shadow: 2px 2px 3px rgb(251, 0, 255);
+    margin-right: 5px;
+    
+}
 .profile-status-li-completed::marker{
  
     color:rgb(0, 89, 255);
 }
 .profile-status-li-completed{
-    width:20vw;
+   
     background: linear-gradient(24deg, rgba(255,255,255,1) 60%, rgb(0, 89, 255) 100%);
 }
 .profile-status-li-watching::marker{
     color:rgb(75, 255, 47);
 }
 .profile-status-li-watching{
-    width:20vw;
     background: linear-gradient(24deg, rgba(255,255,255,1) 60%, rgb(75, 255, 47) 100%);
 }
 .profile-status-li-plantowatch::marker{
     color:rgb(204, 204, 204);
 }
 .profile-status-li-plantowatch{
-    width:20vw;
     background: linear-gradient(24deg, rgba(255,255,255,1) 60%, rgb(204, 204, 204) 100%);
 }
 .profile-status-li-dropped::marker{
     color:rgb(182, 44, 23);
 }
 .profile-status-li-dropped{
-    width:20vw;
     background: linear-gradient(24deg, rgba(255,255,255,1) 60%, rgb(182, 44, 23) 100%);
 }
 .profile-status-li-onhold::marker{
     color:rgb(252, 255, 49);
 }
 .profile-status-li-onhold{
-    width:20vw;
-    background: linear-gradient(24deg, rgba(255,255,255,1) 60%, rgb(252, 255, 49) 100%);
+    background: linear-gradient(24deg, rgba(255,255,255,1) 60%, rgb(255, 238, 0) 100%);
 }
 .profile-status-li-total::marker{
     color:rgb(2, 2, 2);
 }
 .profile-status-li-total{
-    width:20vw;
     background: linear-gradient(24deg, rgba(255,255,255,1) 60%, rgb(2, 2, 2) 100%);
 }

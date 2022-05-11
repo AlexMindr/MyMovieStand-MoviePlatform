@@ -13,13 +13,15 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
   const dispatch = useDispatch()
   const {watchlist}= useSelector(state=>state.watchlist)
   const [formData, setFormData] = useState({status:'',rating:null,episodes:null,movieid})
-  
+  const {user} = useSelector(state=>state.user)
+
     const handleSubmit = async (e) => {
       e.preventDefault()
       dispatch(actionCreateOrUpdateItem(formData,isCreateOrUpdate))
       .then(res=>{
          if(res){
             setFormError(res)
+            //TODO notification in loc de eroare
             //setFormData({id,status:'',episodes:'',rating:''})
          }
          else {
@@ -52,9 +54,10 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
    const handleChangeInt = (e) => {
    setFormData({ ...formData, [e.target.name]: parseInt(e.target.value) });
    }
+
   return (
     <Container className='watchlist-container-form'>
-     
+      {user?
       <Box  sx={{ flexGrow: 1 }} component='form' onSubmit={handleSubmit}>
     
                 <Grid container spacing={2} className='watchlist-form'>
@@ -72,7 +75,7 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
                   <></>
                   }
                    <Input name="status" label="Status" handleChange={handleChange} select={true} required={true} value={formData.status}>
-                    <option value={null} hidden></option>
+                    <option value='' hidden></option>
                     <option value="Plan to watch">Plan to watch</option>
                     <option value="Watching">Watching</option>
                     <option value="Completed">Completed</option>
@@ -86,7 +89,7 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
                    }   
 
                    <Input name="rating" label="My score" handleChange={handleChangeInt} select={true} value={formData.rating}>
-                    <option value={null} hidden></option>
+                    <option value='' hidden></option>
                     <option value={1}>1 - Offensive</option>
                     <option value={2}>2 - Appalling</option>
                     <option value={3}>3 - Horrible</option>
@@ -112,7 +115,9 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
                
                 
          </Box>
-      
+     :<div>
+        <Link to='/login'>Login to add/edit movie</Link>
+     </div> }
     </Container>
   )
 }

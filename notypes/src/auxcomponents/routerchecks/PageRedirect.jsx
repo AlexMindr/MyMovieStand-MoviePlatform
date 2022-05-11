@@ -7,10 +7,10 @@ import {useSelector } from 'react-redux';
     const {user} = useSelector(state=>state.user);
     const location = useLocation();
 
-    
+    const toRedirect = location.state?.from?.pathname || "/";
     if (user) {
       //TODO redirect to dashboard/profile when its done
-        return   <Navigate to={location.state.from} replace />;
+        return   <Navigate to={toRedirect} replace />;
     }
     
     return children;
