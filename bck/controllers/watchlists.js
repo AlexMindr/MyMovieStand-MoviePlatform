@@ -175,7 +175,64 @@ const updateWatchlistEntry = async (req, res) => {
       }
     };  
     
+  const getFavouritesProfile = async (req, res) => {
+    //const uuid=req.userId
+    const {username}=req.params;
+    try {
+        // const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+        const {userid}= await User.findOne({attributes:['userid'],where:{username}});
+      
+      
+        const favourites = await Watchlist.findAll({
+            attributes:['status','rating','movieid','favourite'],
+            
+            where:{
+              userid
+            }, 
+            include:{
+            model:Movie,
+            attributes:['title','poster_path',],
+            },
+            order:[
+              [Movie,'title','ASC'],
+              ['rating','DESC']
+            ],
+          });
+          
+      res.status(200).json({favourites});
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
+  };
+  const getFavourites = async (req, res) => {
+    const uuid=req.userId
+    
+    try {
+        const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+        //const {userid}= await User.findOne({attributes:['userid'],where:{username}});
+      
+      
+        const favourites = await Watchlist.findAll({
+            attributes:['status','rating','movieid','favourite'],
+            
+            where:{
+              userid
+            }, 
+            include:{
+            model:Movie,
+            attributes:['title','poster_path',],
+            },
+            order:[
+              [Movie,'title','ASC'],
+              ['rating','DESC']
+            ],
+          });
+          
+      res.status(200).json({favourites});
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
+  };
 
-
-
-  export {getWatchlist, createWatchlistEntry, updateWatchlistEntry, deleteWatchlistEntry, getWatchlistInit,addFavourite,removeFavourite};
+  export {getWatchlist, createWatchlistEntry, updateWatchlistEntry, deleteWatchlistEntry,
+     getWatchlistInit,addFavourite,removeFavourite,getFavourites,getFavouritesProfile};

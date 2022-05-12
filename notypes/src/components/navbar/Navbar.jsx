@@ -12,7 +12,9 @@ import Avatar from '@mui/material/Avatar';
 import {useSelector,useDispatch } from 'react-redux'
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import LogoutIcon from '@mui/icons-material/Logout';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import SettingsIcon from '@mui/icons-material/Settings';
 import {actionLogOut} from '../../store/userSlice'
 import {stringAvatar} from '../../auxcomponents/avatar/Avatarfct'
 import { setAfterLogout } from '../../store/watchlistSlice';
@@ -152,7 +154,8 @@ const Navbar = () => {
                       <NavLink to={`/profile/${user.username}`}>Profile</NavLink>
                       <NavLink to={`/myfriends`}>Friends</NavLink>
                       <NavLink to={`/myposts`}>Forum posts</NavLink>
-                      <button onClick={handleLogout}>Logout</button>
+                      <NavLink to={`/profile/edit`}><SettingsIcon fontSize='small' sx={{verticalAlign:'bottom'}}/>&nbsp;<span>Settings</span></NavLink>
+                      <button onClick={handleLogout}><LogoutIcon fontSize='small' sx={{verticalAlign:'bottom'}}/>&nbsp;<span>Logout</span></button>
                     </div>
                   </div>
                   <NavLink to={`/profile/${user.username}`}><Avatar {...stringAvatar(user.fullname)} className='navbar__avatar' /></NavLink>

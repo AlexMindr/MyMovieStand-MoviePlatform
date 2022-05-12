@@ -4,7 +4,6 @@ import { Button, Grid, Box, TextField, Typography } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-// import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import Input from '../../auxcomponents/input/Input'
 import Countries from '../../auxcomponents/input/Countries'
 import { useNavigate,Link } from 'react-router-dom'

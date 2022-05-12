@@ -7,6 +7,8 @@ import {
   getWatchlistInit,
   addFavourite,
   removeFavourite,
+  getFavourites,
+  getFavouritesProfile,
 } from "../controllers/watchlists.js";
 import auth from "../middleware/auth.js";
 
@@ -15,6 +17,8 @@ const router = Router();
 
 router.get("/",auth,getWatchlistInit);
 router.get("/:username",getWatchlist);
+router.get("/myfavourites",auth,getFavourites);
+router.get("/fav/:username",getFavouritesProfile)
 router.post("/",auth,createWatchlistEntry);
 router.put("/",auth,updateWatchlistEntry);
 router.put("/addfav",auth,addFavourite);

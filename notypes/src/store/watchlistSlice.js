@@ -4,6 +4,8 @@ import {
     createWatchlistItem as apicreateWl,
     updateWatchlistItem as apiputWl,
     deleteWatchlistItem as apidelWl,
+    remFavourite,
+    addFavourite,
 } from '../api'
 
 export const watchlistSlice = createSlice({
@@ -33,10 +35,46 @@ export const watchlistSlice = createSlice({
             state.fetchedThisSession=false
             state.watchlist=[]
         },
+        addToFav: (state,action) => {
+            state.watchlist= state.watchlist.map((watchlistItem)=>
+            watchlistItem.movieid===action.payload.movieid? watchlistItem.favourite=true : watchlistItem)
+        },
+        remFromFav: (state,action) => {
+            state.watchlist= state.watchlist.map((watchlistItem)=>
+            watchlistItem.movieid===action.payload.movieid? watchlistItem.favourite=false : watchlistItem)
+        }
+
 
     },
 })
-export const { addwlItem,updatewlItem,deletewlItem,getWatchlist,setAfterLogout } = watchlistSlice.actions;
+export const { addwlItem,updatewlItem,deletewlItem,getWatchlist,setAfterLogout,addToFav,remFromFav } = watchlistSlice.actions;
+
+
+export const actionAddToFav = (formData) => async dispatch =>{
+    try{
+        await addFavourite(formData)
+        .then(res=>{
+            dispatch(addToFav(formData))
+                
+        })}
+        catch(err)  {
+            const message=err.response.data.message
+            return message
+        }
+}
+
+export const actionRemFromFav = (formData) => async dispatch =>{
+    try{
+        await remFavourite(formData)
+        .then(res=>{
+            dispatch(remFromFav(formData))
+                
+        })}
+        catch(err)  {
+            const message=err.response.data.message
+            return message
+        }
+}
 
 export const actionGetWl = () => async dispatch => {
     apigetWlInit()
@@ -51,7 +89,7 @@ export const actionGetWl = () => async dispatch => {
 }
 
 export const actionDelWlItem = (formData) => async dispatch => {
-    apidelWl()
+    apidelWl(formData)
     .then(res=>{
         dispatch(deletewlItem(formData))
     })

@@ -186,7 +186,7 @@ const update = async (req, res) => {
   try {
     const  useruuid  = req.userId;
     //if new pass not null, change pass
-    const {firstName,lastName,emailupdt,dateofbirthupdt,locationupdt,bioupdt,genderupdt,oldPass,newPass}=req.body
+    const {firstName,lastName,dateofbirthupdt,locationupdt,bioupdt,genderupdt,oldPass,newPass}=req.body
 
     const checkPass= await User.findOne({attributes:['password'],where:uuid})    
     
@@ -200,7 +200,6 @@ const update = async (req, res) => {
     }
     const updatedUser = await User.update({
         fullname:firstName+' '+lastName,
-        email:emailupdt,
         dateofbirth:dateofbirthupdt,
         location:locationupdt,
         bio:bioupdt,
