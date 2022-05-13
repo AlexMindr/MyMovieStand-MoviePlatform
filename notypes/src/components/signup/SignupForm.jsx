@@ -99,7 +99,7 @@ const Signup = () => {
                      helperText={"This email will be used to provide updates regarding your account"}/>
                    <Input name="username" label="Username" handleChange={handleChange} type="text" required={true} 
                      helperText={"The username you choose will be used to login to your account"}/>
-                   <Input name="password" label="Password" required={true} error={errorPassForm} 
+                   <Input name="password" label="Password" required={true} error={errorPassForm} isPassword={true}
                      helperText={"The password must be at least 4 characters long and contain an uppercase letter and a number"}
                      handleChange={handleChangePass} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
                    <Input name="confirmPassword" label="Repeat Password" handleChange={handleChangeConfPass} error={errorCPassForm}

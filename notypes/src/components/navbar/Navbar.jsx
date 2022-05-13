@@ -149,7 +149,8 @@ const Navbar = () => {
                 </div>
                 <Divider orientation="vertical" flexItem  />
                 <><div className="dropdown-submenu">
-                    <Button>{user.username.length>10?user.username.substring(0,10)+'...':user.username}<ArrowDropDownIcon/></Button>
+                    <Button>{ user.username.length>10?user.username.substring(0,10)+'...':user.username}<ArrowDropDownIcon/></Button>
+                    
                     <div className="dropdown-content">
                       <NavLink to={`/profile/${user.username}`}>Profile</NavLink>
                       <NavLink to={`/myfriends`}>Friends</NavLink>

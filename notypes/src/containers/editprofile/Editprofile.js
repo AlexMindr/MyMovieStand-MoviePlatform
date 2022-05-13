@@ -31,7 +31,7 @@ const Editprofile = () => {
          <Typography component="h3" variant='h4'>Edit your profile information</Typography>
          <Divider flexItem/>
          <Box component='div' className='editprofile-info'>
-            {profile && <EditInfo currentName={profile.fullname}
+            {profile && <EditInfo currentName={profile.fullname} username={user.username}
              initialState={{ firstName: '', lastName: '', newPass: '', oldPass: '',
                 location: profile.location,dateofbirth:profile.dateofbirth,gender:profile.gender,bio:profile.bio }} />
               }

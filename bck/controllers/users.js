@@ -91,7 +91,7 @@ const login = async (req, res) => {
     const { username, password } = req.body;
 
     const currentUser = await User.findOne({
-      attributes:['fullname','dateofbirth','location','role','useruuid','email','password'],
+      attributes:['fullname','dateofbirth','location','role','useruuid','email','password','gender'],
       where:{username}
     });
     if (!currentUser)
@@ -108,12 +108,12 @@ const login = async (req, res) => {
       expiresIn: "7d",
     });
 
-    let fullname,email,dateofbirth,location,role,result,bio,gender
+    let fullname,email,dateofbirth,location,role,result,gender
     ({fullname,email,dateofbirth,location,role}=currentUser); 
     if(role==='admin')
-       result={username,fullname,email,dateofbirth,location,bio,gender,role};
+       result={username,fullname,email,dateofbirth,location,gender,role};
     else
-       result={username,fullname,email,dateofbirth,bio,gender,location};
+       result={username,fullname,email,dateofbirth,gender,location};
     
     res.status(200).json({ result, token });
   } catch (error) {
@@ -154,6 +154,7 @@ const signup = async (req, res) => {
           dateofbirth,
           location,
           bio,
+          gender,
           role:'user',
           createdAt: new Date(),
           updatedAt: new Date()
@@ -165,8 +166,7 @@ const signup = async (req, res) => {
         });
       
       //send mail?
-      
-      let result={fullname,email,dateofbirth,location,username,fullname};
+      let result={fullname,email,dateofbirth,location,username,gender};
       res.status(201).json({result,token});
     }
     }).catch(error =>{
@@ -188,33 +188,43 @@ const update = async (req, res) => {
     //if new pass not null, change pass
     const {firstName,lastName,dateofbirthupdt,locationupdt,bioupdt,genderupdt,oldPass,newPass}=req.body
 
-    const checkPass= await User.findOne({attributes:['password'],where:uuid})    
     
-    const isCorrectPass = await bcrypt.compare(oldPass, checkPass);
-
+    const checkPass= await User.findOne({attributes:['password','userid','email','username'],where:{useruuid}})    
+    
+    const isCorrectPass = await bcrypt.compare(oldPass, checkPass.password);
+    
     if (!isCorrectPass)
       return res.status(400).json({ message: "Password was incorrect." });
     var updatePass=null
+    
     if (newPass){
       updatePass= await bcrypt.hash(newPass, saltHash);
+      
     }
+    
+    var fullName='g'+'g'
+    if(firstName && lastName)
+      fullName=firstName+' '+lastName
+    else if(firstName) fullName=firstName+'g'
+        else if(lastName) fullName='g'+lastName
     const updatedUser = await User.update({
-        fullname:firstName+' '+lastName,
+        fullname:fullName,
         dateofbirth:dateofbirthupdt,
         location:locationupdt,
         bio:bioupdt,
         gender:genderupdt,  
-        password:updatePass?updatePass:checkPass,
+        password:updatePass?updatePass:checkPass.password,
         updatedAt:new Date()
       },{
         where:{
-          useruuid
+          userid:checkPass.userid
       }});
-  
+
+      
+    let result={fullname:fullName,email:checkPass.email,
+      dateofbirth:dateofbirthupdt?dateofbirthupdt:null,location:locationupdt?locationupdt:null,username:checkPass.username};
     
-    let {fullname,email,dateofbirth,location}=updatedUser;
-    let result={fullname,email,dateofbirth,location,username};
-    res.status(201).json({ result});
+    res.status(201).json({result});
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }

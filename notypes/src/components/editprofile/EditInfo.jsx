@@ -9,36 +9,36 @@ import TextField from '@mui/material/TextField';
 import Input from '../../auxcomponents/input/Input'
 import AutocompleteCountries from '../../auxcomponents/input/AutocompleteCountries';
 import useWindowDimensions from '../../auxcomponents/hooks/windowDimensions'
+import DraftTextArea from '../../auxcomponents/input/DraftTextarea';
+import { actionUpdateProfile } from '../../store/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 
-
-const EditInfo = ({initialState,currentName}) => {
+const EditInfo = ({initialState,currentName,username}) => {
 
     const [showPassword, setShowPassword] = useState(false)
     const [showPasswordNew, setShowPasswordNew] = useState(false)
     const [formData, setFormData] = useState(initialState)
     const [errorPassForm, setErrorPassForm] =useState(false)
-    const [errorCPassForm, setErrorCPassForm] =useState(false)
     const [formError,setFormError] = useState(false)
     const dispatch = useDispatch()
-    const {width,height}=useWindowDimensions()
-
+    const {width}=useWindowDimensions()
+    const navigate=useNavigate()
 
 
     const handleSubmit = async (e) => {
-        //TODOde verificat aici ca am schimbat ceva inainte de dispatch
+        
         //TODO redirect la profile? or not
        e.preventDefault()
        if (formData.dateofbirth!==null)formData.dateofbirth=new Date((formData.dateofbirth));
-      // dispatch(actionSignUp(formData))
-    //    .then(res=>{
-    //       if(res)setFormError(res)
-    //       else setFormError(false)
-    //      })
-    //    .catch(e=>setFormError(e))
-      
-      
-   
+        let to=`/profile/${username}`
+        dispatch(actionUpdateProfile(formData,navigate,to))
+       .then(res=>{
+          if(res)setFormError(res)
+          //else setFormError(false)
+                
+         })
+       .catch(e=>setFormError(e))
     }
     
    
@@ -57,22 +57,24 @@ const EditInfo = ({initialState,currentName}) => {
     const handleChangePass = (e) => {
       let password = e.target.value
       let re = new RegExp("^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9_.-:;]{4,}$")
-      
       if (re.test(password)) {
          setErrorPassForm(false)
-         setFormData({ ...formData, password });   
+            
      } else {
          setErrorPassForm(true)
      }
-      
+     setFormData({ ...formData, [e.target.name]:password });
     };
 
     const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword);
     const handleShowPasswordNew = () => setShowPasswordNew((prevShowPassword) => !prevShowPassword);
+    const clearChanges = () =>{
+        setFormData(initialState)
+    }
 
   if(currentName)
   return (
-    <Box  sx={{ flexGrow: 1 }} component='form' onSubmit={handleSubmit}>
+   <Box  sx={{ flexGrow: 1 }} component='form' onSubmit={handleSubmit}>
     
     <Grid container spacing={2} className='editprofile-form-grid' sx={width>800?{width:500}:{width:300}}>
         {formError?
@@ -86,8 +88,8 @@ const EditInfo = ({initialState,currentName}) => {
             <Typography variant='h5'>Your current name is {currentName}</Typography>
             <p>All fields are optional</p>
         </Grid>
-        <Input name="firstName" label="First Name" handleChange={handleChange} required={false} />
-        <Input name="lastName" label="Last Name" handleChange={handleChange} required={false}/>
+        <Input name="firstName" label="First Name" value={formData.firstName} handleChange={handleChange} required={true} />
+        <Input name="lastName" label="Last Name" value={formData.lasttName} handleChange={handleChange} required={true}/>
         <Input name="gender" label="Select Gender" handleChange={handleChange} select={true} required={false} value={formData.gender?formData.gender:''}>
                     <option value='' hidden></option>
                     <option value="Male">Male</option>
@@ -95,14 +97,10 @@ const EditInfo = ({initialState,currentName}) => {
                     <option value="Non-binary">Non-binary</option>
                     
                    </Input>
-        <Input name="newPass" label="Change Password" handleChange={handleChangePass} error={errorPassForm}
-            type={showPasswordNew ? 'text' : 'password'} required={false} handleShowPassword={handleShowPasswordNew}
+        <Input name="newPass" label="Change Password" handleChange={handleChangePass} error={errorPassForm} isPassword={true}
+            type={showPasswordNew ? 'text' : 'password'} required={false} handleShowPassword={handleShowPasswordNew} value={formData.newPass}
             helperText={"The new password must be at least 4 characters long and contain an uppercase letter and a number"} />
 
-        {/* <Input name="location" label="Select your location" helperText={'This field is optional'} 
-            select={true} handleChange={handleChange} required={false}>
-
-        </Input> */}
         <Grid item xs={12}>
                 <LocalizationProvider dateAdapter={AdapterMoment}>            
                     <DesktopDatePicker
@@ -119,22 +117,25 @@ const EditInfo = ({initialState,currentName}) => {
 
         <AutocompleteCountries value={formData.location} setValue={handleChangeLocation}/>
 
-        <Grid item xs={12}>
-            <textarea cols={100} rows={10} placeholder="BIO"></textarea>
+        <Grid item xs={12} id='textarea-edit'>
+             <textarea cols={100} rows={10} placeholder="BIO"></textarea> 
+            {/*DATATYPE json in db*/
+        }
+            {/* <DraftTextArea /> */}
         </Grid>
 
         <Grid item xs={12}>
             <Divider flexItem/>
             <Typography variant='h6'>In order to apply the changes you must provide your current password</Typography>
         </Grid>
-        <Input name="oldPass" label="Current Password" required={true} error={errorPassForm} 
+        <Input name="oldPass" label="Current Password" required={true} error={errorPassForm}  value={formData.oldPass}
             //helperText={"The password must be at least 4 characters long and contain an uppercase letter and a number"}
-            handleChange={handleChangePass} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
+            handleChange={handleChangePass} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} isPassword={true} />
         <Grid item xs={12}>
             <Button type="submit"  variant="contained" color="primary" className='submit-editprofile'>
                 Update Info
             </Button>
-            <Button  /*onClick={clearChanges}*/ variant="text" >
+            <Button  onClick={clearChanges} variant="text" >
                 Cancel
             </Button>
         </Grid>

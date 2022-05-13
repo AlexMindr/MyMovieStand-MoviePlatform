@@ -4,7 +4,7 @@ import { TextField, Grid, InputAdornment, IconButton } from '@mui/material'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
-const Input = ({ disabled,value,name, handleChange, label, autoFocus, type, handleShowPassword,required,select,helperText,error, children }) => {
+const Input = ({ disabled,value,name, handleChange, label, autoFocus, type, handleShowPassword,required,select,helperText,error,isPassword, children }) => {
    
    return (
       <Grid item xs={12} >
@@ -25,7 +25,7 @@ const Input = ({ disabled,value,name, handleChange, label, autoFocus, type, hand
             SelectProps={{
                native: true,
              }}
-            InputProps={name === 'password' ? {
+            InputProps={isPassword===true ? {
                endAdornment: (
                   <InputAdornment position="end">
                      <IconButton onClick={handleShowPassword}>

@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import {signup as apisignUp,login as apilogIn,verify as verifyToken} from '../api'
-import { actionGetWl } from './watchlistSlice';
-import { useDispatch } from 'react-redux';
+import {signup as apisignUp,login as apilogIn,verify as verifyToken,update as apiupdateUser} from '../api'
 
 
 export const userSlice = createSlice({
@@ -40,11 +38,29 @@ export const userSlice = createSlice({
             state.token = ''
             localStorage.removeItem('profile');
         },
+        updateUser: (state,action) => {
+            state.user= action.payload
+            const {user,token}=state
+            localStorage.setItem("profile", JSON.stringify({token,user}));
+        },
         
     },
 })
-export const { logIn, logOut, signUp, tokenVerifySuccess,tokenVerifyFailed } = userSlice.actions;
+export const { logIn, logOut, signUp, tokenVerifySuccess,tokenVerifyFailed,updateUser } = userSlice.actions;
 
+export const actionUpdateProfile = (formData,navigate,to) => async dispatch =>{
+    try{
+        await apiupdateUser(formData)
+        .then(res=>{
+            dispatch(updateUser(res.data.result))
+            navigate(to, { replace: true });
+        })}
+        catch(err)  {
+            const message=err.response.data.message
+            return message
+        }
+        
+}
 
 export const actionVerify = () => async dispatch => {
     verifyToken()
