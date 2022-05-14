@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box'
@@ -8,6 +8,10 @@ import Grid from '@mui/material/Grid'
 const AutocompleteCountries = ({value,setValue}) => {
     //const [val, setVal] = useState(countries.filter((country)=>country.label===value).length>0?countries.filter((country)=>country.label===value)[0]:null);
     const [inputValue, setInputValue] = useState(countries.filter((country)=>country.label===value).length>0?countries.filter((country)=>country.label===value)[0]:'');
+
+    // useEffect(()=>{
+    //   setInputValue(countries.filter((country)=>country.label===value).length>0?countries.filter((country)=>country.label===value)[0]:'')
+    // },[value])
 
     return (
         

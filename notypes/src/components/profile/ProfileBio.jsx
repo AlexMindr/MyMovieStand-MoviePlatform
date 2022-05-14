@@ -1,6 +1,22 @@
 import React from 'react'
 import "./profilebio.css"
 import { Box,Typography,Divider } from '@mui/material'
+import DraftDisplay from '../../auxcomponents/input/DraftDisplay'
+
+const trythis={
+  "blocks": [
+      {
+          "key": "1bqo4",
+          "text": "dabdsdadbc",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+      }
+  ],
+  "entityMap": {}
+}
 
 const ProfileBio = ({bio}) => {
 
@@ -10,7 +26,7 @@ const ProfileBio = ({bio}) => {
       <Divider flexItem/>
       <Box className='profile-bio-text'>
       {bio?
-      <p>bio</p>
+      <DraftDisplay field={bio} />
       :
       <div className='bio-null'>No biography has been added</div>
       }

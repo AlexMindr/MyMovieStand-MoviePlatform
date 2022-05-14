@@ -54,6 +54,10 @@ const EditInfo = ({initialState,currentName,username}) => {
         setFormData({ ...formData, dateofbirth:newValue });    
     };
 
+    const handleChangeBio = (newValue) => {
+        setFormData({ ...formData, bio:newValue }); 
+    };
+
     const handleChangePass = (e) => {
       let password = e.target.value
       let re = new RegExp("^(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9_.-:;]{4,}$")
@@ -118,10 +122,10 @@ const EditInfo = ({initialState,currentName,username}) => {
         <AutocompleteCountries value={formData.location} setValue={handleChangeLocation}/>
 
         <Grid item xs={12} id='textarea-edit'>
-             <textarea cols={100} rows={10} placeholder="BIO"></textarea> 
+             {/* <textarea cols={100} rows={10} placeholder="BIO"></textarea>  */}
             {/*DATATYPE json in db*/
         }
-            {/* <DraftTextArea /> */}
+            <DraftTextArea field={formData.bio} setField={handleChangeBio}/>
         </Grid>
 
         <Grid item xs={12}>

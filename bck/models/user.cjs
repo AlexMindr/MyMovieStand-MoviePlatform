@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     bio: {
-      type: DataTypes.STRING(1200),
+      type: DataTypes.JSON,
     }
   }, {
     sequelize,

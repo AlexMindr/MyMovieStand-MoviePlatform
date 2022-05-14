@@ -20,7 +20,6 @@ const Signup = () => {
     const [errorPassForm, setErrorPassForm] =useState(false)
     const [errorCPassForm, setErrorCPassForm] =useState(false)
     const [formError,setFormError] = useState(false)
-    // const history = useHistory()
     const dispatch = useDispatch()
     //const {user}=useSelector(state=>state.userReducer)
     //console.log(JSON.parse(localStorage.getItem('profile')))

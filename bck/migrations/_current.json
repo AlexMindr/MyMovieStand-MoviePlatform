@@ -291,7 +291,7 @@
                 },
                 "bio": {
                     "field": "bio",
-                    "seqType": "Sequelize.STRING(1200)"
+                    "seqType": "Sequelize.JSON"
                 },
                 "createdAt": {
                     "allowNull": false,
@@ -377,5 +377,5 @@
     "path": "E:\\ProiecteVSCode\\Licenta\\notypesfrbck\\bck\\migrations\\_current.json",
     "backupPath": "E:\\ProiecteVSCode\\Licenta\\notypesfrbck\\bck\\migrations\\_current_bak.json",
     "exists": true,
-    "revision": 2
+    "revision": 3
 }

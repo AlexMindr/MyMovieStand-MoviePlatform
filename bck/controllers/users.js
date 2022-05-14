@@ -186,7 +186,7 @@ const update = async (req, res) => {
   try {
     const  useruuid  = req.userId;
     //if new pass not null, change pass
-    const {firstName,lastName,dateofbirthupdt,locationupdt,bioupdt,genderupdt,oldPass,newPass}=req.body
+    const {firstName,lastName,dateofbirth,location,bio,gender,oldPass,newPass}=req.body
 
     
     const checkPass= await User.findOne({attributes:['password','userid','email','username'],where:{useruuid}})    
@@ -207,12 +207,13 @@ const update = async (req, res) => {
       fullName=firstName+' '+lastName
     else if(firstName) fullName=firstName+'g'
         else if(lastName) fullName='g'+lastName
+
     const updatedUser = await User.update({
         fullname:fullName,
-        dateofbirth:dateofbirthupdt,
-        location:locationupdt,
-        bio:bioupdt,
-        gender:genderupdt,  
+        dateofbirth:dateofbirth,
+        location:location,
+        bio:JSON.stringify(bio),
+        gender:gender,  
         password:updatePass?updatePass:checkPass.password,
         updatedAt:new Date()
       },{
@@ -222,11 +223,12 @@ const update = async (req, res) => {
 
       
     let result={fullname:fullName,email:checkPass.email,
-      dateofbirth:dateofbirthupdt?dateofbirthupdt:null,location:locationupdt?locationupdt:null,username:checkPass.username};
+      dateofbirth:dateofbirth?dateofbirth:null,location:location?location:null,username:checkPass.username};
     
     res.status(201).json({result});
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
+    console.log(error.message)
   }
 };
 

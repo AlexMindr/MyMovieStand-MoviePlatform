@@ -58,7 +58,7 @@ const Profile = () => {
                   <ProfileAvatar profile={profile} joined={joined}/>
                 </Grid>
                 <Grid item className=''  xs={12} md={6}>
-                  <ProfileBio bio={profile.bio}/>
+                  {profile && <ProfileBio bio={profile.bio}/>}
                   <ProfileWatchlist status={status} />
                 </Grid>
                 <Grid item className=''  xs={12} md={12}>
