@@ -187,15 +187,17 @@ const updateWatchlistEntry = async (req, res) => {
             attributes:['status','rating','movieid','favourite'],
             
             where:{
-              userid
+              userid,
+              //favourite:true
             }, 
             include:{
             model:Movie,
             attributes:['title','poster_path',],
             },
             order:[
+              ['rating','DESC'],
               [Movie,'title','ASC'],
-              ['rating','DESC']
+              
             ],
           });
           
@@ -216,15 +218,17 @@ const updateWatchlistEntry = async (req, res) => {
             attributes:['status','rating','movieid','favourite'],
             
             where:{
-              userid
+              userid,
+              //favourite:true
             }, 
             include:{
             model:Movie,
             attributes:['title','poster_path',],
             },
             order:[
+              ['rating','DESC'],
               [Movie,'title','ASC'],
-              ['rating','DESC']
+              
             ],
           });
           

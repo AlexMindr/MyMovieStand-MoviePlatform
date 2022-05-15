@@ -1,5 +1,6 @@
 export { default as Movie} from './movie/Movie';
 export { default as MovieList} from './movielist/MovieList';
+export {default as MovieFavList} from './movielist/MovieFavList';
 export { default as Navbar} from './navbar/Navbar';
 export { default as Scrollbtn} from './scrollbtn/Scrollbtn';
 export { default as LoginForm} from './login/LoginForm';
@@ -10,3 +11,4 @@ export { default as ProfileWatchlist} from './profile/ProfileWatchlist'
 export { default as ProfileBio} from './profile/ProfileBio'
 export { default as ProfileFav} from './profile/ProfileFav'
 export {default as EditInfo} from './editprofile/EditInfo';
+export {default as EditFav} from './editprofile/EditFav';

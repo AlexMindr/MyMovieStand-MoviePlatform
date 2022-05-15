@@ -25,6 +25,17 @@ export default function DraftTextArea({field,setField}) {
         wrapperClassName="wrapperClassName"
         editorClassName="editorClassName"
         onEditorStateChange={onChange}
+        placeholder="Your bio - Tell us about yourself"
+        toolbar={{
+          options: ['inline', 'blockType', 'fontSize',
+           'fontFamily', 'list', 'colorPicker','emoji','history'],
+          inline: {
+            inDropdown: true,
+          },
+          list: {
+            inDropdown: true,
+          }
+        }}
       />
       </div>
   );

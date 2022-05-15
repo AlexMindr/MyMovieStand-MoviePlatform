@@ -189,7 +189,7 @@ const update = async (req, res) => {
     const {firstName,lastName,dateofbirth,location,bio,gender,oldPass,newPass}=req.body
 
     
-    const checkPass= await User.findOne({attributes:['password','userid','email','username'],where:{useruuid}})    
+    const checkPass= await User.findOne({attributes:['password','userid','email','username','fullname'],where:{useruuid}})    
     
     const isCorrectPass = await bcrypt.compare(oldPass, checkPass.password);
     
@@ -202,13 +202,14 @@ const update = async (req, res) => {
       
     }
     
-    var fullName='g'+'g'
-    if(firstName && lastName)
+    var fullName=checkPass.fullname
+    if(lastName && firstName)
       fullName=firstName+' '+lastName
-    else if(firstName) fullName=firstName+'g'
-        else if(lastName) fullName='g'+lastName
+    if(!lastName || !firstName)
+      return res.status(400).json({ message: "Last name or first name cannot be empty!" });
+    
 
-    const updatedUser = await User.update({
+    await User.update({
         fullname:fullName,
         dateofbirth:dateofbirth,
         location:location,

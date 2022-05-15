@@ -27,9 +27,11 @@ const EditInfo = ({initialState,currentName,username}) => {
 
 
     const handleSubmit = async (e) => {
-        
-        //TODO redirect la profile? or not
-       e.preventDefault()
+        e.preventDefault() 
+       if ((formData.firstName && !formData.lasttName) || (formData.lasttName && !formData.firstName))
+            setFormError("You need to fill both first and last name fields if you want to change your name!")
+       else {
+            setFormError(false)
        if (formData.dateofbirth!==null)formData.dateofbirth=new Date((formData.dateofbirth));
         let to=`/profile/${username}`
         dispatch(actionUpdateProfile(formData,navigate,to))
@@ -38,7 +40,7 @@ const EditInfo = ({initialState,currentName,username}) => {
           //else setFormError(false)
                 
          })
-       .catch(e=>setFormError(e))
+       .catch(e=>setFormError(e))}
     }
     
    
@@ -78,7 +80,7 @@ const EditInfo = ({initialState,currentName,username}) => {
 
   if(currentName)
   return (
-   <Box  sx={{ flexGrow: 1 }} component='form' onSubmit={handleSubmit}>
+   <Box  sx={{ flexGrow: 1 }} component='form' onSubmit={handleSubmit} className='editprofile-form'>
     
     <Grid container spacing={2} className='editprofile-form-grid' sx={width>800?{width:500}:{width:300}}>
         {formError?
@@ -92,8 +94,9 @@ const EditInfo = ({initialState,currentName,username}) => {
             <Typography variant='h5'>Your current name is {currentName}</Typography>
             <p>All fields are optional</p>
         </Grid>
-        <Input name="firstName" label="First Name" value={formData.firstName} handleChange={handleChange} required={true} />
-        <Input name="lastName" label="Last Name" value={formData.lasttName} handleChange={handleChange} required={true}/>
+        <Input name="firstName" label="First Name" value={formData.firstName} handleChange={handleChange} required={false} 
+        helperText={"If you want to change your name, both last and first name fields must be filled"}/>
+        <Input name="lastName" label="Last Name" value={formData.lasttName} handleChange={handleChange} required={false}/>
         <Input name="gender" label="Select Gender" handleChange={handleChange} select={true} required={false} value={formData.gender?formData.gender:''}>
                     <option value='' hidden></option>
                     <option value="Male">Male</option>
@@ -123,8 +126,6 @@ const EditInfo = ({initialState,currentName,username}) => {
 
         <Grid item xs={12} id='textarea-edit'>
              {/* <textarea cols={100} rows={10} placeholder="BIO"></textarea>  */}
-            {/*DATATYPE json in db*/
-        }
             <DraftTextArea field={formData.bio} setField={handleChangeBio}/>
         </Grid>
 

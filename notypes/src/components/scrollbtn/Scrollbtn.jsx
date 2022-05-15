@@ -24,7 +24,7 @@ const Scrollbtn /*: FC<ScrollTopArrowProps>*/ = ({ showBelow = 300 }) => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
     return (
-        <ArrowCircleUpIcon className="scrollTop" fontSize='large' onClick={scrollTop} style={{height: 50, display: showScroll ? 'flex' : 'none'}}/>
+        <ArrowCircleUpIcon className="scrollTop" fontSize='large' onClick={scrollTop} style={{ display: showScroll ? 'flex' : 'none'}}/>
     )
 }
 

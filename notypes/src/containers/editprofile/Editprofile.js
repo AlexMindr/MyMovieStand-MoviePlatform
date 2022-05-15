@@ -16,11 +16,7 @@ const Editprofile = () => {
            const {profileUser}=res.data;
            setProfile(profileUser);
           }
-        // async function getFavData(){
-        //   const res= await getSimpleProfile()
-        //   const {profileUser}=res.data;
-        //   setFavData(profileUser);
-        //   }
+
         getProfileData();
     },[]);
 
@@ -35,12 +31,6 @@ const Editprofile = () => {
              initialState={{ firstName: '', lastName: '', newPass: '', oldPass: '',
                 location: profile.location,dateofbirth:profile.dateofbirth,gender:profile.gender,bio:profile.bio }} />
               }
-         </Box>
-         <br/>
-         <Typography component="h3" variant='h4'>Edit your favourite movies</Typography>
-         <Divider flexItem/>
-         <Box component='div' className='editprofile-favorites'>
-
          </Box>
          
         </Container>

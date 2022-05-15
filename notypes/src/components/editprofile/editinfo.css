@@ -1,3 +1,7 @@
-/* .editprofile-form-grid>div{
-    width: ;
-} */
+.editprofile-form{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+} 

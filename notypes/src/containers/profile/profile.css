@@ -19,6 +19,12 @@
     font-weight: bold;
     color:rgb(74, 74, 74)
 }
+
+.profile-editfav{
+    justify-self: right;
+    margin-top: 10px;
+    font-size: 1rem;
+}
 /* .profile-avatar-item{
     justify-content: center;
 } */

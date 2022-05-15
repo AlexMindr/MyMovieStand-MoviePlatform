@@ -155,7 +155,7 @@ const Navbar = () => {
                       <NavLink to={`/profile/${user.username}`}>Profile</NavLink>
                       <NavLink to={`/myfriends`}>Friends</NavLink>
                       <NavLink to={`/myposts`}>Forum posts</NavLink>
-                      <NavLink to={`/profile/edit`}><SettingsIcon fontSize='small' sx={{verticalAlign:'bottom'}}/>&nbsp;<span>Settings</span></NavLink>
+                      <NavLink to={`/profile/edit/info`}><SettingsIcon fontSize='small' sx={{verticalAlign:'bottom'}}/>&nbsp;<span>Settings</span></NavLink>
                       <button onClick={handleLogout}><LogoutIcon fontSize='small' sx={{verticalAlign:'bottom'}}/>&nbsp;<span>Logout</span></button>
                     </div>
                   </div>

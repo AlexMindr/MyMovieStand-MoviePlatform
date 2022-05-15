@@ -2,7 +2,7 @@ import React,{useEffect,useState} from 'react'
 import './profile.css'
 import { useParams } from 'react-router-dom'
 import {ProfileAvatar,ProfileWatchlist,ProfileBio,ProfileFav} from '../../components'
-import { getProfile } from '../../api'
+import { getProfile,getFavouritesProfile } from '../../api'
 import { useSelector} from 'react-redux'
 import { Container,Grid,Box,Typography,StyledEngineProvider,Button } from '@mui/material'
 import { Link } from 'react-router-dom'
@@ -16,7 +16,7 @@ const Profile = () => {
   const {user} = useSelector(state=>state.user)
   const [myProfile, setMyProfile] = useState(false)
   const [joined, setJoined] =useState(null)
-
+  const [favorites,setFavourites]=useState(null)
 
   useEffect(() => {
     
@@ -28,8 +28,14 @@ const Profile = () => {
        const {watching,dropped,onhold,plantowatch,totalStatus,completed}=res.data;
        setStatus({completed,watching,onhold,plantowatch,dropped,totalStatus})
       }
-    
+    async function getFavData(){
+      const res= await getFavouritesProfile(username)
+      const {favourites}=res.data;
+      setFavourites(favourites);
+      }
+  
     getData();
+    getFavData();
   },[username]);
 
   useEffect(() => {
@@ -47,7 +53,7 @@ const Profile = () => {
                 <Grid item className='profile-title-item'  xs={12} md={12}>
                   <Typography component='h3' variant='h4'>{myProfile?'My':user.username+"'s"} profile</Typography>
                   {myProfile?
-                  <Link className='profile-editprofile' to='/profile/edit'>
+                  <Link className='profile-editprofile' to='/profile/edit/info'>
                     <SettingsIcon fontSize='small' sx={{verticalAlign:'sub'}}/>
                     <span>Edit info</span>
                   </Link>
@@ -62,7 +68,7 @@ const Profile = () => {
                   <ProfileWatchlist status={status} />
                 </Grid>
                 <Grid item className=''  xs={12} md={12}>
-                  <ProfileFav /*movies={}*//>
+                  <ProfileFav movies={favorites} myProfile={myProfile}/>
                 </Grid>
             </Grid>
          </Box>

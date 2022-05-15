@@ -8,7 +8,7 @@ import { StyledEngineProvider } from '@mui/material/styles';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useSelector } from 'react-redux';
 import WatchlistForm from '../watchlist/WatchlistForm';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+
 
 const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,releaseDate,title,movieid,trailer,keywords,rating, children }) => {
    
@@ -106,7 +106,7 @@ const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,re
         </Box>
         
         <Box component='div' className='genres-movielist'>
-            {/*la fiecare buton onclick cu link cautare */}
+            {/*TODO scos button poate*/}
            
               {genres.map((genre) => (
                      <Button  variant='text' key={genre.genreid}>
@@ -116,7 +116,7 @@ const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,re
         </Box>
 
         <CardContent className='description'>
-           <CardMedia className='media' image={`https://image.tmdb.org/t/p/original/${posterPath}`} title={title}> </CardMedia>
+           <CardMedia component="img" className='media' image={`https://image.tmdb.org/t/p/original/${posterPath}`} title={title}/> 
            <Typography className='text' variant="body2" color="textSecondary" component="p">
               {overview?overview:<em>No synopsis has been added</em>}
            </Typography> 
