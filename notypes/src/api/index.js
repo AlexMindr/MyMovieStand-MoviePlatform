@@ -25,8 +25,8 @@ export const signup = (formValues) => api.post("/user/signup", formValues);
 export const update = (formValues) => api.put("/user/update", formValues);
 
 
-export const getFavouritesProfile = (username) => api.get(`/watchlist/fav/${username}`);
-export const getFavourites = () => api.get("/watchlist/myfavourites");
+export const getFavouritesProfile = (username) => api.get(`/watchlist/fav/u/${username}`);
+export const getFavourites = () => api.get("/watchlist/fav/myfavourites");
 export const getWatchlist = (username) => api.get(`/watchlist/${username}`);
 export const getWatchlistInit = () => api.get("/watchlist");
 export const createWatchlistItem = (formValues) => api.post("/watchlist",formValues);

@@ -5,7 +5,15 @@ import FavoriteIcon from '@mui/icons-material/Favorite'
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import StarIcon from '@mui/icons-material/Star';
 
-const MovieFavList = ({posterPath,title,movieid,rating,status,actions, children }) => {
+const MovieFavList = ({posterPath,title,movieid,rating,status,actions,favourite,onFavClick,onRemClick, children }) => {
+
+  const onFav = (e) =>{
+      onFavClick(movieid)
+  }
+  const onRem = (e) =>{
+    onRemClick(movieid)
+}
+
   return (
     <Card sx={{ maxWidth: 300, minWidth:150 }} className='moviefavlist-card'>
         <CardHeader className='moviefavlist-header'
@@ -24,13 +32,24 @@ const MovieFavList = ({posterPath,title,movieid,rating,status,actions, children 
             Status: {status}
         </Typography>
         </CardContent>
-        {actions?<CardActions disableSpacing className='moviefavlist-actions'>
-        <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="remove from favorites">
-            <RemoveCircleIcon />
-        </IconButton>
+        {actions?<CardActions className='moviefavlist-actions'>
+            {favourite==='true'? 
+            <IconButton disabled aria-label="add to favorites">
+                <FavoriteIcon />
+            </IconButton>
+            :
+            <IconButton onClick={onFavClick} aria-label="add to favorites">
+                <FavoriteIcon />
+            </IconButton>}
+            {favourite==='true'? 
+            <IconButton onClick={onRemClick} aria-label="remove from favorites">
+                <RemoveCircleIcon />
+            </IconButton>
+            :
+            <IconButton disabled aria-label="remove from favorites">
+                <RemoveCircleIcon />
+            </IconButton>
+            }
         </CardActions>:<></>}
 </Card>
   )

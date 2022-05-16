@@ -17,8 +17,8 @@ const router = Router();
 
 router.get("/",auth,getWatchlistInit);
 router.get("/:username",getWatchlist);
-router.get("/myfavourites",auth,getFavourites);
-router.get("/fav/:username",getFavouritesProfile)
+router.get("/fav/myfavourites",auth,getFavourites);
+router.get("/fav/u/:username",getFavouritesProfile)
 router.post("/",auth,createWatchlistEntry);
 router.put("/",auth,updateWatchlistEntry);
 router.put("/addfav",auth,addFavourite);

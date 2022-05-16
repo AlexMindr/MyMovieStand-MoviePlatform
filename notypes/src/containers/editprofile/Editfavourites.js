@@ -7,14 +7,17 @@ import { StyledEngineProvider,Container,Box,Typography,Grid,Divider } from '@mui
 
 const Editfavourites = () => {
     const [favourites,setFavourites]=useState(null)
+    const [watchlist,setWatchlist]=useState(null)
     const {user} = useSelector(state=>state.user)
+
 
     useEffect(() => {
     
         async function getFavData(){
            const res= await getFavourites()
-           const {favourites}=res.data;
+           const {favourites,watchlist}=res.data;
            setFavourites(favourites);
+           setWatchlist(watchlist);
           }
         getFavData();
     },[]);
@@ -26,7 +29,7 @@ const Editfavourites = () => {
          <Typography component="h3" variant='h4'>Edit your favourite movies</Typography>
          <Divider flexItem/>
          <Box component='div' className='editfav-favorites'>
-            {favourites && <EditFav favourites={favourites}/>}
+            {favourites && watchlist  && <EditFav favourites={favourites} watchlist={watchlist}/>}
          </Box>
          
         </Container>

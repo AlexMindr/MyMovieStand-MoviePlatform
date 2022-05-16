@@ -49,5 +49,20 @@
 }
 
 .moviefavlist-actions{
-    height: 50px;
+    border-top: 2px solid purple;
+    display: flex;
+    height: 40px;
+    padding:0;
+    justify-content: center;
+}
+.moviefavlist-actions>button:nth-child(1){
+    justify-content: left;
+}
+.moviefavlist-actions>button:nth-child(2){
+    justify-content: right;
+}
+
+.moviefavlist-actions>button{
+    height: 75%;
+    padding:2px 5px 2px 5px;
 }

@@ -1,5 +1,5 @@
 import db from '../models/index.cjs';
-//import { Op } from '@sequelize/core';
+import { Op } from '@sequelize/core';
 const {Watchlist,User,Movie}=db;
 
 const getWatchlistInit = async (req, res) => {
@@ -206,20 +206,36 @@ const updateWatchlistEntry = async (req, res) => {
       res.status(404).json({ message: error.message });
     }
   };
+
   const getFavourites = async (req, res) => {
     const uuid=req.userId
     
     try {
         const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
-        //const {userid}= await User.findOne({attributes:['userid'],where:{username}});
-      
-      
+        
+        const watchlist = await Watchlist.findAll({
+          attributes:['status','rating','movieid','favourite'],
+          where:{
+            userid,
+            status:{[Op.or]:['Completed','Watching','On-hold']},
+          }, 
+          include:{
+          model:Movie,
+          attributes:['title','poster_path',],
+          },
+          order:[
+            ['rating','DESC'],
+            [Movie,'title','ASC'],
+            
+          ],
+        });
+        
         const favourites = await Watchlist.findAll({
             attributes:['status','rating','movieid','favourite'],
             
             where:{
               userid,
-              //favourite:true
+              favourite:true
             }, 
             include:{
             model:Movie,
@@ -232,11 +248,11 @@ const updateWatchlistEntry = async (req, res) => {
             ],
           });
           
-      res.status(200).json({favourites});
+      res.status(200).json({favourites,watchlist});
     } catch (error) {
       res.status(404).json({ message: error.message });
     }
   };
 
   export {getWatchlist, createWatchlistEntry, updateWatchlistEntry, deleteWatchlistEntry,
-     getWatchlistInit,addFavourite,removeFavourite,getFavourites,getFavouritesProfile};
+     getWatchlistInit,addFavourite, removeFavourite,getFavourites,getFavouritesProfile};
