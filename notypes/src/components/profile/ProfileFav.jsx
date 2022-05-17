@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import SettingsIcon from '@mui/icons-material/Settings'
 
 const ProfileFav = ({movies , myProfile}) => {
-  console.log(movies && movies)
+
   return (
     <Box className='profile-fav-div'>
       <Typography component='h4' variant='h5'>Favourite movies</Typography>

@@ -37,11 +37,11 @@ export const watchlistSlice = createSlice({
         },
         addToFav: (state,action) => {
             state.watchlist= state.watchlist.map((watchlistItem)=>
-            watchlistItem.movieid===action.payload.movieid? watchlistItem.favourite=true : watchlistItem)
+            watchlistItem.movieid===action.payload.movieid? ({...watchlistItem,favourite:true}) : watchlistItem)
         },
         remFromFav: (state,action) => {
             state.watchlist= state.watchlist.map((watchlistItem)=>
-            watchlistItem.movieid===action.payload.movieid? watchlistItem.favourite=false : watchlistItem)
+            watchlistItem.movieid===action.payload.movieid? ({...watchlistItem,favourite:false}) : watchlistItem)
         }
 
 

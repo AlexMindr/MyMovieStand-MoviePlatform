@@ -133,6 +133,17 @@ const updateWatchlistEntry = async (req, res) => {
     try {
         
         const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+        const countFav=await Watchlist.count({
+          attributes:['favourite'],
+          where:{
+            userid,
+            favourite:true,
+            //status:{[Op.eq]:wlName}
+          }
+        })
+        if (countFav>=6)
+          res.status(403).json({ message: 'You cannot have more than 6 favourite movies!' });
+
         
         await Watchlist.update(
           {
@@ -188,7 +199,7 @@ const updateWatchlistEntry = async (req, res) => {
             
             where:{
               userid,
-              //favourite:true
+              favourite:true
             }, 
             include:{
             model:Movie,
@@ -218,6 +229,7 @@ const updateWatchlistEntry = async (req, res) => {
           where:{
             userid,
             status:{[Op.or]:['Completed','Watching','On-hold']},
+            favourite:false,
           }, 
           include:{
           model:Movie,
