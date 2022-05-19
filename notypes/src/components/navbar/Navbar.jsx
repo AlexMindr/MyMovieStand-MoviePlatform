@@ -1,11 +1,12 @@
 import React,{useState,useRef,useEffect} from 'react'
 import './navbar.css'
 import logo from '../../images/Logo.png'
-import {NavLink, useNavigate} from 'react-router-dom';
+import {NavLink, useNavigate,Link} from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import ClearIcon from '@mui/icons-material/Clear';
 import Button from '@mui/material/Button';
+import  IconButton  from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
@@ -18,6 +19,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import {actionLogOut} from '../../store/userSlice'
 import {stringAvatar} from '../../auxcomponents/avatar/Avatarfct'
 import { setAfterLogout } from '../../store/watchlistSlice';
+import debounce from 'lodash/debounce';
+import {getMoviesSimpleFilter} from '../../api'
+import {MovieSearchList} from '../index'
 
 let notifications=[{id:1,content:"texttext",read:false},{id:2,content:"texttext2",read:true}]
 function getUnreadNotif(notifications){
@@ -36,14 +40,31 @@ const Navbar = () => {
   useCloseSearch(searchBox);
   useCloseOnClickOutside(menuBox);
   const [searchToggle, setSearchToggle]=useState("container2");
-  const [inputSearch,setInputSearch]=useState();
   const [isLoggedIn,setIsLoggedIn]=useState(false);
   const [show, setShow] = useState(true)
+  const [inputSearch, setInputSearch]=useState('')
+  const [searchResult, setSearchResult]=useState(null)
   const {user}=useSelector(state=>state.user)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   var activeStyle = "active-link";
   
+
+  const changeInput = (e) =>{
+    setInputSearch(e.target.value)
+    searchContent(inputSearch)
+  }
+
+  const searchContent = debounce((input) =>{
+    async function getDataFiltered(query){
+      const res= await getMoviesSimpleFilter(1,query);
+      setSearchResult(res.data.movies);
+      //console.log(res.data.movies)
+      //setTotalPages(res.data.totalPages)
+      }
+    const query=`search=${input}`
+    getDataFiltered(query)
+  },1000)
 
   const handleLogout = () =>{
     dispatch(actionLogOut())
@@ -113,6 +134,13 @@ const Navbar = () => {
   }
   
   
+  const closeSearchClick = () =>{
+    setInputSearch('')
+    //setSearchToggle('container2')
+    setSearchResult(null)
+
+  }
+  console.log(searchResult)
   return (
           <div className='app__header' ref={menuBox}>
             <div className={`app__header-header ${show?'':'navbar--hidden'}`}>
@@ -125,7 +153,7 @@ const Navbar = () => {
               <>
                 <div className="dropdown-submenu">
                   <NavLink to={`/watchlist/${user.username}`}>
-                    <Button className='watchlist-dropdown'><FormatListBulletedIcon fontSize='large'/></Button>
+                    <IconButton className='watchlist-dropdown'><FormatListBulletedIcon fontSize='large'/></IconButton>
                   </NavLink>
                   <div className="dropdown-content">
                     <NavLink to={`/watchlist/${user.username}`}>Watchlist</NavLink>
@@ -133,7 +161,7 @@ const Navbar = () => {
                 </div>
                 <Divider orientation="vertical" flexItem  />
                 <div className="dropdown-submenu">
-                    <Button><CircleNotificationsIcon fontSize='large'/></Button> 
+                    <IconButton><CircleNotificationsIcon fontSize='large'/></IconButton> 
                     {notifications.length>0 && getUnreadNotif(notifications).length>0?
                     <span className='notification-length-unread'>
                       {getUnreadNotif(notifications).length}
@@ -149,7 +177,7 @@ const Navbar = () => {
                 </div>
                 <Divider orientation="vertical" flexItem  />
                 <><div className="dropdown-submenu">
-                    <Button>{ user.username.length>10?user.username.substring(0,10)+'...':user.username}<ArrowDropDownIcon/></Button>
+                    <Button sx={{textTransform:'none'}}>{ user.username.length>10?user.username.substring(0,10)+'...':user.username}<ArrowDropDownIcon/></Button>
                     
                     <div className="dropdown-content">
                       <NavLink to={`/profile/${user.username}`}>Profile</NavLink>
@@ -176,7 +204,7 @@ const Navbar = () => {
           <div className={`app__header-navbar ${show?'':'navbar--hidden'}`}>
             <div className='app__navbar-left'>
                 <div className='app__navbar-hamburgermenu'>
-                  <Button onClick={()=>{setMenuBars(!menuBars)}}><MenuIcon fontSize='large'/></Button>
+                  <IconButton onClick={()=>{setMenuBars(!menuBars)}}><MenuIcon fontSize='large'/></IconButton>
                 </div>
                 <div className='app__navbar-left_logo' >
                   <NavLink className={({ isActive }) =>
@@ -191,8 +219,6 @@ const Navbar = () => {
                             onClick={()=>{setMenuBars(false)}}>Movies</NavLink ></li>
                         <li><NavLink className={({ isActive }) =>isActive ? activeStyle : undefined} to='/forum' 
                             onClick={()=>{setMenuBars(false)}}>Forum</NavLink ></li>
-                        {/* <li><NavLink className={({ isActive }) =>isActive ? activeStyle : undefined} to='/watchlist' 
-                            onClick={()=>{setMenuBars(false)}}>Watchlist</NavLink ></li> */}
                       </ul>
                     </nav>
                 </div>
@@ -204,18 +230,30 @@ const Navbar = () => {
               <div className={searchToggle}>
                 <div className='icon'>
                   
-                  <Button className='search' onClick={()=>searchToggle==='container2'?setSearchToggle('container2 active'):setSearchToggle('container2')} aria-label="submit search">
+                  <IconButton className='search' aria-label="submit search"
+                     onClick={()=>searchToggle==='container2'?setSearchToggle('container2 active'):setSearchToggle('container2')} >
                     <SearchIcon fontSize='medium'/>
-                  </Button>
+                  </IconButton>
                 </div>
                 <div className="input">
-                  <input type="text" aria-label='search' placeholder="Search a movie" value={inputSearch}/>
-                  <Button className='clear' onClick={() => setInputSearch(() => "")}><ClearIcon/></Button>
+                  <input type="text" aria-label='search' placeholder="Search movie..."  value={inputSearch?inputSearch:''} 
+                                onChange={changeInput}/>
+                  <IconButton className='clear' onClick={() => setInputSearch(() => "")}><ClearIcon/></IconButton>
+                  
                 </div>
+                
               </div>
-              {/* <div className='app__navbar-right_search'>
-                  <Button className='search' onClick={()=>searchToggle==='container2'?setSearchToggle('container2 active'):setSearchToggle('container2')} aria-label="submit search"><SearchIcon fontSize='medium'/></Button>   
-              </div> */}
+              <div className={searchToggle==='container2 active' && inputSearch!==''?'dropdown-search open':'dropdown-search'}>
+                {searchResult && searchResult.length>0?
+                  searchResult.map(movie=>
+                    <Link onClick={closeSearchClick} key={movie.movieid} to={`/movies/${movie.movieid}`}>
+                      <MovieSearchList poster={movie.poster_path} title={movie.title}/>
+                    </Link>)
+                
+                :<Button disabled variant='text'>Nothing matched your search</Button>
+                }
+              </div>
+              
             </div>
 
           </div>

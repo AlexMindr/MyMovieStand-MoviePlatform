@@ -43,10 +43,8 @@ const Movies=()=>{
     const [genresChecked, setGenresChecked] = useState(null)
     const [genres, setGenres]= useState(null)
     const [inputSearch, setInputSearch]=useState('')
-
-    // const handleChangeRadio = (e) => {
-    //     setGenresChecked({ ...genresChecked,[e.target.name]: e.target.value });
-    // };
+    const [queryGlobal,setQueryGlobal]=useState(null)
+    
     const handleChangeOrder = (event) => {
         setOrder(event.target.value);
     };
@@ -79,18 +77,14 @@ const Movies=()=>{
 
     useEffect(()=> {
         async function getDataFiltered(query){
-            let pg=1
-            const res= await getMoviesFiltered(pg,query);
+            const res= await getMoviesFiltered(page,query);
             setMovies(res.data.movies);
             setTotalPages(res.data.totalPages)
-            setPage(pg)
             }
         async function getData(){
-            let pg=1
-            const res= await getMovies(pg);
+            const res= await getMovies(page);
             setMovies(res.data.movies);
             setTotalPages(res.data.totalPages)
-            setPage(pg)
             }
         let toQuery={checked:null,order:null,sorter:null,search:null}
         if(genresChecked && !allValEq(genresChecked,false)){
@@ -116,28 +110,27 @@ const Movies=()=>{
                     query+=`${key}=${value}&`
             }
         query=query.slice(0,-1)
+        if(queryGlobal!==query){
+            pageChange(null,1)
+        }
+        setQueryGlobal(query)
+        
         getDataFiltered(query);
         }
         
         if(genresChecked && inputSearch==='' &&order==='' && sorter==='' && allValEq(genresChecked,false)){
+            if(queryGlobal && !allValEq(queryGlobal,null)){
+                setQueryGlobal(null)
+                pageChange(null,1)
+            }
             getData()
         }
         
 
-    },[order,sorter,inputSearch,genresChecked,genres])
+    },[order,sorter,inputSearch,genresChecked,genres,page,queryGlobal])
 
-    
-    useEffect(() => {
-        async function getData(){
-            const res= await getMovies(page);
-            setMovies(res.data.movies);
-            setTotalPages(res.data.totalPages)
-            }    
-        
-        getData();
-     },[page]);
+   
 
-    
 
     return (
         <Container className='container-movies'>
@@ -163,27 +156,11 @@ const Movies=()=>{
                 </div>
                 <div className='filter-items-selects'>
                     <div className="dropdown-selectgenres">
-                        {/* <Tooltip title="AND: Movies must have all the genres selected;
-                             OR: Movies must have at least one of the selected genres" placement="top" arrow> */}
                             <label className='dropdown-selectgenres-label'>Genres &nbsp;&nbsp;&nbsp;<ArrowDropDownIcon fontSize='small' 
                             sx={{verticalAlign:'bottom'}}/></label>
-                        {/* </Tooltip> */}
-                    
+                        
                         <div className="dropdown-selectgenres-content">
-                            {/* {genres && 
-                            <FormControl className='radio-search'>
-                            <RadioGroup
-                                aria-labelledby="radio-buttons-group-genres-top"
-                                name="radio"
-                                value={genresChecked.radio}
-                                onChange={handleChangeRadio}
-                                row
-                                >
-                                <FormControlLabel value="and" control={<Radio />} label="AND" />
-                                <FormControlLabel value="or" control={<Radio />} label="OR" />
-                            </RadioGroup>
-                            </FormControl>
-                            } */}
+                            
                             <FormGroup >
                             {genres && genres.map((genre)=>
                             <FormControlLabel key={genre.genreid} control={
@@ -302,7 +279,7 @@ const Movies=()=>{
                     }
                     {movies!==null&&movies.length>=1?
                     <div className='container-pagination'>
-                        <Pagination count={totalPages} variant="outlined" shape="rounded" showFirstButton showLastButton onChange={pageChange}/>
+                        <Pagination count={totalPages} page={page?page:1} variant="outlined" shape="rounded" showFirstButton showLastButton onChange={pageChange}/>
                     </div>:
                     <></>}
                 </div>

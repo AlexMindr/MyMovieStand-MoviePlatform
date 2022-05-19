@@ -18,6 +18,52 @@ function getPagingData(data, page, limit) {
   return {  movies, totalPages };
 };
 
+
+const getMoviesSimpleFilter = async (req, res) => {
+  //TODO schimbat page-1 in 0 daca nu folosesc in alta parte + path
+  const {page}=req.params;
+  const { limit, offset } = getPagination(page-1,5);
+  const {search}=req.query
+    await Movie.findAndCountAll({
+        attributes:['movieid','title','poster_path','keywords'], 
+        limit,
+        offset,
+        distinct: true,
+        where:{
+           [Op.or]:[
+             {
+               title:{
+                [Op.like]:search?`%${search}%`:`%`
+               }
+             },
+             search&&search.length>=3?{
+               keywords:{
+                [Op.like]:search?`%${search}%`:`%`
+               }
+             }:{
+              title:{
+                [Op.like]:search?`%${search}%`:`%`
+               }
+              },
+           ],
+           
+        },
+        order:[
+          ['title','ASC']
+        ],
+      })
+      .then(data => {
+        const {movies,totalPages} = getPagingData(data, page, limit);
+        
+        res.status(200).json({movies,totalPages});
+      })
+
+      .catch(error=>{
+        res.status(404).json({ message: error.message });
+        //console.log(error)
+    })
+}
+
 const getMoviesFiltered = async (req, res) => {
   const {page}=req.params;
   const { limit, offset } = getPagination(page-1);
@@ -327,4 +373,4 @@ const populateMovies = async (req, res) => {
         res.status(404).json({ message: error.message });
       }
   };
-  export { getMovies, getMovie, populateMovies, createMovie, updateMovie, deleteMovie,getMoviesFiltered };
+  export { getMovies, getMovie, populateMovies, createMovie, updateMovie, deleteMovie,getMoviesFiltered,getMoviesSimpleFilter };

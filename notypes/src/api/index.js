@@ -15,7 +15,7 @@ api.interceptors.request.use((req) => {
 export const getMovie = (id) => api.get(`/movies/movie=${id}`);
 export const getMovies = (page)  => api.get(`/movies/page=${page}`)
 export const getMoviesFiltered = (page,query)  => api.get(`/movies/page=${page}/filter/?${query}`)
-
+export const getMoviesSimpleFilter = (page,query) => api.get(`/movies/page=${page}/search/?${query}`)
 
 export const verify = () => api.get("/user/verify");
 export const getProfile = (username) => api.get(`/user/profile/${username}`);

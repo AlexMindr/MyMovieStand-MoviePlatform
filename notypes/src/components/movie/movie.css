@@ -152,7 +152,7 @@
 }
 .synopsis{
     margin-left: 0.2rem;
-    margin-right: 1rem;
+    margin-right: 1.5rem;
     text-align: justify;
 }
 
@@ -285,9 +285,16 @@
     justify-content: center;
     row-gap: 0.5rem;
     
+    
 }
-.financial span,.financial p{
+.financial span{
     font-size: 0.9rem;
+    max-width: 100%;
+    
+}
+.financial>div{
+   display: grid;
+   grid-template-columns: 1fr 1fr 1fr;
 }
 .financial h6{
     font-weight: bold;  

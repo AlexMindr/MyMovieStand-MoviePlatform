@@ -67,7 +67,7 @@ const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,re
         {/*de pus culoare cand adaugam in lista la element etc.  */}
         <Typography className='title' variant="h4">
            <Link to={`/movies/${movieid}`}>
-            {title.length>50?title.substring(0,50)+'...':title}
+            {title.length>40?title.substring(0,40)+'...':title}
            </Link>
         </Typography>
         
@@ -90,7 +90,9 @@ const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,re
                               </Box>
             </Modal>
             </>
-            :null} 
+            :
+            <Button  className='trailer-movielist' variant='contained' disabled >PV</Button>
+            } 
         </Divider>
 
         <Box component='div' className='overlay' >

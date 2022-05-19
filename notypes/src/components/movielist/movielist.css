@@ -14,11 +14,15 @@
     justify-content: center;
     font-size:1rem;
     font-weight: bold;
-    height: 2.75rem;    
+    height: 2.75rem; 
+    min-height: 2.75rem;
+      
 }
 .title a{
     text-align: center;
-    text-decoration: none; 
+    text-decoration: none;
+    text-overflow: elipsis; 
+    width: 90%;
 }
 
 .trailer-movielist{
@@ -48,6 +52,7 @@
     align-items: center;
     justify-items: center;
     margin:0.2rem 0.1rem 0.2rem 0.1rem;
+    min-height: 25px;
 }
 
 .overlay .movielist-certification{
@@ -75,7 +80,7 @@
     flex-wrap:wrap;
     column-gap: 3px;
     width:100%;
-    min-height: 2.5rem;
+    min-height: 2.65rem;
     align-items: center;
     justify-content: center;
     background-color: rgb(240, 236, 236);
@@ -146,6 +151,7 @@
     justify-content: center;
     margin-bottom: 0.2rem;
     margin-top: 0.1rem;
+    min-height: 25px;
 }
 .bottom-card div{
     display:flex;

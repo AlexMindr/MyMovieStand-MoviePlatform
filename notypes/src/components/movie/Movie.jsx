@@ -295,7 +295,7 @@ else
                <Typography component='h6'>Revenue</Typography>
                <Typography component='span'>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(movie.revenue)}</Typography>
                <Typography component='h6'>Keywords</Typography>
-               <Typography component='p'>{movie.keywords}</Typography>   
+               <Box component='div' >{movie.keywords.split(',').map(keyword=><span key={keyword}>{keyword}</span>)}</Box>   
          </Grid>
          <Grid item  xs={12} md={6} lg={6}>
             <Typography component='h5' variant='h5'>Cast</Typography>

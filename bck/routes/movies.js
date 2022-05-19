@@ -6,13 +6,15 @@ import {
   createMovie,
   updateMovie,
   deleteMovie,
-  getMoviesFiltered
+  getMoviesFiltered,
+  getMoviesSimpleFilter,
 } from "../controllers/movies.js";
 //import auth from "../middlewares/auth.mjs";
 
 const router = Router();
 
 router.get("/page=:page/filter",getMoviesFiltered)
+router.get("/page=:page/search",getMoviesSimpleFilter)
 router.get("/page=:page", getMovies);
 router.get("/movie=:id",getMovie)
 router.post("/populate",populateMovies)
