@@ -226,6 +226,110 @@
             },
             "indexes": []
         },
+        "posts": {
+            "tableName": "posts",
+            "schema": {
+                "postid": {
+                    "autoIncrement": true,
+                    "primaryKey": true,
+                    "field": "postid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "content": {
+                    "field": "content",
+                    "seqType": "Sequelize.JSON"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "movieid": {
+                    "name": "movieid",
+                    "allowNull": false,
+                    "unique": "posts_userid_movieid_unique",
+                    "references": {
+                        "model": "movies",
+                        "key": "movieid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "movieid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "userid": {
+                    "unique": "posts_userid_movieid_unique",
+                    "references": {
+                        "model": "users",
+                        "key": "userid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "userid",
+                    "allowNull": false,
+                    "name": "userid",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
+        "reviews": {
+            "tableName": "reviews",
+            "schema": {
+                "reviewid": {
+                    "autoIncrement": true,
+                    "primaryKey": true,
+                    "field": "reviewid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "content": {
+                    "field": "content",
+                    "seqType": "Sequelize.JSON"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "movieid": {
+                    "name": "movieid",
+                    "allowNull": false,
+                    "unique": "reviews_userid_movieid_unique",
+                    "references": {
+                        "model": "movies",
+                        "key": "movieid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "movieid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "userid": {
+                    "unique": "reviews_userid_movieid_unique",
+                    "references": {
+                        "model": "users",
+                        "key": "userid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "userid",
+                    "allowNull": false,
+                    "name": "userid",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
         "users": {
             "tableName": "users",
             "schema": {
@@ -306,6 +410,113 @@
             },
             "indexes": []
         },
+        "usercomments": {
+            "tableName": "usercomments",
+            "schema": {
+                "ucid": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "ucid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "comment_content": {
+                    "field": "comment_content",
+                    "seqType": "Sequelize.JSON"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "postid": {
+                    "name": "postid",
+                    "allowNull": false,
+                    "unique": "usercomments_userid_postid_unique",
+                    "references": {
+                        "model": "posts",
+                        "key": "postid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "postid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "userid": {
+                    "unique": "usercomments_userid_postid_unique",
+                    "references": {
+                        "model": "users",
+                        "key": "userid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "userid",
+                    "name": "userid",
+                    "allowNull": false,
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
+        "userlikes": {
+            "tableName": "userlikes",
+            "schema": {
+                "ulid": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "ulid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "liked": {
+                    "defaultValue": {
+                        "value": true
+                    },
+                    "field": "liked",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "reviewid": {
+                    "name": "reviewid",
+                    "allowNull": false,
+                    "unique": "userlikes_userid_reviewid_unique",
+                    "references": {
+                        "model": "reviews",
+                        "key": "reviewid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "reviewid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "userid": {
+                    "unique": "userlikes_userid_reviewid_unique",
+                    "references": {
+                        "model": "users",
+                        "key": "userid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "userid",
+                    "name": "userid",
+                    "allowNull": false,
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
         "watchlists": {
             "tableName": "watchlists",
             "schema": {
@@ -377,5 +588,5 @@
     "path": "E:\\ProiecteVSCode\\Licenta\\notypesfrbck\\bck\\migrations\\_current.json",
     "backupPath": "E:\\ProiecteVSCode\\Licenta\\notypesfrbck\\bck\\migrations\\_current_bak.json",
     "exists": true,
-    "revision": 3
+    "revision": 15
 }

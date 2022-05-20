@@ -5,11 +5,27 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
    
-    static associate({Movie,Watchlist,Notification}) {
-      this.belongsToMany(Movie,{through:Watchlist, foreignKey:{name:'userid',allowNull:false}})
+    static associate({Movie,Watchlist,Notification,Review,UserLike,Post,UserComment}) {
+
+      this.belongsToMany(Movie,{through:Watchlist, foreignKey:{name:'userid',allowNull:false}, otherKey:'movieid'})
       this.hasMany(Watchlist,{foreignKey:{name:'userid',allowNull:false}});
 
       this.hasMany(Notification,{foreignKey:'userid'});
+
+      
+      this.belongsToMany(Review,{through:UserLike, foreignKey:{name:'userid',allowNull:false}})
+      this.hasMany(UserLike,{foreignKey:{name:'userid',allowNull:false}});
+
+      this.belongsToMany(Movie,{through:Review, foreignKey:{name:'userid',allowNull:false},otherKey:'movieid'})
+      this.hasMany(Review,{foreignKey:{name:'userid',allowNull:false}});
+
+
+      this.belongsToMany(Post,{through:UserComment, foreignKey:{name:'userid',allowNull:false}})
+      this.hasMany(UserComment,{foreignKey:{name:'userid',allowNull:false}});
+
+      this.belongsToMany(Movie,{through:Post, foreignKey:{name:'userid',allowNull:false},otherKey:'movieid'})
+      this.hasMany(Post,{foreignKey:{name:'userid',allowNull:false}});
+
     }
 
     toJSON(){

@@ -18,12 +18,19 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Movie extends Model {
     
-    static associate({Genre,User,Watchlist,Moviegenre}) {
+    static associate({Genre,User,Watchlist,Moviegenre,Review,Post}) {
       this.belongsToMany(Genre,{through:Moviegenre, foreignKey: {name:'movieid',allowNull:false}});
       this.hasMany(Moviegenre,{foreignKey: {name:'movieid',allowNull:false}});
     
-      this.belongsToMany(User,{through:Watchlist,foreignKey: {name:'movieid',allowNull:false}});  
+      this.belongsToMany(User,{through:Watchlist,foreignKey: {name:'movieid',allowNull:false},otherKey:'userid'});  
       this.hasMany(Watchlist,{foreignKey: {name:'movieid',allowNull:false}});
+
+      this.belongsToMany(User,{through:Review,foreignKey: {name:'movieid',allowNull:false},otherKey:'userid'});  
+      this.hasMany(Review,{foreignKey: {name:'movieid',allowNull:false}});
+      
+      this.belongsToMany(User,{through:Post,foreignKey: {name:'movieid',allowNull:false},otherKey:'userid'});  
+      this.hasMany(Post,{foreignKey: {name:'movieid',allowNull:false}});
+      
       }
     toJSON(){
       return {...this.get(),createdAt:undefined,updatedAt:undefined}
