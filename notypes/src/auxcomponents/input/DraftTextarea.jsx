@@ -5,7 +5,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 //import debounce from 'lodash/debounce';
 
 
-export default function DraftTextArea({field,setField}) {
+export default function DraftTextArea({field,setField,placeholder}) {
   const [editorState, setEditorState] = useState(()=>field?EditorState.createWithContent(convertFromRaw(JSON.parse(field))):EditorState.createEmpty())
   
   
@@ -25,7 +25,7 @@ export default function DraftTextArea({field,setField}) {
         wrapperClassName="wrapperClassName"
         editorClassName="editorClassName"
         onEditorStateChange={onChange}
-        placeholder="Your bio - Tell us about yourself"
+        placeholder={placeholder}
         toolbar={{
           options: ['inline', 'blockType', 'fontSize',
            'fontFamily', 'list', 'colorPicker','emoji','history'],

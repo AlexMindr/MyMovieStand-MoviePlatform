@@ -16,10 +16,14 @@ function getPagingData(data, page, limit) {
 };
 
 const getHomeReviews = async (req, res) => {
-    //TODO orderby createdat, primele 5 doar
     try {
-        const {movieid} =req.params
-        const reviews = await Review.findAll({});
+        const reviews = await Review.findAll({
+          limit:5,
+          include:[
+            {model:Movie,attributes:['title','movieid']},
+            {model:User,attributes:['username']}
+          ],
+          order:[['createdAt','DESC']]});
   
       res.status(200).json(reviews);
     } catch (error) {

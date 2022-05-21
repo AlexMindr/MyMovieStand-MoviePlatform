@@ -140,7 +140,7 @@ const Navbar = () => {
     setSearchResult(null)
 
   }
-  console.log(searchResult)
+  
   return (
           <div className='app__header' ref={menuBox}>
             <div className={`app__header-header ${show?'':'navbar--hidden'}`}>

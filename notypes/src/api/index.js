@@ -12,6 +12,13 @@ api.interceptors.request.use((req) => {
   return req;
 });
 
+export const getUserReviews = () => api.get(`/reviews/get/user`);
+export const getHomeReviews = () => api.get('/reviews/get/home');
+export const getMovieReviews = (movieid) => api.get(`/reviews/get/movie/${movieid}`);
+export const addReview = (formData) => api.post('/reviews/add',formData);
+export const deleteReview = (formData) => api.post('/reviews/delete',formData);
+
+
 export const getMovie = (id) => api.get(`/movies/movie=${id}`);
 export const getMovies = (page)  => api.get(`/movies/page=${page}`)
 export const getMoviesFiltered = (page,query)  => api.get(`/movies/page=${page}/filter/?${query}`)

@@ -1,0 +1,12 @@
+.reviewadd-form{
+    margin-top:10px;
+}
+.reviewadd-textarea{
+    max-width: 50vw;
+}
+
+@media only screen and (max-width:600px){
+    .reviewadd-textarea{
+        max-width: 300px;
+    }
+}

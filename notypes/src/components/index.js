@@ -13,3 +13,5 @@ export { default as ProfileBio} from './profile/ProfileBio'
 export { default as ProfileFav} from './profile/ProfileFav'
 export {default as EditInfo} from './editprofile/EditInfo';
 export {default as EditFav} from './editprofile/EditFav';
+export {default as MovieReview} from './review/MovieReview';
+export {default as ReviewAdd} from './review/ReviewAdd';

@@ -126,7 +126,7 @@ const EditInfo = ({initialState,currentName,username}) => {
 
         <Grid item xs={12} id='textarea-edit'>
              {/* <textarea cols={100} rows={10} placeholder="BIO"></textarea>  */}
-            <DraftTextArea field={formData.bio} setField={handleChangeBio}/>
+            <DraftTextArea field={formData.bio} setField={handleChangeBio} placeholder={"Your bio - Tell us about yourself"}/>
         </Grid>
 
         <Grid item xs={12}>

@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react';
 import './movie.css'
-import {getMovie,getImages,getCredits} from '../../api';
+import {getMovie,getImages,getCredits, getMovieReviews} from '../../api';
 import moment from 'moment'
 import { Divider,Box, Button, Typography,Grid,ImageList,ImageListItem,Modal,Paper } from '@mui/material'
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
@@ -13,6 +13,7 @@ import {Link,useLocation} from 'react-router-dom'
 import {useSelector} from 'react-redux'
 import WatchlistForm from '../watchlist/WatchlistForm';
 import StarIcon from '@mui/icons-material/Star';
+import MovieImgHoriz from './MovieImgHoriz';
 
 function numFormatter(num) {
    if(num > 999 && num < 1000000){
@@ -34,6 +35,7 @@ const Movie = ({movieid,children}) => {
    const [openTrailer, setOpenTrailer] = useState(false);
    const [openWatchForm, setOpenWatchForm] = useState(false);
    const [wlData,setWlData]=useState(null)
+   const [reviews,setReviews]=useState(null)
    const {watchlist}= useSelector(state=>state.watchlist)
    const {user}=useSelector(state=>state.user)
    const location = useLocation()
@@ -86,7 +88,9 @@ const Movie = ({movieid,children}) => {
          const res3= await getCredits(res.data.tmdb_id);
          const {crew,cast}= res3.data
          setCredits({crew,cast}); 
-         }
+         const res4= await getMovieReviews(movieid);
+         setReviews(res4.data);   
+      }
       
       getData();
    },[movieid]);
@@ -270,24 +274,9 @@ else
 
 
          <Grid item  xs={12} md={7} lg={8}>
-            {/*De pus Tabs pt fiecare tip de imagine*/}
             <Typography component='h5' variant='h5'>Gallery</Typography>
             <Divider flexItem/>
-            <Box component='div' className='imageroot'>
-               <ImageList  className="images" >
-                {images && images.posters.map((item) => (
-                  <ImageListItem  key={item.file_path}>
-                     <img
-                        src={`https://image.tmdb.org/t/p/original/${item.file_path}`}
-                        alt={movie.title}
-                        loading="lazy" 
-                     />
-                  </ImageListItem>
-               ))}
-               {children}
-               </ImageList>
-            </Box>
-
+            {images? <MovieImgHoriz images={images} title={movie.title}/>:<div>Loading images...</div>}
          </Grid>
          <Grid className='financial' item  xs={12} md={5} lg={4}>
                <Typography component='h6'>Budget</Typography>
@@ -340,6 +329,20 @@ else
                ))}
             {children}
             </ImageList>
+         </Grid>
+         <Grid item  xs={12} md={12} lg={12}>
+            <Box component='div' className='review-title-box'>
+               <Typography component='h5' variant='h5'>User Reviews</Typography>
+               {/* To check if already has review and edit */}
+               <Link to={`/movies/${movieid}/addreview`}>Add Review</Link>
+            </Box>
+            <Divider flexItem/>
+            {reviews && reviews.length>0?
+               <></>
+               :
+               <Box component='div' sx={{display:'flex',justifyContent:'center',alignItems:'center',p:3,fontStyle:'italic'}}>
+                  No reviews have been added for this movie
+               </Box>}
          </Grid>
       </Grid>
    </Box>

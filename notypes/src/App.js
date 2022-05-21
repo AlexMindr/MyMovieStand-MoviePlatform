@@ -2,7 +2,8 @@ import React, {useState,useEffect} from 'react';
 import './App.css';
 import {Routes, Route, BrowserRouter as Router,Outlet,useLocation,useNavigate} from 'react-router-dom';
 import {Navbar} from './components';
-import {Footer,Home,Movies,Errorpage,Moviepage,Login,Signup,Watchlistpage,Profile,Editprofile,Editfavourites} from './containers'
+import {Footer,Home,Movies,Errorpage,Moviepage,Login,Signup,Watchlistpage,
+  Profile,Editprofile,Editfavourites,Reviewaddpage,Reviewspage} from './containers'
 import CssBaseline from '@mui/material/CssBaseline';
 import { useDispatch,useSelector } from 'react-redux';
 import { actionVerify } from './store/userSlice';
@@ -11,12 +12,9 @@ import {default as PageAuth} from './auxcomponents/routerchecks/PageAuth'
 import {default as PageRedirect} from './auxcomponents/routerchecks/PageRedirect'
 
 
-//TODO overflow:elipsis pt titlurile lungi?
 //TODO switch countries with auto-complete countries from mui autocomplete
 //TODO rating mui ?
 //TODO redirect from form to login with saved location
-//TODO autocomplete component la search sus?
-//TODO bind var to sequelize.literal
 export default function App() {
   const dispatch=useDispatch()
   const {user,verifiedThisSession} =useSelector(state=>state.user)
@@ -47,6 +45,7 @@ export default function App() {
               <Route path='/home' element={<Home/>}/>
               <Route path='/movies' element={<Movies/>}/>
               <Route path='/movies/:id' element={<Moviepage/>}/>
+              <Route path='/movies/:id/reviews/all' element={<Reviewspage/>}/>
               <Route path='/watchlist/:username' element={<Watchlistpage/>}/>
              
               <Route path='/signup' element={ 
@@ -73,6 +72,11 @@ export default function App() {
               <Route path='/profile/edit/favourites' element={ 
                 <PageAuth>
                   <Editfavourites />
+                </PageAuth>
+              }/>  
+              <Route path='/movies/:id/addreview' element={ 
+                <PageAuth>
+                  <Reviewaddpage/>
                 </PageAuth>
               }/>  
               <Route path='*' element={<Errorpage/>}/>

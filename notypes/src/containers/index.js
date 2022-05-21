@@ -9,3 +9,5 @@ export {default as Watchlistpage} from './watchlist/Watchlistpage';
 export {default as Profile} from './profile/Profile';
 export {default as Editprofile} from './editprofile/Editprofile';
 export {default as Editfavourites} from './editprofile/Editfavourites';
+export {default as Reviewaddpage} from './review/Reviewaddpage';
+export {default as Reviewspage} from './review/Reviewspage';

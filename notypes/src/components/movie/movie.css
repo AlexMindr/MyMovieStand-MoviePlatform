@@ -243,7 +243,7 @@
 }
 
 
-.images{
+/* .images{
     width: 95%;
     height: 15%;    
     grid-auto-flow: column;
@@ -276,7 +276,7 @@
 
 .images::-webkit-scrollbar-thumb:hover {
     background: green; 
-}
+} */
 
 .financial{
     display: flex;
@@ -413,21 +413,26 @@
     background: rgb(4, 216, 4); 
 }
 
-/* @media only screen and (max-width:1199px){
-    .trailer{
-        margin-left: 0;
-        margin-inline:25%;
-    }
-} */
+.review-title-box{
+    display: flex;
+    align-items: center;
+}
+.review-title-box>h5{
+    flex:85%;
+}
+.review-title-box>a{
+    flex:15%;
+    margin-right:5px;
+}
 
 @media only screen and (max-width:600px){
     
-    .images{
+    /* .images{
         width: 95%;
         height: 10%; 
         grid-template-columns: repeat(auto-fill,minmax(150px,15%)) !important;
         grid-auto-columns: minmax(150px,15%);       
-    }
+    } */
     .actors{
         width: 95%;
         height: max(70vh,250px);
