@@ -36,13 +36,38 @@ const getMovieReviews = async (req, res) => {
     //TODO orderby likes +pagination
     try {
         const {movieid} =req.params
-        const reviews = await Review.findAll({where:movieid});
+        const reviews = await Review.findAll({where:{movieid}});
   
       res.status(200).json(reviews);
     } catch (error) {
       res.status(404).json({ message: error.message });
+     
     }
   };
+
+const getUserReviewsAndLikes = async (req,res) => {
+  try {
+    const uuid=req.userId
+    const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+    const reviews = await Review.findAll({attributes:['movieid'],where:{userid}});
+    const likes = await UserLike.findAll({attributes:['ulid','reviewid','liked'],where:{userid}});
+  res.status(200).json({reviews,likes});
+} catch (error) {
+  res.status(404).json({ message: error.message });
+}
+}
+
+const getReview = async (req,res) =>{
+  try {
+    const uuid=req.userId
+    const {movieid}=req.params
+    const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+    const review = await Review.findOne({attributes:['movieid','content'],where:{userid,movieid}});
+  res.status(200).json(review);
+} catch (error) {
+  res.status(404).json({ message: error.message });
+}
+}
 
 
 const getUserReviews = async (req, res) => {
@@ -68,13 +93,15 @@ const addReview = async (req, res) => {
         {   
             userid,
             movieid,
-            content,
+            content
+            //:JSON.stringify(content)
+            ,
             createdAt:new Date(),
             updatedAt:new Date()
         }
       );
       
-      res.status(201).json(newReview);
+      res.status(201).json("Success");
     } catch (error) {
       res.status(403).json({ message: error.message });
     }
@@ -83,14 +110,14 @@ const addReview = async (req, res) => {
 
 const deleteReview = async (req, res) => {
     try {
-    const {reviewid}=req.body;
+    const {movieid}=req.params;
     const uuid=req.userId
     const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
     
 
     await Review.destroy({
         where:{
-            reviewid,
+            movieid,
             userid
         }
     })
@@ -99,6 +126,7 @@ const deleteReview = async (req, res) => {
     
 } catch (error) {
     res.status(403).json({ message: error.message });
+    console.log(error)
 }};
 
   
@@ -106,17 +134,18 @@ const deleteReview = async (req, res) => {
   const updateReview  = async (req, res) => {
     try {
     
-    const {updateId,content}=req.body;
+    const {movieid,content}=req.body;
     const uuid=req.userId
     const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
 
     await Review.update(
     {
-      content,
+      content
+      //:JSON.stringify(content),
     },
     {
       where:{
-        reviewid:updateId,
+        movieid,
         userid
     }})
 
@@ -127,4 +156,4 @@ const deleteReview = async (req, res) => {
     }
   };
 
-  export {getHomeReviews,getMovieReviews,getUserReviews, deleteReview, addReview, updateReview};
+  export {getHomeReviews,getMovieReviews,getUserReviews, deleteReview, addReview, updateReview,getUserReviewsAndLikes,getReview};

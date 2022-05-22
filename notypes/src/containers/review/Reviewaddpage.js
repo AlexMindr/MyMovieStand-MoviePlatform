@@ -4,11 +4,14 @@ import {Container,StyledEngineProvider} from '@mui/material'
 import {ReviewAdd} from '../../components'
 import { useParams } from 'react-router-dom'
 import { getMovie } from '../../api'
+import { useSelector } from 'react-redux'
+import { getReviewOfMovie } from '../../api'
 
 const Reviewaddpage = () => {
     const {id}=useParams()
     const [movie,setMovie]=useState(null)
     const [err,setErr]=useState(null)
+    
     useEffect(() => {
 
         async function getMoviebck(){
@@ -23,11 +26,13 @@ const Reviewaddpage = () => {
         
     },[id]);
 
+    
+
 return (
     <StyledEngineProvider injectFirst>
       <Container component='div' className='container-reviewadd'>    
         
-          {movie && err===null?<ReviewAdd movieid={movie.movieid} title={movie.title} />
+          {movie && err===null?<ReviewAdd movieid={movie.movieid} title={movie.title}/>
           :
           <div>{err}</div>}
       </Container>

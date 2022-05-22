@@ -4,10 +4,38 @@ import { EditorState,convertToRaw,convertFromRaw } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 //import debounce from 'lodash/debounce';
 
+const obj={
+  "blocks": [
+      {
+          "key": "8mk6u",
+          "data": {},
+          "text": "Aa1b test",
+          "type": "unstyled",
+          "depth": 0,
+          "entityRanges": [],
+          "inlineStyleRanges": [
+              {
+                  "style": "color-rgb(26,188,156)",
+                  "length": 4,
+                  "offset": 5
+              }
+          ]
+      }
+  ],
+  "entityMap": {}
+}
 
 export default function DraftTextArea({field,setField,placeholder}) {
-  const [editorState, setEditorState] = useState(()=>field?EditorState.createWithContent(convertFromRaw(JSON.parse(field))):EditorState.createEmpty())
-  
+  //const [editorState, setEditorState] = useState(()=>field?EditorState.createWithContent(convertFromRaw(JSON.parse(field))):EditorState.createEmpty())
+  const [editorState,setEditorState]= useState(field?EditorState.createWithContent(convertFromRaw(field)):EditorState.createEmpty())  
+  const [ok,setOk] =useState(false)
+
+  useEffect(()=>{
+    if(field && ok===false){
+     setEditorState(EditorState.createWithContent(convertFromRaw(field)))
+      setOk(true)
+    }
+  },[field,ok,setOk])
   
   const onChange = (editorState) => {
     

@@ -8,6 +8,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { useDispatch,useSelector } from 'react-redux';
 import { actionVerify } from './store/userSlice';
 import { actionGetWl } from './store/watchlistSlice';
+import { actionGetRevAndLikes } from './store/reviewSlice';
 import {default as PageAuth} from './auxcomponents/routerchecks/PageAuth'
 import {default as PageRedirect} from './auxcomponents/routerchecks/PageRedirect'
 
@@ -18,8 +19,9 @@ import {default as PageRedirect} from './auxcomponents/routerchecks/PageRedirect
 export default function App() {
   const dispatch=useDispatch()
   const {user,verifiedThisSession} =useSelector(state=>state.user)
-  const {fetchedThisSession}=useSelector(state=>state.watchlist)
-  
+  const {fetchedThisSessionWl}=useSelector(state=>state.watchlist)
+  const {fetchedThisSessionRev}=useSelector(state=>state.review)
+
   useEffect(() => {
     if(user && verifiedThisSession===false){
     dispatch(actionVerify())
@@ -28,11 +30,18 @@ export default function App() {
   }, [dispatch,user,verifiedThisSession])
 
   useEffect(() => {
-    if(user && verifiedThisSession===true && fetchedThisSession===false){
+    if(user && verifiedThisSession===true && fetchedThisSessionWl===false){
       dispatch(actionGetWl())
     }
-  },[user,verifiedThisSession,fetchedThisSession,dispatch])
+  },[user,verifiedThisSession,fetchedThisSessionWl,dispatch])
   
+  useEffect(() => {
+    if(user && verifiedThisSession===true && fetchedThisSessionRev===false){
+      dispatch(actionGetRevAndLikes())
+    }
+  },[user,verifiedThisSession,fetchedThisSessionRev,dispatch])
+  
+
   return (
     
     <>

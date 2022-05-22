@@ -3,7 +3,7 @@ import { combineReducers } from 'redux'
 import userReducer from './userSlice';
 import watchlistReducer from './watchlistSlice';
 import notificationReducer from './notificationSlice';
-//import userReducer from './watchlistSlice';
+import reviewReducer from './reviewSlice'
 
 
 
@@ -11,6 +11,7 @@ const reducer = combineReducers({
   user:userReducer,
   watchlist:watchlistReducer,
   notification:notificationReducer,
+  review:reviewReducer,
 })
 
 const store = configureStore({

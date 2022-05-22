@@ -28,8 +28,11 @@ const EditInfo = ({initialState,currentName,username}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault() 
-       if ((formData.firstName && !formData.lasttName) || (formData.lasttName && !formData.firstName))
+        console.log(formData)
+       if (formData.firstName==='' || formData.lasttName===''){
             setFormError("You need to fill both first and last name fields if you want to change your name!")
+        console.log('here')
+        }
        else {
             setFormError(false)
        if (formData.dateofbirth!==null)formData.dateofbirth=new Date((formData.dateofbirth));
@@ -40,7 +43,8 @@ const EditInfo = ({initialState,currentName,username}) => {
           //else setFormError(false)
                 
          })
-       .catch(e=>setFormError(e))}
+       .catch(e=>setFormError(e))
+        }
     }
     
    

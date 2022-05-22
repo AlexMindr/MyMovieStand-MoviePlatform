@@ -99,16 +99,9 @@ const Movie = ({movieid,children}) => {
     //console.log(location.pathname)
 //ramas homepage,tmdb link, imdb link 
   
-      //de pus culoare cand adaugam in lista la element etc.   
       //de modificat members = nr membri, popularity=al cate-lea dupa nr membrii
-
-/*      popularity, score, add to  favs(profile)/watchlist, 
-      
-      reviews, 
-      comments
-      
-      */
-
+      //posts
+console.log(reviews)
 
 if(movie===null)
    return (<Box sx={{ display: 'flex', position:'absolute', right:'50%',top:'40%' }}>

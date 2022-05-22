@@ -153,7 +153,6 @@ const signup = async (req, res) => {
           fullname,
           dateofbirth,
           location,
-          bio,
           gender,
           role:'user',
           createdAt: new Date(),
@@ -213,7 +212,9 @@ const update = async (req, res) => {
         fullname:fullName,
         dateofbirth:dateofbirth,
         location:location,
-        bio:JSON.stringify(bio),
+        bio
+        //:JSON.stringify(bio)
+        ,
         gender:gender,  
         password:updatePass?updatePass:checkPass.password,
         updatedAt:new Date()

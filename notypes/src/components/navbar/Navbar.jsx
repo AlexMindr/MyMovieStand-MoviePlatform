@@ -1,7 +1,7 @@
 import React,{useState,useRef,useEffect} from 'react'
 import './navbar.css'
 import logo from '../../images/Logo.png'
-import {NavLink, useNavigate,Link} from 'react-router-dom';
+import {NavLink, useNavigate,Link,useLocation} from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -22,6 +22,7 @@ import { setAfterLogout } from '../../store/watchlistSlice';
 import debounce from 'lodash/debounce';
 import {getMoviesSimpleFilter} from '../../api'
 import {MovieSearchList} from '../index'
+
 
 let notifications=[{id:1,content:"texttext",read:false},{id:2,content:"texttext2",read:true}]
 function getUnreadNotif(notifications){
@@ -47,6 +48,7 @@ const Navbar = () => {
   const {user}=useSelector(state=>state.user)
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const location = useLocation()
   var activeStyle = "active-link";
   
 
@@ -181,7 +183,7 @@ const Navbar = () => {
                     
                     <div className="dropdown-content">
                       <NavLink to={`/profile/${user.username}`}>Profile</NavLink>
-                      <NavLink to={`/myfriends`}>Friends</NavLink>
+                      {/* <NavLink to={`/myfriends`}>Friends</NavLink> */}
                       <NavLink to={`/myposts`}>Forum posts</NavLink>
                       <NavLink to={`/profile/edit/info`}><SettingsIcon fontSize='small' sx={{verticalAlign:'bottom'}}/>&nbsp;<span>Settings</span></NavLink>
                       <button onClick={handleLogout}><LogoutIcon fontSize='small' sx={{verticalAlign:'bottom'}}/>&nbsp;<span>Logout</span></button>
@@ -192,9 +194,9 @@ const Navbar = () => {
               </>
                 :
                 <>
-                <NavLink className={({ isActive }) =>
+                <NavLink state={{ from: location }} className={({ isActive }) =>
               isActive ? `login-button ${activeStyle} `: 'login-button'} to='/login'>Login</NavLink >
-                <NavLink  className={({ isActive }) =>
+                <NavLink state={{ from: location }} className={({ isActive }) =>
               isActive ? `login-button ${activeStyle} `: 'login-button'} to='/signup'>Sign up</NavLink >
                 </>
                 }

@@ -12,7 +12,7 @@ export const watchlistSlice = createSlice({
     name: 'watchlist',
     initialState: {
         watchlist:[],
-        fetchedThisSession:false,
+        fetchedThisSessionWl:false,
     },
     reducers: {
         addwlItem: (state, action) => {
@@ -29,10 +29,10 @@ export const watchlistSlice = createSlice({
         },
         getWatchlist:(state,action) => {
             state.watchlist=[...action.payload.watchlist]
-            state.fetchedThisSession=true
+            state.fetchedThisSessionWl=true
         },
         setAfterLogout:(state)=> {
-            state.fetchedThisSession=false
+            state.fetchedThisSessionWl=false
             state.watchlist=[]
         },
         addToFav: (state,action) => {
@@ -49,6 +49,7 @@ export const watchlistSlice = createSlice({
 })
 export const { addwlItem,updatewlItem,deletewlItem,getWatchlist,setAfterLogout,addToFav,remFromFav } = watchlistSlice.actions;
 
+//TODO Delete from form
 
 export const actionAddToFav = (formData) => async dispatch =>{
     try{
