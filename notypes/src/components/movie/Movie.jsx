@@ -14,6 +14,7 @@ import {useSelector} from 'react-redux'
 import WatchlistForm from '../watchlist/WatchlistForm';
 import StarIcon from '@mui/icons-material/Star';
 import MovieImgHoriz from './MovieImgHoriz';
+import {MovieReview} from '../index'
 
 function numFormatter(num) {
    if(num > 999 && num < 1000000){
@@ -35,11 +36,11 @@ const Movie = ({movieid,children}) => {
    const [openTrailer, setOpenTrailer] = useState(false);
    const [openWatchForm, setOpenWatchForm] = useState(false);
    const [wlData,setWlData]=useState(null)
-   const [reviews,setReviews]=useState(null)
+   const [reviewsList,setReviewsList]=useState(null)
    const {watchlist}= useSelector(state=>state.watchlist)
    const {user}=useSelector(state=>state.user)
+   const {reviews}=useSelector(state=>state.review)
    const location = useLocation()
-   //const images=useRef(null);
    
    
    const handleOpenTrailer = () => setOpenTrailer(true);
@@ -89,7 +90,7 @@ const Movie = ({movieid,children}) => {
          const {crew,cast}= res3.data
          setCredits({crew,cast}); 
          const res4= await getMovieReviews(movieid);
-         setReviews(res4.data);   
+         setReviewsList(res4.data);   
       }
       
       getData();
@@ -101,7 +102,6 @@ const Movie = ({movieid,children}) => {
   
       //de modificat members = nr membri, popularity=al cate-lea dupa nr membrii
       //posts
-console.log(reviews)
 
 if(movie===null)
    return (<Box sx={{ display: 'flex', position:'absolute', right:'50%',top:'40%' }}>
@@ -326,16 +326,26 @@ else
          <Grid item  xs={12} md={12} lg={12}>
             <Box component='div' className='review-title-box'>
                <Typography component='h5' variant='h5'>User Reviews</Typography>
-               {/* To check if already has review and edit */}
-               <Link to={`/movies/${movieid}/addreview`}>Add Review</Link>
+               {reviews.filter(rev=>rev.movieid===movieid).length>0?
+               <Link to={`/movies/${movieid}/addreview`}>Edit your review</Link>
+               :
+               <Link to={`/movies/${movieid}/addreview`}>Add a review</Link>
+               }
             </Box>
             <Divider flexItem/>
-            {reviews && reviews.length>0?
-               <></>
+            {reviewsList && reviewsList.length>0?
+               <Box component='div' className='review-reviews-box'>
+                  {reviewsList.map(reviewItem=>
+                  <MovieReview key={reviewItem.reviewid} review={reviewItem}/>
+                  )}
+               </Box>
                :
                <Box component='div' sx={{display:'flex',justifyContent:'center',alignItems:'center',p:3,fontStyle:'italic'}}>
                   No reviews have been added for this movie
                </Box>}
+            <Box component='div' sx={{display:'flex',justifyContent:'center',alignItems:'center',p:2}}>
+               <Link to='/movies/:id/reviews/all'>Show all reviews</Link>
+            </Box>
          </Grid>
       </Grid>
    </Box>

@@ -19,6 +19,8 @@ export const getHomeReviews = () => api.get('/reviews/get/home');
 export const getMovieReviews = (movieid) => api.get(`/reviews/get/movie/${movieid}`);
 export const addReview = (formData) => api.post('/reviews/add',formData);
 export const updateReview = (formData) => api.put('/reviews/update',formData);
+export const likeReview = (formData) => api.put(`/reviews/like`,formData);
+export const dislikeReview = (formData) => api.put(`/reviews/dislike`,formData);
 export const deleteReview = (movieid) => api.delete(`/reviews/delete/${movieid}`);
 
 

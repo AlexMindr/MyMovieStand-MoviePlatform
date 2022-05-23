@@ -263,16 +263,16 @@
                     "seqType": "Sequelize.INTEGER"
                 },
                 "userid": {
-                    "allowNull": false,
-                    "name": "userid",
+                    "unique": "posts_userid_movieid_unique",
                     "references": {
                         "model": "users",
                         "key": "userid"
                     },
-                    "onDelete": "NO ACTION",
+                    "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
                     "field": "userid",
-                    "unique": "posts_userid_movieid_unique",
+                    "allowNull": false,
+                    "name": "userid",
                     "seqType": "Sequelize.INTEGER"
                 }
             },
@@ -304,7 +304,7 @@
                 "movieid": {
                     "name": "movieid",
                     "allowNull": false,
-                    "unique": "reviews_movieid_UserUserid_unique",
+                    "unique": "reviews_userid_movieid_unique",
                     "references": {
                         "model": "movies",
                         "key": "movieid"
@@ -314,39 +314,17 @@
                     "field": "movieid",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "UserUserid": {
-                    "unique": "reviews_movieid_UserUserid_unique",
+                "userid": {
+                    "unique": "reviews_userid_movieid_unique",
                     "references": {
                         "model": "users",
                         "key": "userid"
                     },
                     "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "field": "UserUserid",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "userid": {
-                    "allowNull": false,
-                    "name": "userid",
-                    "references": {
-                        "model": "users",
-                        "key": "userid"
-                    },
-                    "onDelete": "NO ACTION",
                     "onUpdate": "CASCADE",
                     "field": "userid",
-                    "unique": "reviews_userid_MovieMovieid_unique",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "MovieMovieid": {
-                    "unique": "reviews_userid_MovieMovieid_unique",
-                    "references": {
-                        "model": "movies",
-                        "key": "movieid"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "field": "MovieMovieid",
+                    "allowNull": false,
+                    "name": "userid",
                     "seqType": "Sequelize.INTEGER"
                 }
             },
@@ -610,5 +588,5 @@
     "path": "E:\\ProiecteVSCode\\Licenta\\notypesfrbck\\bck\\migrations\\_current.json",
     "backupPath": "E:\\ProiecteVSCode\\Licenta\\notypesfrbck\\bck\\migrations\\_current_bak.json",
     "exists": true,
-    "revision": 14
+    "revision": 15
 }

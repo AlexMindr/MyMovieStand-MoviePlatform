@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     toJSON(){
-      return {...this.get(),updatedAt:undefined,}
+      return {...this.get(),updatedAt:undefined,userid:undefined}
     }
   }
   Review.init({

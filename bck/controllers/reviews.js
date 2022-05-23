@@ -33,10 +33,20 @@ const getHomeReviews = async (req, res) => {
 
 
 const getMovieReviews = async (req, res) => {
-    //TODO orderby likes +pagination
+    //TODO orderby likes +pagination +count likes/dislike 
     try {
         const {movieid} =req.params
-        const reviews = await Review.findAll({where:{movieid}});
+        const reviews = await Review.findAll({
+          attributes:['movieid','content','createdAt','reviewid'],
+          include:[{
+            model:User,
+            attributes:['username'],
+          },{
+            model:UserLike,
+            attributes:['liked']
+          }],
+          where:{movieid},
+        });
   
       res.status(200).json(reviews);
     } catch (error) {
@@ -50,7 +60,7 @@ const getUserReviewsAndLikes = async (req,res) => {
     const uuid=req.userId
     const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
     const reviews = await Review.findAll({attributes:['movieid'],where:{userid}});
-    const likes = await UserLike.findAll({attributes:['ulid','reviewid','liked'],where:{userid}});
+    const likes = await UserLike.findAll({attributes:['reviewid','liked'],where:{userid}});
   res.status(200).json({reviews,likes});
 } catch (error) {
   res.status(404).json({ message: error.message });
@@ -142,6 +152,8 @@ const deleteReview = async (req, res) => {
     {
       content
       //:JSON.stringify(content),
+      ,
+      updatedAt:new Date()
     },
     {
       where:{
@@ -156,4 +168,81 @@ const deleteReview = async (req, res) => {
     }
   };
 
-  export {getHomeReviews,getMovieReviews,getUserReviews, deleteReview, addReview, updateReview,getUserReviewsAndLikes,getReview};
+  const likeReview  = async (req, res) => {
+    try {
+    
+    const {reviewid}=req.body;
+    const uuid=req.userId
+    const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+    const current = await UserLike.findOne({where:{userid,reviewid}})
+    if(current){
+      await UserLike.update(
+      {
+        liked:true,
+        updatedAt:new Date(),
+      },
+      {
+        where:{
+          reviewid,
+          userid
+      }})
+      res.status(201).json("Success");
+    }
+    else {
+      await UserLike.create(
+        {
+          liked:true,
+          reviewid,
+          userid,
+          createdAt:new Date(),
+          updatedAt:new Date(),
+        })
+        res.status(200).json("Success");
+    }
+
+    
+    } catch (error) {
+      res.status(403).json({ message: error.message });
+    }
+  };
+
+  const dislikeReview  = async (req, res) => {
+    try {
+    
+    const {reviewid}=req.body;
+    const uuid=req.userId
+    const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+    const current = await UserLike.findOne({where:{userid,reviewid}})
+    if(current){
+      await UserLike.update(
+      {
+        liked:false,
+        updatedAt:new Date(),
+      },
+      {
+        where:{
+          reviewid,
+          userid
+      }})
+      res.status(201).json("Success");
+    }
+    else {
+      await UserLike.create(
+        {
+          liked:false,
+          reviewid,
+          userid,
+          createdAt:new Date(),
+          updatedAt:new Date(),
+        })
+        res.status(200).json("Success");
+    }
+
+    
+    } catch (error) {
+      res.status(403).json({ message: error.message });
+    }
+  };
+
+
+  export {getHomeReviews,getMovieReviews,getUserReviews, deleteReview, addReview, updateReview,getUserReviewsAndLikes,getReview,likeReview,dislikeReview};

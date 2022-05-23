@@ -76,7 +76,8 @@ const deleteSelected = async (req, res) => {
 
     await Notification.update(
     {
-      read:true
+      read:true,
+      updatedAt:new Date()
     },
     {
       where:{

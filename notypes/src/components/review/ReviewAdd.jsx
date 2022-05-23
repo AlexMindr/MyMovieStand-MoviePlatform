@@ -89,7 +89,7 @@ const ReviewAdd = ({movieid,title}) => {
         </Grid>
         <Grid item xs={12}>
             <Button type="submit"  variant="contained" color="primary" className='submit-reviewadd'>
-                Post review
+                {isCreateOrUpdate==='update'?'Update review':'Post review'}
             </Button>
             <Button  onClick={clearChanges} variant="text" >
                 Cancel

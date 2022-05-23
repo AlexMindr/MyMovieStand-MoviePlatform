@@ -1,0 +1,13 @@
+.moviereview-card{
+    background-color: rgb(253, 233, 209);
+}
+.moviereview-actions>div>h6{
+    font-size: 1rem;
+}
+.moviereview-actions>div:nth-child(2){
+    
+    margin-left: auto;
+} 
+.Box-moviereview-draftdisplay{
+    overflow: hidden;
+}

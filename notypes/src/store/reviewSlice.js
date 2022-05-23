@@ -2,7 +2,9 @@ import { createSlice } from '@reduxjs/toolkit'
 import {getUserReviewsAndLikes as apiGetRevAndLikes,
 updateReview as apiUpdateReview,
 addReview as apiAddReview,
-deleteReview as apiDelReview} from '../api'
+deleteReview as apiDelReview,
+likeReview as apiLikeRev,
+dislikeReview as apiDislikeRev} from '../api'
 
 
 export const reviewSlice = createSlice({
@@ -18,7 +20,6 @@ export const reviewSlice = createSlice({
             state.reviews=[...state.reviews,action.payload]
             
         },
-        
         deleteReview: (state,action) => {
             state.reviews= state.reviews.filter((reviewsItem)=> 
             reviewsItem.movieid!==action.payload.movieid)
@@ -33,17 +34,40 @@ export const reviewSlice = createSlice({
             state.reviews=[]
             state.likes=[]
         },
-
+        likeReview:(state,action) => {
+            state.likes=state.likes.filter(likedItem=>likedItem.reviewid!==action.payload.reviewid)
+            state.likes=[...state.likes,action.payload]
+        }
         
     },
 })
-export const { getReviewsAndLikes,setAfterLogout,deleteReview,updateReview,addReview } = reviewSlice.actions;
+export const { getReviewsAndLikes,setAfterLogout,deleteReview,updateReview,addReview,likeReview } = reviewSlice.actions;
 
+export const actionLikeReview = (formData) => async dispatch =>{
+    apiLikeRev(formData)
+    .then(res => {
+
+        dispatch(likeReview(formData))
+    })
+    .catch(err=>{
+        console.error(err)
+    })
+
+}
+
+export const actionDislikeReview = (formData) => async dispatch =>{
+    apiDislikeRev(formData)
+    .then(res => {
+        dispatch(likeReview(formData))
+    })
+    .catch(err=>{
+        console.error(err)
+    })
+
+}
 export const actionDeleteReview = (movieid) => async dispatch => {
-    console.log(1)
     apiDelReview(movieid)
     .then(res =>{
-        console.log(2)
         dispatch(deleteReview(movieid))
     })
     .catch(err=>{

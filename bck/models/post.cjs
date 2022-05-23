@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     toJSON(){
-      return {...this.get(),updatedAt:undefined,}
+      return {...this.get(),updatedAt:undefined,userid:undefined}
     }
   }
   Post.init({
@@ -26,10 +26,15 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true
     },
-    
+    title:{
+      type:DataTypes.STRING,
+      allowNull:false,
+    },
     content: {
       type: DataTypes.JSON,
     },
+
+
   }, {
     sequelize,
     tableName:'posts',
