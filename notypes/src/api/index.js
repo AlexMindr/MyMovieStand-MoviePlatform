@@ -14,9 +14,9 @@ api.interceptors.request.use((req) => {
 
 export const getReviewOfMovie = (movieid) => api.get(`/reviews/get/moviereview/${movieid}`);
 export const getUserReviewsAndLikes = () => api.get(`/reviews/get/userinit`);
-export const getUserReviews = () => api.get(`/reviews/get/user`);
+export const getUserReviews = (page,count) => api.get(`/reviews/get/user/page=${page}/count=${count}`);
 export const getHomeReviews = () => api.get('/reviews/get/home');
-export const getMovieReviews = (movieid) => api.get(`/reviews/get/movie/${movieid}`);
+export const getMovieReviews = (movieid,page,count) => api.get(`/reviews/get/movie/${movieid}/page=${page}/count=${count}`);
 export const addReview = (formData) => api.post('/reviews/add',formData);
 export const updateReview = (formData) => api.put('/reviews/update',formData);
 export const likeReview = (formData) => api.put(`/reviews/like`,formData);

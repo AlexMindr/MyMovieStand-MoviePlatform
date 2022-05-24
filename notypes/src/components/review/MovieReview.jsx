@@ -7,11 +7,13 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import DraftDisplay from '../../auxcomponents/input/DraftDisplay'
 import { useSelector,useDispatch } from 'react-redux';
 import {actionLikeReview,actionDislikeReview} from '../../store/reviewSlice'
+import { stringAvatar } from '../../auxcomponents/avatar/Avatarfct';
 
 const MovieReview = ({review}) => {
   const [show,setShow]=useState(false)
   const [liked,setLiked]=useState(null)
   const {likes} = useSelector(state=>state.review)
+  const {user} =useSelector(state=>state.user)
   const dispatch = useDispatch()
 
 
@@ -33,18 +35,16 @@ const MovieReview = ({review}) => {
   }
   const dislikeReview = () => {
     const formData={reviewid:review.reviewid,liked:false}
-    dispatch(actionLikeReview(formData))
+    dispatch(actionDislikeReview(formData))
   }
   
   return (
-    <Card flexItem sx={{ minWidth: 300,p:0.5, marginInline:1}} variant='outlined' className='moviereview-card'>
+    <Card sx={{ minWidth: 300,p:0.5, marginInline:1, maxWidth:'100%'}} variant='outlined' className='moviereview-card'>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor:'red' }} aria-label="username">
-            {review.User.username}
-          </Avatar>
+          <Avatar  {...stringAvatar(review.User.fullname)} aria-label="fullname"/>
         }
-        action={
+        action={user?
         <>
         <IconButton aria-label="like" onClick={likeReview} sx={liked && liked.liked===true?{color:'orange'}:{}}>
           <ThumbUpIcon />
@@ -52,14 +52,14 @@ const MovieReview = ({review}) => {
         <IconButton aria-label="dislike" onClick={dislikeReview} sx={liked && liked.liked===false?{color:'orange'}:{}}>
           <ThumbDownIcon />
         </IconButton>
-        </>
+        </>:<></>
         }
         title={review.User.username}
         subheader={moment(review.createdAt).format("MMM Do YYYY")}
       />
       <Divider flexItem/>
       <CardContent>
-        <Box component='div' className='Box-moviereview-draftdisplay' maxHeight={show===true?'none':140}>
+        <Box component='div' className='Box-moviereview-draftdisplay' maxHeight={show===true?'none':140} sx={{bgcolor:'white'}}>
           <DraftDisplay field={review.content} />
         </Box>
       </CardContent>
@@ -67,8 +67,7 @@ const MovieReview = ({review}) => {
       <CardActions disableSpacing className="moviereview-actions">
         <Box component='div'>
         <Typography variant='h6' color="text.secondary">
-          {/* review.likes tbd >1? review.likes people liked this review: 1 person liked this review*/}
-          review.likes people liked this review
+          {review.likeCount? review.likeCount>1? `${review.likeCount} people liked this review`: '1 person liked this review':'Be the first to like this review'}
         </Typography>
         </Box>
         <Box component='div'>

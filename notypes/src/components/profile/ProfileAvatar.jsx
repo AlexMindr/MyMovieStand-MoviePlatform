@@ -29,7 +29,7 @@ return (
             </li>
             <li>
               <span className='profile-avatar-list-title'>Birthday </span>
-              <span className='profile-avatar-list-content'>{profile.dateofbirth?profile.dateofbirth:'-'}</span>
+              <span className='profile-avatar-list-content'>{profile.dateofbirth?moment(profile.dateofbirth).format("Do MM YYYY"):'-'}</span>
             </li>
             <li>
               <span className='profile-avatar-list-title'>Joined </span>

@@ -3,28 +3,52 @@ import { Op,QueryTypes } from '@sequelize/core';
 const {Movie,Review,UserLike,User,sequelize,Sequelize}=db;
 
 function getPagination(page, size) {
-  const limit = size ? +size : 21;
+  const limit = size ? +size : 10;
   const offset = page? page * limit : 0;
   return { limit, offset };
 };
 
 function getPagingData(data, page, limit) {
-  const { count: totalItems, rows: movies } = data;
-  const currentPage = page ? +page : 0;
+  const { count: totalItems, rows: reviews } = data;
+  //const currentPage = page ? +page : 0;
   const totalPages = Math.ceil(totalItems / limit);
-  return {  movies, totalPages };
+  return {  reviews, totalPages };
 };
+
+function getPagingDataGroup(data, page, limit) {
+  const {rows:reviews} = data
+  const totalItems= data.count.length
+  //const currentPage = page ? +page : 0;
+  const totalPages = Math.ceil(totalItems / limit);
+  return {  reviews, totalPages };
+};
+
 
 const getHomeReviews = async (req, res) => {
     try {
-        const reviews = await Review.findAll({
-          limit:5,
+      // const {page,count}=req.params;
+        const page = 1
+        const { limit, offset } = getPagination(page-1,5);
+        
+         await Review.findAndCountAll({
+          limit,
+          offset,
+          subQuery:false,
           include:[
             {model:Movie,attributes:['title','movieid']},
             {model:User,attributes:['username']}
           ],
-          order:[['createdAt','DESC']]});
-  
+          order:[['createdAt','DESC']]})
+          .then(data => {
+            const {reviews,totalPages} = getPagingData(data, page, limit);
+            
+            res.status(200).json({reviews,totalPages});
+          })
+    
+          .catch(error=>{
+            res.status(404).json({ message: error.message });
+            //console.log(error)
+        })
       res.status(200).json(reviews);
     } catch (error) {
       res.status(404).json({ message: error.message });
@@ -34,25 +58,49 @@ const getHomeReviews = async (req, res) => {
 
 const getMovieReviews = async (req, res) => {
     //TODO orderby likes +pagination +count likes/dislike 
-    try {
+    
+        const {page,count}=req.params;
+        const { limit, offset } = getPagination(page-1,count);
+        
         const {movieid} =req.params
-        const reviews = await Review.findAll({
-          attributes:['movieid','content','createdAt','reviewid'],
-          include:[{
-            model:User,
-            attributes:['username'],
-          },{
+        await Review.findAndCountAll({
+          subQuery:false,
+          attributes:[
+            'movieid','content','createdAt','updatedAt','reviewid',
+            [Sequelize.fn("COUNT", Sequelize.col("userlikes.liked")), "likeCount"]
+           ],
+           limit,
+           offset,
+           distinct: true,
+           include:[{
+             model:User,
+             attributes:['username','fullname'],
+           },
+          { 
             model:UserLike,
-            attributes:['liked']
-          }],
+            required:false,
+            attributes:[],
+            where:{
+              liked:{[Op.eq]:true}
+            }
+          }
+        ],
           where:{movieid},
-        });
+          group:['reviewid'],
+          order:[[sequelize.literal('likeCount'),'DESC']],
+          
+        })
+        .then(data => {
+          const {reviews,totalPages} = getPagingDataGroup(data, page, limit);
+          
+          res.status(200).json({reviews,totalPages});
+        })
   
-      res.status(200).json(reviews);
-    } catch (error) {
-      res.status(404).json({ message: error.message });
-     
-    }
+        .catch(error=>{
+          res.status(404).json({ message: error.message });
+          //console.log(error)
+      })
+  
   };
 
 const getUserReviewsAndLikes = async (req,res) => {
@@ -82,15 +130,55 @@ const getReview = async (req,res) =>{
 
 const getUserReviews = async (req, res) => {
     //TODO pagination
-    try {
-        const uuid=req.userId
-        const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
-        const reviews = await Review.findAll({where:userid});
+    
+      const uuid=req.userId
+      const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+      const {page,count}=req.params;
+      const { limit, offset } = getPagination(page-1,count);
+        
+        const {movieid} =req.params
+        await Review.findAndCountAll({
+          subQuery:false,
+          attributes:[
+            'movieid','content','createdAt','updatedAt','reviewid',
+            [Sequelize.fn("COUNT", Sequelize.col("userlikes.liked")), "likeCount"]
+           ],
+           limit,
+           offset,
+           distinct: true,
+           include:[{
+             model:User,
+             attributes:['username','fullname'],
+           },
+          { 
+            model:UserLike,
+            required:false,
+            attributes:[],
+            where:{
+              liked:{[Op.eq]:true},
+            },
+          },
+          {
+            model:Movie,
+            attributes:['title'],
+          },
+        ],
+          where:{userid},
+          group:['reviewid'],
+          order:[[sequelize.literal('likeCount'),'DESC']],
+          
+        })
+        .then(data => {
+          const {reviews,totalPages} = getPagingDataGroup(data, page, limit);
+          
+          res.status(200).json({reviews,totalPages});
+        })
   
-      res.status(200).json(reviews);
-    } catch (error) {
-      res.status(404).json({ message: error.message });
-    }
+        .catch(error=>{
+          res.status(404).json({ message: error.message });
+          //console.log(error)
+      })
+      
   };
 
 const addReview = async (req, res) => {

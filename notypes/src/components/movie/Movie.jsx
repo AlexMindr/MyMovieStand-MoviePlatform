@@ -89,13 +89,12 @@ const Movie = ({movieid,children}) => {
          const res3= await getCredits(res.data.tmdb_id);
          const {crew,cast}= res3.data
          setCredits({crew,cast}); 
-         const res4= await getMovieReviews(movieid);
-         setReviewsList(res4.data);   
+         const res4= await getMovieReviews(movieid,1,4);
+         setReviewsList(res4.data.reviews);   
       }
       
       getData();
    },[movieid]);
-      
       
     //console.log(location.pathname)
 //ramas homepage,tmdb link, imdb link 
@@ -344,7 +343,7 @@ else
                   No reviews have been added for this movie
                </Box>}
             <Box component='div' sx={{display:'flex',justifyContent:'center',alignItems:'center',p:2}}>
-               <Link to='/movies/:id/reviews/all'>Show all reviews</Link>
+               <Link to={`/movies/${movieid}/reviews/all`}>Show all reviews</Link>
             </Box>
          </Grid>
       </Grid>

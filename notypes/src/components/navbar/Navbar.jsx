@@ -19,6 +19,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import {actionLogOut} from '../../store/userSlice'
 import {stringAvatar} from '../../auxcomponents/avatar/Avatarfct'
 import { setAfterLogout } from '../../store/watchlistSlice';
+import { setAfterLogout as logoutReview } from '../../store/reviewSlice';
 import debounce from 'lodash/debounce';
 import {getMoviesSimpleFilter} from '../../api'
 import {MovieSearchList} from '../index'
@@ -71,6 +72,7 @@ const Navbar = () => {
   const handleLogout = () =>{
     dispatch(actionLogOut())
     dispatch(setAfterLogout())
+    dispatch(logoutReview())
     navigate('/')
   }
 

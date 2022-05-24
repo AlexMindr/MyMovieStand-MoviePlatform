@@ -11,3 +11,4 @@ export {default as Editprofile} from './editprofile/Editprofile';
 export {default as Editfavourites} from './editprofile/Editfavourites';
 export {default as Reviewaddpage} from './review/Reviewaddpage';
 export {default as Reviewspage} from './review/Reviewspage';
+export {default as Userreviews} from './review/Userreviews';

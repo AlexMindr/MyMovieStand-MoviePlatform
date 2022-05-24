@@ -3,7 +3,7 @@ import './App.css';
 import {Routes, Route, BrowserRouter as Router,Outlet,useLocation,useNavigate} from 'react-router-dom';
 import {Navbar} from './components';
 import {Footer,Home,Movies,Errorpage,Moviepage,Login,Signup,Watchlistpage,
-  Profile,Editprofile,Editfavourites,Reviewaddpage,Reviewspage} from './containers'
+  Profile,Editprofile,Editfavourites,Reviewaddpage,Reviewspage,Userreviews} from './containers'
 import CssBaseline from '@mui/material/CssBaseline';
 import { useDispatch,useSelector } from 'react-redux';
 import { actionVerify } from './store/userSlice';
@@ -75,6 +75,12 @@ export default function App() {
               <Route path='/profile/edit/info' element={ 
                 <PageAuth>
                   <Editprofile />
+                </PageAuth>
+              }/>
+
+              <Route path='/profile/:username/reviews' element={ 
+                <PageAuth>
+                  <Userreviews />
                 </PageAuth>
               }/>
 
