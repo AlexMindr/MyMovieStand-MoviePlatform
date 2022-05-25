@@ -13,7 +13,8 @@ const Userreviews = () => {
     const [page, setPage] = useState(1);
     const [totalPages,setTotalPages]=useState()
     const {username} = useParams()
-  
+    const {user} = useSelector(state=>state.user)
+
     const pageChange = (event, value) => {
       setPage(value);
     };
@@ -23,22 +24,22 @@ const Userreviews = () => {
     useEffect(() => {
      
       async function getData(){ 
-         const res= await getUserReviews(parseInt(id),1,10);
+         const res= await getUserReviews(username,1,5);
          setReviewsList(res.data.reviews);
          setTotalPages(res.data.totalPages);   
       }
       
       getData();
      
-   },[id]);
+   },[username]);
   
    
   return (
     <StyledEngineProvider injectFirst>
     <Container className='userreviews-container'>
       <Paper elevation={5}>
-        <Typography variant='h4' component='h3'>
-          You are viewing all reviews made by you:
+        <Typography variant='h4' component='h3' sx={{p:'10px 5px 5px 5px',}}>
+          You are viewing all reviews made by {username===user.username?'you':username}:
         </Typography>
         <Divider flexItem sx={{m:1}}/>
         {reviewList===null?
@@ -51,8 +52,10 @@ const Userreviews = () => {
               <Grid container rowGap={1} columnSpacing={'10px'}>
                 {reviewList.map((review) =>
                     <Grid item xs={12}  key={review.reviewid} className='userreviews-review'> 
-                    <Link to={`/movies/${review.movieid}`}><Typography variant='h5' component='h4'>{review.Movie.title}</Typography></Link>
-                    <Link to={`/movies/${review.movieid}/addreview`}>Edit your review</Link>
+                      <Box component='div' className='userreviews-review-title'>
+                        <Typography variant='h5' component='h4'>Movie: &nbsp;<Link to={`/movies/${review.movieid}`}>{review.Movie.title}</Link></Typography>
+                        <Link className='userreviews-review-edit' to={`/movies/${review.movieid}/addreview`}>Edit your review</Link>
+                      </Box>
                       <MovieReview review={review}/>  
                     </Grid>
                 )}
@@ -60,7 +63,8 @@ const Userreviews = () => {
             </Box>
             :
             <div className='loading-userreviews'>
-                <Typography variant='h4' sx={{fontStyle:'oblique', color:'#a3abb3'}}>No reviews have been added for this movie</Typography>    
+                <Typography variant='h4' sx={{fontStyle:'oblique', color:'#a3abb3'}}>
+                  No reviews have been made</Typography>    
             </div>
         }
                

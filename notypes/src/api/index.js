@@ -12,9 +12,19 @@ api.interceptors.request.use((req) => {
   return req;
 });
 
+
+
+export const addPost = (formData) => api.post('/posts/add',formData);
+export const getMoviePosts = (movieid,page,count) => api.get(`posts/get/movie/${movieid}/page=${page}/count=${count}`);
+export const getPostContent = (postid) => api.get(`posts/get/post/${postid}`);
+export const getPostComments = (postid,page,count) => api.get(`posts/get/post/${postid}/comments/page=${page}/count=${count}`);
+export const deletePost = (postid) => api.delete("posts/delete",postid);
+
+
+export const getLikesForReview = (reviewid) => api.get(`/reviews/get/likes/${reviewid}`);
 export const getReviewOfMovie = (movieid) => api.get(`/reviews/get/moviereview/${movieid}`);
 export const getUserReviewsAndLikes = () => api.get(`/reviews/get/userinit`);
-export const getUserReviews = (page,count) => api.get(`/reviews/get/user/page=${page}/count=${count}`);
+export const getUserReviews = (username,page,count) => api.get(`/reviews/get/user/${username}/page=${page}/count=${count}`);
 export const getHomeReviews = () => api.get('/reviews/get/home');
 export const getMovieReviews = (movieid,page,count) => api.get(`/reviews/get/movie/${movieid}/page=${page}/count=${count}`);
 export const addReview = (formData) => api.post('/reviews/add',formData);

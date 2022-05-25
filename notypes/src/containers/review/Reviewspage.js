@@ -47,7 +47,7 @@ const Reviewspage = () => {
       <Paper elevation={5}>
       {movie && err===null?
         <>
-        <Typography variant='h4' component='h3'>
+        <Typography variant='h4' component='h3' sx={{p:'10px 5px 5px 5px',}}>
           You are viewing all user reviews of the movie:
         </Typography>
         <Link to={`/movies/${movie.movieid}`}><Typography variant='h5' component='h4'>{movie.title}</Typography></Link>

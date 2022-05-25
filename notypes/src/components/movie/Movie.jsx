@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react';
 import './movie.css'
-import {getMovie,getImages,getCredits, getMovieReviews} from '../../api';
+import {getMovie,getImages,getCredits, getMovieReviews,getMoviePosts} from '../../api';
 import moment from 'moment'
 import { Divider,Box, Button, Typography,Grid,ImageList,ImageListItem,Modal,Paper } from '@mui/material'
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
@@ -14,18 +14,10 @@ import {useSelector} from 'react-redux'
 import WatchlistForm from '../watchlist/WatchlistForm';
 import StarIcon from '@mui/icons-material/Star';
 import MovieImgHoriz from './MovieImgHoriz';
-import {MovieReview} from '../index'
+import {MovieReview,PostTitle} from '../index'
+import {numFormatter} from '../../auxcomponents/functions/NumberFormat'
 
-function numFormatter(num) {
-   if(num > 999 && num < 1000000){
-       return (num/1000).toFixed(1) + 'K'; // convert to K for number from > 1000 < 1 million 
-   }else if(num > 1000000){
-       return (num/1000000).toFixed(1) + 'M'; // convert to M for number from > 1 million 
-   }else if(num < 999){
-       return num; // if value < 1000, nothing to do
-   }
-}
-
+const post={title:'TITLE',User:{username:'USERNAMEE'},createdAt:'DATE',commentCount:100}
 
 const Movie = ({movieid,children}) => {
 
@@ -37,6 +29,7 @@ const Movie = ({movieid,children}) => {
    const [openWatchForm, setOpenWatchForm] = useState(false);
    const [wlData,setWlData]=useState(null)
    const [reviewsList,setReviewsList]=useState(null)
+   const [postsList,setPostsList]=useState(null)
    const {watchlist}= useSelector(state=>state.watchlist)
    const {user}=useSelector(state=>state.user)
    const {reviews}=useSelector(state=>state.review)
@@ -90,7 +83,9 @@ const Movie = ({movieid,children}) => {
          const {crew,cast}= res3.data
          setCredits({crew,cast}); 
          const res4= await getMovieReviews(movieid,1,4);
-         setReviewsList(res4.data.reviews);   
+         setReviewsList(res4.data.reviews);
+         const res5= await getMoviePosts(movieid,1,3);
+         setPostsList(res5.data.posts);   
       }
       
       getData();
@@ -342,9 +337,35 @@ else
                <Box component='div' sx={{display:'flex',justifyContent:'center',alignItems:'center',p:3,fontStyle:'italic'}}>
                   No reviews have been added for this movie
                </Box>}
+
+            {reviewsList && reviewsList.length>0?
             <Box component='div' sx={{display:'flex',justifyContent:'center',alignItems:'center',p:2}}>
                <Link to={`/movies/${movieid}/reviews/all`}>Show all reviews</Link>
+            </Box>:<></>}
+         </Grid>
+
+         <Grid item  xs={12} md={12} lg={12}>
+            <Box component='div' className='review-title-box'>
+               <Typography component='h5' variant='h5'>Forum Discussions</Typography>
+               <Link to={`/movies/${movieid}/addpost`}>Start a discussion</Link>
             </Box>
+            <Divider flexItem/>
+            {/* {postsList && postsList.length>0?
+               <Box component='div' className='review-reviews-box'>
+                  {/* {postsList.map(postItem=>
+                   <MovieReview key={postItem.postid} post={postItem}/>
+                  )} 
+                  <PostTitle post={post}/>
+               </Box>
+               :
+               <Box component='div' sx={{display:'flex',justifyContent:'center',alignItems:'center',p:3,fontStyle:'italic'}}>
+                  No posts have been added for this movie
+               </Box>} */}
+            <PostTitle post={post}/>
+            {postsList && postsList.length>0?   
+            <Box component='div' sx={{display:'flex',justifyContent:'center',alignItems:'center',p:2}}>
+               <Link to={`/movies/${movieid}/posts/all`}>Show all forum discussions related to this movie</Link>
+            </Box>:<></>}
          </Grid>
       </Grid>
    </Box>

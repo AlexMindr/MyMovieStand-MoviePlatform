@@ -11,3 +11,8 @@
 .Box-moviereview-draftdisplay{
     overflow: hidden;
 }
+.moviereview-likecount{
+    margin-right: 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}

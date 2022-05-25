@@ -12,3 +12,8 @@ export {default as Editfavourites} from './editprofile/Editfavourites';
 export {default as Reviewaddpage} from './review/Reviewaddpage';
 export {default as Reviewspage} from './review/Reviewspage';
 export {default as Userreviews} from './review/Userreviews';
+export {default as Userposts} from './post/Userposts';
+export {default as Postpage} from './post/Postpage';
+export {default as Postaddpage} from './post/Postaddpage';
+export {default as Movieposts} from './post/Movieposts';
+

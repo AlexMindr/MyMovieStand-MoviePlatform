@@ -15,3 +15,7 @@ export {default as EditInfo} from './editprofile/EditInfo';
 export {default as EditFav} from './editprofile/EditFav';
 export {default as MovieReview} from './review/MovieReview';
 export {default as ReviewAdd} from './review/ReviewAdd';
+export {default as PostAdd} from './post/PostAdd';
+export {default as PostContent} from './post/PostContent';
+export {default as PostComm} from './post/PostComm';
+export {default as PostTitle} from './post/PostTitle';

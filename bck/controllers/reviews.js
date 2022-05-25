@@ -57,7 +57,6 @@ const getHomeReviews = async (req, res) => {
 
 
 const getMovieReviews = async (req, res) => {
-    //TODO orderby likes +pagination +count likes/dislike 
     
         const {page,count}=req.params;
         const { limit, offset } = getPagination(page-1,count);
@@ -127,16 +126,48 @@ const getReview = async (req,res) =>{
 }
 }
 
+const getLikesForReview = async (req,res) =>{
+  try {
+    const uuid=req.userId
+    const {reviewid}=req.params
+    const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+    if (userid){
+    const likes = await UserLike.count({
+      attributes:['liked'],
+      where:{
+        //userid,
+        reviewid,
+        liked:true,
+      }
+    });
+    const dislikes = await UserLike.count({
+      attributes:['liked'],
+      where:{
+        //userid,
+        reviewid,
+        liked:false,
+      }
+    });
+
+    res.status(200).json({likes,dislikes});
+  }
+  else {
+    res.status(403).json({ message: error.message });  
+  }
+} catch (error) {
+  res.status(404).json({ message: error.message });
+}
+}
+
 
 const getUserReviews = async (req, res) => {
-    //TODO pagination
     
-      const uuid=req.userId
-      const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
-      const {page,count}=req.params;
+      //const uuid=req.userId
+      //const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+      const {username,page,count}=req.params;
       const { limit, offset } = getPagination(page-1,count);
+      const {userid}= await User.findOne({attributes:['userid'],where:{username}});
         
-        const {movieid} =req.params
         await Review.findAndCountAll({
           subQuery:false,
           attributes:[
@@ -333,4 +364,5 @@ const deleteReview = async (req, res) => {
   };
 
 
-  export {getHomeReviews,getMovieReviews,getUserReviews, deleteReview, addReview, updateReview,getUserReviewsAndLikes,getReview,likeReview,dislikeReview};
+  export {getHomeReviews,getMovieReviews,getUserReviews, deleteReview, addReview, updateReview,
+    getUserReviewsAndLikes,getReview,likeReview,dislikeReview,getLikesForReview};

@@ -8,6 +8,9 @@ import DraftDisplay from '../../auxcomponents/input/DraftDisplay'
 import { useSelector,useDispatch } from 'react-redux';
 import {actionLikeReview,actionDislikeReview} from '../../store/reviewSlice'
 import { stringAvatar } from '../../auxcomponents/avatar/Avatarfct';
+import { getLikesForReview } from '../../api';
+import {numFormatter} from '../../auxcomponents/functions/NumberFormat'
+
 
 const MovieReview = ({review}) => {
   const [show,setShow]=useState(false)
@@ -15,7 +18,19 @@ const MovieReview = ({review}) => {
   const {likes} = useSelector(state=>state.review)
   const {user} =useSelector(state=>state.user)
   const dispatch = useDispatch()
+  const [likeCount,setLikeCount] = useState(null)
+  const [dislikeCount,setDislikeCount] = useState(null)
 
+  useEffect(()=>{
+    async function getReviewLikes(){
+      const res= await getLikesForReview(review.reviewid);
+      const {likes,dislikes}=res.data
+      setLikeCount(numFormatter(likes));
+      setDislikeCount(numFormatter(dislikes));
+   }     
+    if(user.username===review.User.username)
+        getReviewLikes()
+  },[user,review])
 
   useEffect(()=>{
     if(likes){
@@ -39,7 +54,11 @@ const MovieReview = ({review}) => {
   }
   
   return (
-    <Card sx={{ minWidth: 300,p:0.5, marginInline:1, maxWidth:'100%'}} variant='outlined' className='moviereview-card'>
+    <Card sx={user.username===review.User.username?
+      { minWidth: 300,p:0.5, marginInline:1, maxWidth:'100%' , border:'2px solid red',}
+      :
+      { minWidth: 300,p:0.5, marginInline:1, maxWidth:'100%'}}
+     variant='outlined' className='moviereview-card'>
       <CardHeader
         avatar={
           <Avatar  {...stringAvatar(review.User.fullname)} aria-label="fullname"/>
@@ -49,9 +68,11 @@ const MovieReview = ({review}) => {
         <IconButton aria-label="like" onClick={likeReview} sx={liked && liked.liked===true?{color:'orange'}:{}}>
           <ThumbUpIcon />
         </IconButton>
+        {user.username===review.User.username?<span className='moviereview-likecount'>{likeCount}</span>:<></>}
         <IconButton aria-label="dislike" onClick={dislikeReview} sx={liked && liked.liked===false?{color:'orange'}:{}}>
           <ThumbDownIcon />
         </IconButton>
+        {user.username===review.User.username?<span className='moviereview-likecount'>{dislikeCount}</span>:<></>}
         </>:<></>
         }
         title={review.User.username}
@@ -61,6 +82,10 @@ const MovieReview = ({review}) => {
       <CardContent>
         <Box component='div' className='Box-moviereview-draftdisplay' maxHeight={show===true?'none':140} sx={{bgcolor:'white'}}>
           <DraftDisplay field={review.content} />
+        </Box>
+        <Box>
+          {new Date(review.createdAt).getTime()<new Date(review.updatedAt).getTime()?
+          <>Updated at {moment(review.updatedAt).format("MMM Do YYYY")}</>:<></>}
         </Box>
       </CardContent>
       <Divider flexItem/>

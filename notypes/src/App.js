@@ -3,7 +3,8 @@ import './App.css';
 import {Routes, Route, BrowserRouter as Router,Outlet,useLocation,useNavigate} from 'react-router-dom';
 import {Navbar} from './components';
 import {Footer,Home,Movies,Errorpage,Moviepage,Login,Signup,Watchlistpage,
-  Profile,Editprofile,Editfavourites,Reviewaddpage,Reviewspage,Userreviews} from './containers'
+  Profile,Editprofile,Editfavourites,Reviewaddpage,Reviewspage,Userreviews,
+  Postaddpage,Postpage,Movieposts,Userposts} from './containers'
 import CssBaseline from '@mui/material/CssBaseline';
 import { useDispatch,useSelector } from 'react-redux';
 import { actionVerify } from './store/userSlice';
@@ -55,6 +56,8 @@ export default function App() {
               <Route path='/movies' element={<Movies/>}/>
               <Route path='/movies/:id' element={<Moviepage/>}/>
               <Route path='/movies/:id/reviews/all' element={<Reviewspage/>}/>
+              <Route path='/movies/:id/posts/all' element={<Movieposts/>}/>
+              <Route path='/movies/:id/posts/post/:id' element={<Postpage/>}/>
               <Route path='/watchlist/:username' element={<Watchlistpage/>}/>
              
               <Route path='/signup' element={ 
@@ -84,6 +87,12 @@ export default function App() {
                 </PageAuth>
               }/>
 
+              <Route path='/profile/:username/posts' element={ 
+                <PageAuth>
+                  <Userposts />
+                </PageAuth>
+              }/>
+
               <Route path='/profile/edit/favourites' element={ 
                 <PageAuth>
                   <Editfavourites />
@@ -92,6 +101,12 @@ export default function App() {
               <Route path='/movies/:id/addreview' element={ 
                 <PageAuth>
                   <Reviewaddpage/>
+                </PageAuth>
+              }/>
+
+              <Route path='/movies/:id/addpost' element={ 
+                <PageAuth>
+                  <Postaddpage/>
                 </PageAuth>
               }/>  
               <Route path='*' element={<Errorpage/>}/>

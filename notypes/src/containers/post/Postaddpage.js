@@ -1,11 +1,12 @@
 import React,{useEffect,useState} from 'react'
-import './reviewaddpage.css'
+import './postaddpage.css'
 import {Container,StyledEngineProvider} from '@mui/material'
-import {ReviewAdd} from '../../components'
+import {PostAdd} from '../../components'
 import { useParams } from 'react-router-dom'
 import { getMovie } from '../../api'
 
-const Reviewaddpage = () => {
+const Postaddpage = () => {
+  
     const {id}=useParams()
     const [movie,setMovie]=useState(null)
     const [err,setErr]=useState(null)
@@ -17,20 +18,18 @@ const Reviewaddpage = () => {
            if(res.data)
            setMovie(res.data);
            else
+           //poate navigate in loc de seterr
            setErr("Movie doesn't exist!")  
         }
         getMoviebck()    
-        
-        
+              
     },[id]);
 
-    
-
-return (
+    return (
     <StyledEngineProvider injectFirst>
-      <Container component='div' className='container-reviewadd'>    
+      <Container component='div' className='container-postadd'>    
         
-          {movie && err===null?<ReviewAdd movieid={movie.movieid} title={movie.title}/>
+          {movie && err===null?<PostAdd movieid={movie.movieid} title={movie.title}/>
           :
           <div>{err}</div>}
       </Container>
@@ -38,4 +37,4 @@ return (
   )
 }
 
-export default Reviewaddpage
+export default Postaddpage
