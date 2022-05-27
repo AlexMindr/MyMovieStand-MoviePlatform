@@ -1,1 +1,1 @@
-web: wsgi:LicentaML
+web: wsgi:MLLicenta
