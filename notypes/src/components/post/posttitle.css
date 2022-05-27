@@ -1,34 +1,58 @@
 .Box-container-posttitle{
-    padding: 5px;
-    max-width: 95%;
+    width: 98%;
+    min-width: 300px;
     margin-inline: auto;
-    border: 2px solid black;
-    max-height: 100px;
+    border: 1px solid rgb(101, 101, 101);
+    height: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-wrap: nowrap;
     flex-direction: row;
-    background-color: rgb(228, 235, 241);
+    background-color: rgb(239, 241, 242);
+    flex-grow: 1;
+    border-radius: 5px;
 }
-.Box-posttitle-title{
+.Box-posttitle-left{
+    padding:5px;
     border-right: 2px solid black;
-    max-height: 100px;
-    min-width: 80%;
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    flex: 80%;
+    box-sizing: border-box;
+    height: 100px;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    overflow: hidden;
     flex-wrap: nowrap;
-    overflow: hidden; 
-     flex-direction: column;
+
+}
+.posttitle-title{
+    overflow: hidden;
+    max-width: 300px;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+    font-size: 1.4rem;
+}
+
+.posttitle-user{
+    overflow: hidden;
+    max-width: 250px;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+    font-size: 1.1rem;
+}
+.posttitle-date{
+    font-size: 0.9rem;
 }
 
 .Box-posttitle-comms{
-    background-color: rgb(210, 217, 223);
-    max-height: 100px;
-    /* flex: 20%; */
-    /* display: flex;
+    /* background-color: aliceblue; */
+    display: flex;
+    box-sizing: border-box;
+    flex: 20%; 
     align-items: center;
-    justify-content: flex-end; */
- 
+    justify-content: center;
+    margin-left: 5px;
+    height: 98px;
 }

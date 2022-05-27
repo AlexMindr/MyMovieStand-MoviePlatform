@@ -81,7 +81,7 @@ const Reviewspage = () => {
         :
         <div className='loading-allreviews'>{err}</div>
         }      
-        {reviewList!==null&&reviewList.length>=1?
+        {reviewList &&reviewList.length>=1?
         <div className='allreviews-pagination'>
             <Pagination count={totalPages} page={page?page:1} variant="outlined" shape="rounded" showFirstButton showLastButton onChange={pageChange}/>
         </div>:

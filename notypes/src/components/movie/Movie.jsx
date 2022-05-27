@@ -17,7 +17,8 @@ import MovieImgHoriz from './MovieImgHoriz';
 import {MovieReview,PostTitle} from '../index'
 import {numFormatter} from '../../auxcomponents/functions/NumberFormat'
 
-const post={title:'TITLE',User:{username:'USERNAMEE'},createdAt:'DATE',commentCount:100}
+const post={title:'TITLE TITLE TITLE TITLE TITLE TITLE TITLE TITLE TITLE TITLE TITLETITLETITLETITLETITLETITLETITLE',
+User:{username:'SERNASERNAUSERNAMEEUSERNAMEEUSERNAMEEUSERNAMEEUSERNAMEEUSERNAMEEUSERNAMEE'},createdAt:'DATE',commentCount:100}
 
 const Movie = ({movieid,children}) => {
 
@@ -321,9 +322,9 @@ else
             <Box component='div' className='review-title-box'>
                <Typography component='h5' variant='h5'>User Reviews</Typography>
                {reviews.filter(rev=>rev.movieid===movieid).length>0?
-               <Link to={`/movies/${movieid}/addreview`}>Edit your review</Link>
+               <Link to={`/movies/${movieid}/addreview`} style={{textShadow:'1px 1px 1px orange'}}>Edit your review</Link>
                :
-               <Link to={`/movies/${movieid}/addreview`}>Add a review</Link>
+               <Link to={`/movies/${movieid}/addreview`} style={{textShadow:'1px 1px 1px orange'}}>Add a review</Link>
                }
             </Box>
             <Divider flexItem/>
@@ -340,31 +341,30 @@ else
 
             {reviewsList && reviewsList.length>0?
             <Box component='div' sx={{display:'flex',justifyContent:'center',alignItems:'center',p:2}}>
-               <Link to={`/movies/${movieid}/reviews/all`}>Show all reviews</Link>
+               <Link to={`/movies/${movieid}/reviews/all`} style={{textShadow:'1px 1px 1px orange'}}>Show all reviews</Link>
             </Box>:<></>}
          </Grid>
 
          <Grid item  xs={12} md={12} lg={12}>
-            <Box component='div' className='review-title-box'>
+            <Box component='div' className='post-title-box'>
                <Typography component='h5' variant='h5'>Forum Discussions</Typography>
-               <Link to={`/movies/${movieid}/addpost`}>Start a discussion</Link>
+               <Link to={`/movies/${movieid}/addpost`} sx={{textShadow:'1px 1px 1px orange'}}>Start a discussion</Link>
             </Box>
             <Divider flexItem/>
-            {/* {postsList && postsList.length>0?
-               <Box component='div' className='review-reviews-box'>
-                  {/* {postsList.map(postItem=>
-                   <MovieReview key={postItem.postid} post={postItem}/>
+            {postsList && postsList.length>0?
+               <Box component='div' className='post-posts-box'>
+                  {postsList.map(postItem=>
+                     <PostTitle key={postItem.postid} post={postItem}/>
                   )} 
-                  <PostTitle post={post}/>
                </Box>
                :
                <Box component='div' sx={{display:'flex',justifyContent:'center',alignItems:'center',p:3,fontStyle:'italic'}}>
                   No posts have been added for this movie
-               </Box>} */}
-            <PostTitle post={post}/>
+               </Box>}
+            
             {postsList && postsList.length>0?   
             <Box component='div' sx={{display:'flex',justifyContent:'center',alignItems:'center',p:2}}>
-               <Link to={`/movies/${movieid}/posts/all`}>Show all forum discussions related to this movie</Link>
+               <Link to={`/movies/${movieid}/posts/all`} style={{textShadow:'1px 1px 1px orange'}}>Show all forum discussions related to this movie</Link>
             </Box>:<></>}
          </Grid>
       </Grid>

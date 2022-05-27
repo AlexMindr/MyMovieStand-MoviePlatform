@@ -80,9 +80,9 @@ const ReviewAdd = ({movieid,title}) => {
      
         <Grid item xs={12} className='reviewadd-textarea'>
            {isCreateOrUpdate==='update'? 
-            <DraftTextArea field={field} setField={setField} placeholder={"Write your review here"} ok={1}/>
+            <DraftTextArea field={field} setField={setField} placeholder={"Write your review here"} ok={1} textMaxLength={5000}/>
             :
-            <DraftTextArea  setField={setField} placeholder={"Write your review here"}/> 
+            <DraftTextArea  setField={setField} placeholder={"Write your review here"} textMaxLength={5000}/> 
             }
             
             

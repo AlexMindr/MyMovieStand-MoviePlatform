@@ -14,10 +14,14 @@ api.interceptors.request.use((req) => {
 
 
 
-export const addPost = (formData) => api.post('/posts/add',formData);
+export const addPost = (formData) => api.post('/posts/add/post',formData);
+export const addComm = (formData) => api.post('/posts/add/comment',formData);
 export const getMoviePosts = (movieid,page,count) => api.get(`posts/get/movie/${movieid}/page=${page}/count=${count}`);
 export const getPostContent = (postid) => api.get(`posts/get/post/${postid}`);
 export const getPostComments = (postid,page,count) => api.get(`posts/get/post/${postid}/comments/page=${page}/count=${count}`);
+export const getUserPosts = (username,page,count) => api.get(`/posts/get/posts/user/${username}/page=${page}/count=${count}`);
+export const getUserComments = (username,page,count) => api.get(`/posts/get/comments/user/${username}/page=${page}/count=${count}`);
+
 export const deletePost = (postid) => api.delete("posts/delete",postid);
 
 

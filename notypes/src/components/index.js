@@ -19,3 +19,4 @@ export {default as PostAdd} from './post/PostAdd';
 export {default as PostContent} from './post/PostContent';
 export {default as PostComm} from './post/PostComm';
 export {default as PostTitle} from './post/PostTitle';
+export {default as CommAdd} from './post/CommAdd';

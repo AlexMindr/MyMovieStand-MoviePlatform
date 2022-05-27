@@ -4,7 +4,7 @@ import { TextField, Grid, InputAdornment, IconButton } from '@mui/material'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
-const Input = ({ disabled,value,name, handleChange, label, autoFocus, type, handleShowPassword,required,select,helperText,error,isPassword, children }) => {
+const Input = ({ maxLength,disabled,value,name, handleChange, label, autoFocus, type, handleShowPassword,required,select,helperText,error,isPassword, children }) => {
    
    return (
       <Grid item xs={12} >
@@ -34,6 +34,7 @@ const Input = ({ disabled,value,name, handleChange, label, autoFocus, type, hand
                   </InputAdornment>
                ),
             } : null}
+            inputProps={maxLength?{maxLength}:null}
          >
          {children}
          </TextField>

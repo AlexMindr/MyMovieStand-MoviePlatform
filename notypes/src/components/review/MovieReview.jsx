@@ -10,7 +10,7 @@ import {actionLikeReview,actionDislikeReview} from '../../store/reviewSlice'
 import { stringAvatar } from '../../auxcomponents/avatar/Avatarfct';
 import { getLikesForReview } from '../../api';
 import {numFormatter} from '../../auxcomponents/functions/NumberFormat'
-
+import { Link } from 'react-router-dom';
 
 const MovieReview = ({review}) => {
   const [show,setShow]=useState(false)
@@ -75,7 +75,7 @@ const MovieReview = ({review}) => {
         {user.username===review.User.username?<span className='moviereview-likecount'>{dislikeCount}</span>:<></>}
         </>:<></>
         }
-        title={review.User.username}
+        title={<Link to={`/profile/${review.User.username}`}>{review.User.username}</Link>}
         subheader={moment(review.createdAt).format("MMM Do YYYY")}
       />
       <Divider flexItem/>

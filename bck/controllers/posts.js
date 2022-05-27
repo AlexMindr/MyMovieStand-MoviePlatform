@@ -84,7 +84,7 @@ const getMoviePosts = async (req, res) => {
 const getPostContent = async (req, res) => {
   try {
     const {postid} = req.params
-    const posts = await Post.findAll({
+    const post = await Post.findOne({
       attributes:[
         'movieid','content','createdAt','title','postid',
       ],
@@ -97,15 +97,18 @@ const getPostContent = async (req, res) => {
     
     });
 
-  res.status(200).json(posts);
+  res.status(200).json(post);
 } catch (error) {
   res.status(404).json({ message: error.message });
 }
 }
 
 const getPostComments = async (req, res) => {
+    const {page,count}=req.params;
+    const { limit, offset } = getPagination(page-1,count);
+    
     const {postid} = req.params
-    await UserComment.findAll({
+    await UserComment.findAndCountAll({
       attributes:['comment_content','ucid','createdAt'],
       limit,
       offset,
@@ -121,7 +124,6 @@ const getPostComments = async (req, res) => {
     })
     .then(data => {
       const {posts:comments,totalPages} = getPagingData(data, page, limit);
-      
       res.status(200).json({comments,totalPages});
     })
 
@@ -135,24 +137,111 @@ const getPostComments = async (req, res) => {
 
 
 const getUserPosts = async (req, res) => {
-    //TODO pagination
-    try {
-        const uuid=req.userId
-        const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
-        const posts = await Post.findAll({where:userid});
+    const {username,page,count}=req.params;
+    const { limit, offset } = getPagination(page-1,count);
+    const {userid}= await User.findOne({attributes:['userid'],where:{username}});      
+    
+    await Post.findAndCountAll({
+          subQuery:false,
+          attributes:[
+            'movieid','createdAt','title','postid',
+            [Sequelize.fn("COUNT", Sequelize.col("usercomments.ucid")), "commentCount"]
+          ],
+           limit,
+           offset,
+           distinct: true,
+           include:[{
+             model:User,
+             attributes:['username','fullname'],
+           },
+          { 
+            model:UserComment,
+            required:false,
+            attributes:[],
+            
+          },
+          {
+            model:Movie,
+            attributes:['title'],
+          },
+        ],
+    
+          where:{userid},
+          group:['postid'],
+          order:[['createdAt','DESC']],
+          
+        })
+        .then(data => {
+          const {posts,totalPages} = getPagingDataGroup(data, page, limit);
+          
+          res.status(200).json({posts,totalPages});
+        })
+    
+        .catch(error=>{
+          res.status(404).json({ message: error.message });
+          //console.log(error)
+      })
+};
+
+
+const getUserComments = async (req, res) => {
+  const {username,page,count}=req.params;
+  const { limit, offset } = getPagination(page-1,count);
+  const {userid}= await User.findOne({attributes:['userid'],where:{username}});
   
-      res.status(200).json(posts);
-    } catch (error) {
-      res.status(404).json({ message: error.message });
-    }
-  };
+  await Post.findAndCountAll({
+    subQuery:false,
+    attributes:[
+      'movieid','createdAt','title','postid',
+      //[Sequelize.fn("COUNT", Sequelize.col("usercomments.ucid")), "commentCount"]
+    ],
+     limit,
+     offset,
+     distinct: true,
+     include:[{
+       model:User,
+       attributes:['username','fullname'],
+     },
+    { 
+      model:UserComment,
+      required:false,
+      attributes:['comment_content','ucid','createdAt'],
+      where:{userid},
+      include:[{
+        model:User,
+        attributes:['username','fullname'],
+      },],
+    },
+    {
+      model:Movie,
+      attributes:['title'],
+    },
+  ],
+
+    //where:{userid},
+    //group:['postid'],
+    order:[['createdAt','DESC']],
+    
+  })
+  .then(data => {
+    const {posts,totalPages} = getPagingData(data, page, limit);
+    
+    res.status(200).json({posts,totalPages});
+  })
+
+  .catch(error=>{
+    res.status(404).json({ message: error.message });
+    //console.log(error)
+})
+};
+
+
 
 const addPost = async (req, res) => {
     try {
         const {content,movieid,title}=req.body;
         const uuid=req.userId
         const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
-
         const newPost=await Post.create(
         {   
             userid,
@@ -163,14 +252,34 @@ const addPost = async (req, res) => {
             updatedAt:new Date()
         }
       );
-      
-      res.status(201).json("Success");
+      const postid=newPost.postid
+      res.status(201).json(postid);
     } catch (error) {
       res.status(403).json({ message: error.message });
+     
     }
   };
 
-
+  const addComment = async (req, res) => {
+    try {
+        const {comment_content,postid}=req.body;
+        const uuid=req.userId
+        const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+        const newComm=await UserComment.create(
+        {   
+            userid,
+            postid,
+            comment_content,
+            createdAt:new Date(),
+            updatedAt:new Date()
+        }
+      );
+      res.status(201).json("Success");
+    } catch (error) {
+      res.status(403).json({ message: error.message });
+     
+    }
+  };
 const deletePost = async (req, res) => {
     try {
     const {postid}=req.body;
@@ -220,4 +329,4 @@ const deletePost = async (req, res) => {
     }
   };
 
-  export {getHomePosts,getMoviePosts,getUserPosts, deletePost, addPost, updatePost,getPostContent,getPostComments};
+  export {getHomePosts,getMoviePosts,getUserPosts,getUserComments, deletePost, addPost, updatePost,getPostContent,getPostComments, addComment};

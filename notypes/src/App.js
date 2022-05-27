@@ -57,7 +57,7 @@ export default function App() {
               <Route path='/movies/:id' element={<Moviepage/>}/>
               <Route path='/movies/:id/reviews/all' element={<Reviewspage/>}/>
               <Route path='/movies/:id/posts/all' element={<Movieposts/>}/>
-              <Route path='/movies/:id/posts/post/:id' element={<Postpage/>}/>
+              <Route path='/movies/:movieid/posts/post/:postid' element={<Postpage/>}/>
               <Route path='/watchlist/:username' element={<Watchlistpage/>}/>
              
               <Route path='/signup' element={ 

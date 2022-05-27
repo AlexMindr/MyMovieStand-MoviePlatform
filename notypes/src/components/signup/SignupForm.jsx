@@ -92,13 +92,13 @@ const Signup = () => {
                   :
                   <></>
                   }
-                   <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus required={true} />
-                   <Input name="lastName" label="Last Name" handleChange={handleChange} required={true}/>
+                   <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus required={true} maxLength={100} />
+                   <Input name="lastName" label="Last Name" handleChange={handleChange} required={true} maxLength={100}/>
                    <Input name="email" label="Email Adress" handleChange={handleChange} type="email" required={true} 
-                     helperText={"This email will be used to provide updates regarding your account"}/>
-                   <Input name="username" label="Username" handleChange={handleChange} type="text" required={true} 
+                     helperText={"This email will be used to provide updates regarding your account"} maxLength={150}/>
+                   <Input name="username" label="Username" handleChange={handleChange} type="text" required={true} maxLength={70}
                      helperText={"The username you choose will be used to login to your account"}/>
-                   <Input name="password" label="Password" required={true} error={errorPassForm} isPassword={true}
+                   <Input name="password" label="Password" required={true} error={errorPassForm} isPassword={true} maxLength={200}
                      helperText={"The password must be at least 4 characters long and contain an uppercase letter and a number"}
                      handleChange={handleChangePass} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
                    <Input name="confirmPassword" label="Repeat Password" handleChange={handleChangeConfPass} error={errorCPassForm}

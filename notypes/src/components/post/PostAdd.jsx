@@ -5,22 +5,29 @@ import { Box,Typography,Divider,Grid,Button } from '@mui/material'
 import Input from '../../auxcomponents/input/Input'
 import { useSelector } from 'react-redux'
 import { Link,useNavigate } from 'react-router-dom'
-import { getReviewOfMovie } from '../../api'
+import { addPost } from '../../api'
 
 const PostAdd = ({movieid,title}) => {
-  const [formData, setFormData] = useState({title:'',field:null})
+  const [formData, setFormData] = useState({title:'',content:null,movieid})
   const [formError,setFormError]=useState(null)
-  
+  const navigate = useNavigate()
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-    //if(formData.title!=='' && formData.field!==null)
-    //console.log(formData)
-    // dispatch(actionCreateOrUpdateReview(formData,isCreateOrUpdate))
-    // .then(res=>{
-    //   if(res)setFormError(res)
-    //   else setFormError(false)
-    //  })
-    // .catch(e=>setFormError(e))
+    if(formData.title!=='' && formData.content.blocks[0].text.length>=1){
+      setFormError(null)
+      
+      addPost(formData)
+      .then(res=>{
+        //TODO check error from bck?
+        const postid=res.data
+        navigate(`/movies/${movieid}/posts/post/${postid}`)
+      })
+      .catch(e=>setFormError(e))
+    }
+    else 
+        setFormError('You need to fill both fields!')
+    
 
   }
 
@@ -30,23 +37,19 @@ const PostAdd = ({movieid,title}) => {
 
 
  const setField = (newValue) => {
-     setFormData({ ...formData, field:newValue }); 
+     setFormData({ ...formData, content:newValue }); 
  };
 
-  const deleteReview = (e) =>{
-    //dispatch(actionDeleteReview(movieid))
-    clearChanges()
-    window.location.reload(false);
-  }
+  
 
   const clearChanges = () =>{
     //navigate(`/movies/${movieid}`)
   }
 
   return (
-    <Box  sx={{ flexGrow: 1 }} component='form' onSubmit={handleSubmit} className='reviewadd-form'>
+    <Box  sx={{ flexGrow: 1 }} component='form' onSubmit={handleSubmit} className='postadd-form'>
     
-    <Grid container spacing={2} className='reviewadd-form-grid' >
+    <Grid container spacing={2} className='postadd-form-grid' >
         <Grid item xs={12}>
           <Typography variant='h5' component='h4'>Discuss about the movie:</Typography>
           <Link to={`/movies/${movieid}`}><Typography variant='h5' component='h5'>{title}</Typography></Link>
@@ -59,16 +62,17 @@ const PostAdd = ({movieid,title}) => {
         :
         <></>
         }
-        <Grid item xs={12} className='reviewadd-textarea'>
-            <Input name="title" label="Choose a title" handleChange={handleChange} type="text" required={true} value={formData.title}/>
+        <Grid item xs={12} className='postadd-textarea'>
+            <Input name="title" label="Choose a title" handleChange={handleChange} type="text" required={true}
+             value={formData.title} maxLength={70} helperText={`${formData.title.length}/70 characters`}/>
         </Grid>
          
-        <Grid item xs={12} className='reviewadd-textarea'>
-            <DraftTextArea  setField={setField} placeholder={"Discuss about the movie here"}/> 
+        <Grid item xs={12} className='postadd-textarea'>
+            <DraftTextArea  setField={setField} placeholder={"Discuss about the movie here"} textMaxLength={1500}/> 
             
         </Grid>
         <Grid item xs={12}>
-            <Button type="submit"  variant="contained" color="primary" className='submit-reviewadd'>
+            <Button type="submit"  variant="contained" color="primary" className='submit-postadd'>
                 Post 
             </Button>
             <Button  onClick={clearChanges} variant="text" >
