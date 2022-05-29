@@ -8,14 +8,12 @@ import Container from '@mui/material/Container'
 const Moviepage = () => {
   const {id}=useParams()
   return (
-    <>
     <StyledEngineProvider injectFirst>
       <Container component='div' className='container-movie'>    
   
           <Movie movieid={parseInt(id)}/>
       </Container>
     </StyledEngineProvider>
-    </>
   )
 }
 

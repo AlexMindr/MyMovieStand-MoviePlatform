@@ -14,6 +14,11 @@ const getGenres = async (req, res) => {
   };
 
 const createGenres = async (req, res) => {
+  //TODO ADMIN
+  // const useruuid=res.userId
+  //   const role=res.userRole
+  //   const user = await User.findOne({where:{useruuid,role}})
+  //   if(user){
     const key=process.env.APIKEY;  
     const resp =await axios.get(`https://api.themoviedb.org/3/genre/movie/list?api_key=${key}`)
     try {
@@ -35,6 +40,12 @@ const createGenres = async (req, res) => {
 
 
 const updateGenres = async (req, res) => {
+  //TODO ADMIN
+  // const useruuid=res.userId
+  //   const role=res.userRole
+  //   const user = await User.findOne({where:{useruuid,role}})
+  //   if(user){
+  
     const key=process.env.APIKEY;  
     const resp =await axios.get(`https://api.themoviedb.org/3/genre/movie/list?api_key=${key}`)
     try {

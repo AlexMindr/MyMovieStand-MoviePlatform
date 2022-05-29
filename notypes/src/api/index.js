@@ -21,7 +21,7 @@ export const getPostContent = (postid) => api.get(`posts/get/post/${postid}`);
 export const getPostComments = (postid,page,count) => api.get(`posts/get/post/${postid}/comments/page=${page}/count=${count}`);
 export const getUserPosts = (username,page,count) => api.get(`/posts/get/posts/user/${username}/page=${page}/count=${count}`);
 export const getUserComments = (username,page,count) => api.get(`/posts/get/comments/user/${username}/page=${page}/count=${count}`);
-
+export const getHomePosts = () => api.get('/posts/get/home');
 export const deletePost = (postid) => api.delete("posts/delete",postid);
 
 
@@ -38,10 +38,15 @@ export const dislikeReview = (formData) => api.put(`/reviews/dislike`,formData);
 export const deleteReview = (movieid) => api.delete(`/reviews/delete/${movieid}`);
 
 
+export const getMoviesSimpleFilter = (page,query) => api.get(`/movies/page=${page}/search/?${query}`)
+export const getHomeMovies = ()  => api.get(`/movies/get/home`)
 export const getMovie = (id) => api.get(`/movies/movie=${id}`);
 export const getMovies = (page)  => api.get(`/movies/page=${page}`)
 export const getMoviesFiltered = (page,query)  => api.get(`/movies/page=${page}/filter/?${query}`)
-export const getMoviesSimpleFilter = (page,query) => api.get(`/movies/page=${page}/search/?${query}`)
+export const updateMovie = (formData) => api.put(`/movies/update/movie`,formData)
+export const updatePopularityAndRating = () => api.get(`/movies/update/all`)
+
+
 
 export const verify = () => api.get("/user/verify");
 export const getProfile = (username) => api.get(`/user/profile/${username}`);

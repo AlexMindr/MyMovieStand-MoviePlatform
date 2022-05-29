@@ -65,12 +65,12 @@ const EditFav = (/*{watchlist,favourites,setFavourites,setWatchlist}*/) => {
       }
       <Grid container rowGap={1} columnSpacing={'10px'} className='watchlistfav-edit-wl-grid'>
           {watchlist && watchlist.length>0? watchlist.map(wlItem=>
-            <Grid item xs={6} md={4} lg={2} key={wlItem.movieid}>
+            <Grid item xs={6} sm={4} md={3} lg={2}  sx={{alignItems:'center'}} key={wlItem.movieid}>
               <MovieFavList title={wlItem.Movie.title} posterPath={wlItem.Movie.poster_path} status={wlItem.status} rating={wlItem.rating}
               movieid={wlItem.movieid} actions={true} favourite={wlItem.favourite} onFavClick={onFavClick} onRemClick={onRemClick}/>
             </Grid>
             ):
-            <Grid item xs={12} className='watchlist-null'>No movies added to favourites</Grid>}
+            <Grid item xs={12} className='watchlist-null'>You need more watchlist movies</Grid>}
       </Grid>
 
       <Divider flexItem sx={{height:10, marginTop:5}}/>
@@ -79,7 +79,7 @@ const EditFav = (/*{watchlist,favourites,setFavourites,setWatchlist}*/) => {
       <Grid container rowGap={1} columnSpacing={'10px'} className='watchlistfav-edit-fav-grid'>
           {favourites && favourites.length>0? 
             favourites.map(favItem=>
-            <Grid item xs={6} md={4} lg={2} key={favItem.movieid}>
+            <Grid item xs={6} sm={4} md={3} lg={2}  sx={{alignItems:'center'}} key={favItem.movieid}>
               <MovieFavList title={favItem.Movie.title} posterPath={favItem.Movie.poster_path} status={favItem.status} rating={favItem.rating}
               movieid={favItem.movieid} actions={true} favourite={favItem.favourite} onFavClick={onFavClick} onRemClick={onRemClick}/>
             </Grid>

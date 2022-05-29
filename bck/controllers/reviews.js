@@ -26,29 +26,39 @@ function getPagingDataGroup(data, page, limit) {
 
 const getHomeReviews = async (req, res) => {
     try {
-      // const {page,count}=req.params;
-        const page = 1
-        const { limit, offset } = getPagination(page-1,5);
         
-         await Review.findAndCountAll({
-          limit,
-          offset,
+        const reviews= await Review.findAll({
+          limit:3,
           subQuery:false,
-          include:[
-            {model:Movie,attributes:['title','movieid']},
-            {model:User,attributes:['username']}
-          ],
-          order:[['createdAt','DESC']]})
-          .then(data => {
-            const {reviews,totalPages} = getPagingData(data, page, limit);
-            
-            res.status(200).json({reviews,totalPages});
-          })
-    
-          .catch(error=>{
-            res.status(404).json({ message: error.message });
-            //console.log(error)
+          attributes:[
+            'movieid','content','createdAt','updatedAt','reviewid',
+            [Sequelize.fn("COUNT", Sequelize.col("userlikes.liked")), "likeCount"]
+           ],
+           distinct: true,
+           include:[{
+             model:User,
+             attributes:['username','fullname'],
+           },
+          { 
+            model:UserLike,
+            required:false,
+            attributes:[],
+            where:{
+              liked:{[Op.eq]:true}
+            }
+          },
+          {
+            model:Movie,
+            required:true,
+            attributes:['movieid','title']
+          }
+
+        ],
+          group:['reviewid'],
+          order:[[sequelize.literal('likeCount'),'DESC']],
+          
         })
+          
       res.status(200).json(reviews);
     } catch (error) {
       res.status(404).json({ message: error.message });
@@ -259,7 +269,7 @@ const deleteReview = async (req, res) => {
 }};
 
   
-
+ //TODO updaterevadmin
   const updateReview  = async (req, res) => {
     try {
     

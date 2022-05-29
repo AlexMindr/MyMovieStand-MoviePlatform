@@ -20,9 +20,9 @@ const ProfileFav = ({movies , myProfile}) => {
                   <></>}
       <Box className='profile-fav-movies'>
         <Box sx={{ flexGrow: 1 }}>
-          <Grid container rowGap={1} columnSpacing={'10px'}>
+          <Grid container rowGap={1} columnSpacing={'10px'}  alignItems={'center'} >
           {movies && movies.length>0? movies.map(movie=>
-            <Grid item xs={6} md={4} lg={2} key={movie.movieid}>
+            <Grid item xs={6} sm={4} md={3} lg={2} key={movie.movieid} sx={{alignItems:'center'}}>
               <MovieFavList title={movie.Movie.title} posterPath={movie.Movie.poster_path} status={movie.status} rating={movie.rating}
               movieid={movie.movieid} />
             </Grid>

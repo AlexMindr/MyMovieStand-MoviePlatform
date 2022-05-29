@@ -12,7 +12,7 @@ import { getLikesForReview } from '../../api';
 import {numFormatter} from '../../auxcomponents/functions/NumberFormat'
 import { Link } from 'react-router-dom';
 
-const MovieReview = ({review}) => {
+const MovieReview = ({review,MaxHeight=140}) => {
   const [show,setShow]=useState(false)
   const [liked,setLiked]=useState(null)
   const {likes} = useSelector(state=>state.review)
@@ -80,10 +80,8 @@ const MovieReview = ({review}) => {
       />
       <Divider flexItem/>
       <CardContent>
-        <Box component='div' className='Box-moviereview-draftdisplay' maxHeight={show===true?'none':140} sx={{bgcolor:'white'}}>
+        <Box component='div' className='Box-moviereview-draftdisplay' maxHeight={show===true?'none':MaxHeight} sx={{bgcolor:'white'}}>
           <DraftDisplay field={review.content} />
-        </Box>
-        <Box>
           {new Date(review.createdAt).getTime()<new Date(review.updatedAt).getTime()?
           <>Updated at {moment(review.updatedAt).format("MMM Do YYYY")}</>:<></>}
         </Box>

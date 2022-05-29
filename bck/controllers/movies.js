@@ -3,7 +3,7 @@ import db from '../models/index.cjs';
 import fs from 'fs';
 import { Op,QueryTypes } from '@sequelize/core';
 
-const {Movie,Moviegenre,Genre,User,sequelize,Sequelize}=db;
+const {Movie,Moviegenre,Genre,User,Watchlist,sequelize,Sequelize}=db;
 
 function getPagination(page, size) {
   const limit = size ? +size : 21;
@@ -17,6 +17,42 @@ function getPagingData(data, page, limit) {
   const totalPages = Math.ceil(totalItems / limit);
   return {  movies, totalPages };
 };
+
+
+const getHomeMovies = async (req, res) => {
+ try{
+   console.log(1)
+  const mostPopular = await Movie.findAll({
+        attributes:['movieid','title','poster_path'], 
+        limit:5,
+        where:{
+           popularity:{[Op.ne]:null}
+        },
+        order:[
+         ['popularity','DESC'],
+         ['title','ASC']
+        ],
+      })
+      console.log(1)
+  const bestRated = await Movie.findAll({
+    attributes:['movieid','title','poster_path'], 
+    limit:5,
+    where:{
+        rating:{[Op.ne]:null}
+    },
+    order:[
+      ['rating','DESC'],
+      ['title','ASC']
+    ],
+  })
+
+    res.status(200).json({bestRated,mostPopular});
+ 
+    } catch(error){
+      res.status(404).json({ message: error.message });
+     console.log(error)
+  }
+}
 
 
 const getMoviesSimpleFilter = async (req, res) => {
@@ -183,8 +219,15 @@ const getMovie = async (req, res) => {
   }
 };
 
-//de facut api request la tmdb la imagini pt galerie
+
+
 const populateMovies = async (req, res) => {
+  //TODO ADMIN
+  // const useruuid=res.userId
+  //   const role=res.userRole
+  //   const user = await User.findOne({where:{useruuid,role}})
+  //   if(user){
+  //TODO get oldest video?
   const key=process.env.APIKEY;  
     try {
         const data = fs.readFileSync("./data/bypopularity.txt", "utf8", (err) => {
@@ -256,6 +299,12 @@ const populateMovies = async (req, res) => {
   
   const createMovie = async (req, res) => {
     
+    //TODO ADMIN
+    // const useruuid=res.userId
+    //   const role=res.userRole
+    //   const user = await User.findOne({where:{useruuid,role}})
+    //   if(user){
+    
     try {
       
       let {adult,backdrop_path,budget,homepage,tmdb_id,imdb_id,original_title,title,overview,
@@ -302,6 +351,12 @@ const populateMovies = async (req, res) => {
   
 
   const updateMovie = async (req, res) => {
+    //TODO ADMIN
+    // const useruuid=res.userId
+    //   const role=res.userRole
+    //   const user = await User.findOne({where:{useruuid,role}})
+    //   if(user){
+  
     const {movieid}=req.params
     let {adult,backdrop_path,budget,homepage,tmdb_id,imdb_id,popularity,original_title,title,overview,
       poster_path,release_date,revenue,duration,status,trailer_path,keywords,original_language,uscertification/*,genres*/}=req.body;
@@ -309,19 +364,7 @@ const populateMovies = async (req, res) => {
     try {
             rating=0;
             //de facut rating update endpoint separat din suma din wl / numarul de oameni din wl; la fel la popularity 
-            //genres update not working
-            /*genres=genres.split(',');
-            let genreids=[]
-            genres.map((genre)=>{genreids.push({genreid:genre.id})})
-            
-            await Moviegenre.update({
-              genreid:genreids,
-              updatedAt: new Date()
-            },{
-              where:{
-              movieid:movieid
-            }});
-            */
+            //no genres update 
             await Movie.update({
                   adult,
                   backdrop_path,
@@ -356,10 +399,50 @@ const populateMovies = async (req, res) => {
           res.status(404).json({ message: error.message });
         }
       };
+
+      
+const updatePopularityAndRating = async (req, res) => {
+  //TODO ADMIN
+  // const useruuid=res.userId
+  //   const role=res.userRole
+  //   const user = await User.findOne({where:{useruuid,role}})
+  //   if(user){
+  
+  try {
+          const movies=await Movie.findAll({attributes:['movieid']})
+          movies.map(async (movie)=>{
+            const countPopularity=await Watchlist.count({where:{movieid:movie.movieid}})
+            const countRating=countPopularity>0?await Watchlist.count({where:{movieid:movie.movieid,rating:{[Op.not]:null}}}):null
+            const sumRating=countRating>0?await Watchlist.sum('rating',{where:{movieid:movie.movieid}}):null
+            const calcRating=countRating>0?sumRating/countRating:null
+            
+            await Movie.update({
+              popularity:countPopularity,
+              rating:calcRating!=0?calcRating:null,
+              updatedAt:new Date()
+              },{
+              where:{
+                movieid:movie.movieid
+              }});
+    
+              })
+          
+    
+          
+        res.status(201).json("Success");
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
+  };
     
 
   const deleteMovie = async (req, res) => {
-    
+      //TODO ADMIN
+    // const useruuid=res.userId
+    //   const role=res.userRole
+    //   const user = await User.findOne({where:{useruuid,role}})
+    //   if(user){
+  
     const { id } = req.params;
     try {
       
@@ -373,4 +456,4 @@ const populateMovies = async (req, res) => {
         res.status(404).json({ message: error.message });
       }
   };
-  export { getMovies, getMovie, populateMovies, createMovie, updateMovie, deleteMovie,getMoviesFiltered,getMoviesSimpleFilter };
+  export { getMovies, getMovie, populateMovies, createMovie, updateMovie, deleteMovie,getMoviesFiltered,getMoviesSimpleFilter,getHomeMovies,updatePopularityAndRating };

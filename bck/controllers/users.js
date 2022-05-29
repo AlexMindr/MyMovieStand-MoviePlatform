@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import db from '../models/index.cjs';
 import crypto from "crypto";
 import { Op } from '@sequelize/core';
+import nodemailer from 'nodemailer'
 const {User,Notification,Watchlist}=db;
 
 async function watchListStatus(wlName,id){
@@ -238,20 +239,59 @@ const update = async (req, res) => {
 const deleteAdm = async (req, res) => {
   
   try {
+    const useruuid=res.userId
+    const role=res.userRole
+    const user = await User.findOne({where:{useruuid,role}})
+    if(user){
     const {id}=req.params;
-    const deleteUser = await User.destroy({
+
+    await User.destroy({
         where:{
           userid:id
       }});
   
     
-  res.status(201).json({ message:"Success"});
+    res.status(201).json({ message:"Success"});
+    }
+    else {
+      res.status(404).json({ message: "Something went wrong" });  
+    }
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 
+
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.REACT_APP_EMAIL,
+    pass: process.env.REACT_APP_EMAIL_PASS,
+  },
+});
+
+let mailOptions = {
+  from: 'myemail@gmail.com',
+  to: "receiver@example.com",
+  subject: `The subject goes here`,
+  html: `The body of the email goes here in HTML`,
+  // attachments: [
+  //   {
+  //     filename: `${name}.pdf`,
+  //     path: path.join(__dirname, `../../src/assets/books/${name}.pdf`),
+  //     contentType: 'application/pdf',
+  //   },
+  // ],
+};
+
+// transporter.sendMail(mailOptions, function (err, info) {
+//   if (err) {
+//     res.json(err);
+//   } else {
+//     res.json(info);
+//   }
+// });
 
 const resetPass = async (req, res) => {
   

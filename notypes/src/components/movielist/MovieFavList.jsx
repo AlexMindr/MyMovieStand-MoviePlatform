@@ -18,7 +18,7 @@ const MovieFavList = ({posterPath,title,movieid,rating,status,actions,favourite,
    
     
   return (
-    <Card sx={{ maxWidth: 300, minWidth:150 }} className='moviefavlist-card'>
+    <Card sx={{ maxWidth: 200, minWidth:150 }} className='moviefavlist-card'>
         <CardHeader className='moviefavlist-header'
         title={title}
         />

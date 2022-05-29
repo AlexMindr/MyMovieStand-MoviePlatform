@@ -1,0 +1,16 @@
+.loading-allposts{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin-top: 20vh;
+}
+.allposts-pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+/* .allposts-post{
+    background-color: aliceblue;
+} */

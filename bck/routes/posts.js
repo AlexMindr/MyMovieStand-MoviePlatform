@@ -19,7 +19,7 @@ const router = Router();
 router.post("/add/post",auth, addPost);
 router.post("/add/comment",auth, addComment);
 //router.get("/get", auth,geHomePosts);
-//router.get("/get/:movieid",auth,getReview);
+router.get("/get/home",getHomePosts);
 router.get("/get/movie/:movieid/page=:page/count=:count",getMoviePosts);
 router.get("/get/post/:postid/",getPostContent);
 router.get("/get/post/:postid/comments/page=:page/count=:count",getPostComments);

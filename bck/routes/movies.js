@@ -8,6 +8,8 @@ import {
   deleteMovie,
   getMoviesFiltered,
   getMoviesSimpleFilter,
+  getHomeMovies,
+  updatePopularityAndRating
 } from "../controllers/movies.js";
 //import auth from "../middlewares/auth.mjs";
 
@@ -17,9 +19,11 @@ router.get("/page=:page/filter",getMoviesFiltered)
 router.get("/page=:page/search",getMoviesSimpleFilter)
 router.get("/page=:page", getMovies);
 router.get("/movie=:id",getMovie)
+router.get("/get/home",getHomeMovies)
 router.post("/populate",populateMovies)
 router.post("/create",createMovie)
-router.put("/update/:movieid",updateMovie)
+router.put("/update/movie=:movieid",updateMovie)
+router.put("/update/all",updatePopularityAndRating)
 router.delete("/delete/:id",deleteMovie)
 
 export default router;

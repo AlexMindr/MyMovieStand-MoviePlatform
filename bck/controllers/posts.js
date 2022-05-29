@@ -24,9 +24,30 @@ function getPagingDataGroup(data, page, limit) {
 };
 
 const getHomePosts = async (req, res) => {
-    //TODO orderby createdat, primele 5 doar
     try {
-      const posts = await Post.findAll({});
+     const posts= await Post.findAll({
+        subQuery:false,
+        attributes:[
+          'movieid','createdAt','title','postid',
+          [Sequelize.fn("COUNT", Sequelize.col("usercomments.ucid")), "commentCount"]
+        ],
+         limit:5,
+         distinct: true,
+         include:[{
+           model:User,
+           attributes:['username','fullname'],
+         },
+        { 
+          model:UserComment,
+          required:false,
+          attributes:[],
+          
+        }
+      ],
+        group:['postid'],
+        order:[['createdAt','DESC']],
+        
+      })
   
       res.status(200).json(posts);
     } catch (error) {
@@ -280,6 +301,8 @@ const addPost = async (req, res) => {
      
     }
   };
+
+//TODO make empty json with post deleted by x and add it instead + admin delete with different x
 const deletePost = async (req, res) => {
     try {
     const {postid}=req.body;
@@ -304,11 +327,15 @@ const deletePost = async (req, res) => {
 
   const updatePost  = async (req, res) => {
     try {
+        //TODO ADMIN
+    // const useruuid=res.userId
+    //   const role=res.userRole
+    //   const user = await User.findOne({where:{useruuid,role}})
+    //   if(user){
+  
     //ADMIN ONLY
     const {updateId,content,title}=req.body;
-    const uuid=req.userId
-    const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
-
+  
     await Post.update(
     {
 
@@ -319,7 +346,6 @@ const deletePost = async (req, res) => {
     {
       where:{
         postid:updateId,
-        userid
     }})
 
     res.status(201).json("Success");

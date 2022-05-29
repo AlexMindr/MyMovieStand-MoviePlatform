@@ -13,7 +13,7 @@ const auth = async (req, res, next) => {
          decodedData = jwt.verify(token, jwtSecret)
 
          req.userId = decodedData?.useruuid
-         //req.userRole= decodedData?.role
+         req.userRole= decodedData?.role
   
       }
       }

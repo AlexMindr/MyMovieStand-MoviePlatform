@@ -1,0 +1,43 @@
+.Box-moviehomelist{
+    display: flex;
+    max-width:320px ;
+}
+.moviehomelist-index{
+    flex:10%;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+.moviehomelist-item{
+    flex:80%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    column-gap: 0.5rem;
+    align-items: center;
+    justify-content: left;
+}
+.moviehomelist-img{
+    height: 120px;
+    width: 80px;
+
+}
+.moviehomelist-title{
+    /* white-space: nowrap; 
+    width: 300px; 
+    text-overflow: ellipsis;  */
+    font-size: 1rem;
+    font-weight: bold;
+    overflow: hidden;
+    
+}
+.moviehomelist-status{
+    flex:10%;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+}
