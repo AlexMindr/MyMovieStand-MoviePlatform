@@ -3,7 +3,7 @@ import './watchlistform.css'
 import { Button, Grid, Box,Typography,Container,Divider,Paper } from '@mui/material'
 import Input from '../../auxcomponents/input/Input'
 import { useNavigate,Link } from 'react-router-dom'
-import { actionCreateOrUpdateItem} from '../../store/watchlistSlice'
+import { actionCreateOrUpdateItem, actionDelWlItem} from '../../store/watchlistSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
 //de setat state-ul initial cu ce vine din store
@@ -55,6 +55,28 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
    setFormData({ ...formData, [e.target.name]: parseInt(e.target.value) });
    }
 
+   const handleDelete = (e) => {
+      //TODO Verificat
+      e.preventDefault()
+      dispatch(actionDelWlItem(formData))
+      .then(res=>{
+         if(res){
+            setFormError(res)
+            //TODO notification in loc de eroare
+            //setFormData({id,status:'',episodes:'',rating:''})
+         }
+         else {
+           setFormError(false)
+           handleCloseWatchForm()
+          }
+        
+        })
+      .catch(e=>{
+         setFormError(e)
+         //setFormData({id,status:'',episodes:'',rating:''})
+      })
+   }
+
   return (
     <Container className='watchlist-container-form'>
       {user?
@@ -75,7 +97,7 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
                   <></>
                   }
                    <Input name="status" label="Status" handleChange={handleChange} select={true} required={true} value={formData.status}>
-                    <option value='' hidden></option>
+                    <option value=' ' hidden></option>
                     <option value="Plan to watch">Plan to watch</option>
                     <option value="Watching">Watching</option>
                     <option value="Completed">Completed</option>
@@ -89,7 +111,7 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
                    }   
 
                    <Input name="rating" label="My score" handleChange={handleChangeInt} select={true} value={formData.rating}>
-                    <option value='' hidden></option>
+                    <option value=' ' hidden></option>
                     <option value={1}>1 - Offensive</option>
                     <option value={2}>2 - Appalling</option>
                     <option value={3}>3 - Horrible</option>
@@ -108,7 +130,7 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
                         Submit
                      </Button>
                      {/* //TODO ADD logic to delete */}
-                     <Button variant="contained" color="primary" className='submit-watchlist'>
+                     <Button variant="contained" color="primary" className='submit-watchlist' onClick={handleDelete}>
                         Delete
                      </Button>
               </Box>

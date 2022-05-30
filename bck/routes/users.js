@@ -11,7 +11,7 @@ import {
  getSimpleProfile,
 } from "../controllers/users.js";
 import auth from '../middleware/auth.js'
-
+import authAdmin from '../middleware/authAdmin.js'
 
 const router = Router();
 
@@ -23,6 +23,7 @@ router.post("/login", login);
 router.put("/update",auth,update);
 router.put("/reset",resetPass);
 router.put("/change",changePass);
-router.delete("/delete/:id",deleteAdm)
+
+router.delete("/delete/:username",authAdmin,deleteAdm)
 
 export default router;

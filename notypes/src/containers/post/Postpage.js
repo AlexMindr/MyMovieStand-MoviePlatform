@@ -2,9 +2,10 @@ import React,{useEffect,useState} from 'react'
 import './postpage.css'
 import { getPostContent,getPostComments,getMovie } from '../../api'
 import {Button,Grid,CircularProgress,Pagination,Box,Typography,Container,StyledEngineProvider,Paper,Divider} from '@mui/material'
-import { Link,useParams } from 'react-router-dom'
+import { Link,useParams,useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { PostContent,PostComm,CommAdd } from '../../components'
+
 
 const Postpage = () => {
   const [postComments,setPostComments]=useState(null)
@@ -15,7 +16,9 @@ const Postpage = () => {
   const [movie,setMovie]=useState(null)
   const [err,setErr]=useState(null)
   const {movieid,postid} = useParams()
-
+  const {user} = useSelector(state=>state.user)
+  const location =useLocation()
+  
   const pageChange = (event, value) => {
     setPage(value);
   };
@@ -63,9 +66,14 @@ const Postpage = () => {
         
         <PostContent postContent={postContent}/>
         <Box className='postpage-addcomment'>
-          {addComm===false?<Button onClick={handleAddComm} variant='outlined'>Add a comment</Button>
-          :
-          <CommAdd postid={postid} addState={setAddComm}/>
+          {user?
+          <>
+            {addComm===false?<Button onClick={handleAddComm} variant='outlined'>Add a comment</Button>
+            :
+            <CommAdd postid={postid} addState={setAddComm}/>
+            }
+          </>:
+          <Link to={'/login'} state={{ from: location }}>Login to add comment</Link>
           }
         </Box>
         <Box className='postpage-comments'>

@@ -3,14 +3,14 @@ import './movielist.css'
 import moment from 'moment'
 import { Divider,Box,Card, CardContent, CardMedia, Button, Typography,Modal } from '@mui/material'
 import {Link,useLocation } from 'react-router-dom'
-import {PersonOutline,StarBorderPurple500Outlined} from '@mui/icons-material';
+import { PersonOutline,StarBorderPurple500Outlined} from '@mui/icons-material';
 import { StyledEngineProvider } from '@mui/material/styles';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useSelector } from 'react-redux';
 import WatchlistForm from '../watchlist/WatchlistForm';
+import { numFormatter } from '../../auxcomponents/functions/NumberFormat';
 
-
-const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,releaseDate,title,movieid,trailer,keywords,rating, children }) => {
+const MovieList = ({status,adult,uscertification,duration,genres,overview,posterPath,releaseDate,title,movieid,trailer,keywords,rating,popularity, children }) => {
    
    const [bgColor, setBgColor]=useState('rgb(230,230,230,0.7)');
    const [open, setOpen] = useState(false);
@@ -99,11 +99,12 @@ const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,re
            <Typography className={uscertification?'movielist-certification':''} variant="subtitle1" component='div' >
                {adult?'Adult movie':uscertification?uscertification:'-'}
            </Typography>
-           <Typography className='date' variant="subtitle1" component='div' >{moment(releaseDate).format("MMM YYYY")}</Typography>
+           <Typography className='date' variant="subtitle1" component='div' >
+              {releaseDate?moment(releaseDate).format("MMM YYYY"):'TBA'}</Typography>
            <Divider id='divi' orientation="vertical" variant="middle" flexItem />
            <Typography variant="subtitle1" component='div'>Movie</Typography>
            <Typography variant="subtitle1" component='div'>
-              {Math.round(parseInt(duration)/60)}h {parseInt(duration)%60}min
+             {parseInt(duration)>0?<>{Math.round(parseInt(duration)/60)}h {parseInt(duration)%60}min</>:'-'}
            </Typography>
         </Box>
         
@@ -150,12 +151,12 @@ const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,re
                   </Modal>
                {wlData && wlData.rating?
                <div className="movielist-userscore">
-                   <div className="movielist-userscore-content">&nbsp;{wlData.rating}&nbsp;</div>
+                   <div className="movielist-userscore-content">{wlData.rating===10?wlData.rating:<>&nbsp;{wlData.rating}</>}&nbsp;</div>
                </div>
                :
                <></>
                }
-               </>          
+            </>          
             :
             <>
             {/*TODO verificat/style asta */}
@@ -180,12 +181,12 @@ const MovieList = ({adult,uscertification,duration,genres,overview,posterPath,re
             }
             </Box>
             <Box component='div' className='bottom-info'>
-               <Box  component='div'>
-                  <PersonOutline className="icn" fontSize='small'/>
-                     <span>220k</span>
+               <Box  component='div' >
+                  <PersonOutline className="icn" fontSize='small' />
+                     <span>{popularity?numFormatter(popularity):'N/A'}</span>
                </Box>
-               <Box  component='div'>
-                  <StarBorderPurple500Outlined className='icn' fontSize='small'/>
+               <Box  component='div' >
+                  <StarBorderPurple500Outlined className='icn' fontSize='small' sx={{color:'orange'}}/>
                   <em >
                         {rating?rating:'N/A'}
                   </em>

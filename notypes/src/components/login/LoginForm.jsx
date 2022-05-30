@@ -41,7 +41,7 @@ const Login = () => {
     }
  
     const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword)
- 
+    
     
   return (
          <Box  sx={{ flexGrow: 1 }} component='form' onSubmit={handleSubmit}>
@@ -54,7 +54,8 @@ const Login = () => {
                   :
                   <></>
                   }
-                   <Input name="username" label="Username" handleChange={handleChange} type="text" required={true} value={formData.username}/>
+                  <Input name="username" label="Username" handleChange={handleChange} type="text" required={true} value={formData.username} />
+                  
                    <Input name="password" label="Password" required={true} value={formData.password} isPassword={true}
                    handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
                    <Grid item xs={12}>

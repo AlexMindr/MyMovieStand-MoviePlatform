@@ -9,6 +9,7 @@
     align-items: center;
     justify-content: center;
     margin-right: 10px;
+    color:grey;
 }
 .moviehomelist-item{
     flex:80%;
@@ -30,10 +31,16 @@
     /* white-space: nowrap; 
     width: 300px; 
     text-overflow: ellipsis;  */
-    font-size: 1rem;
-    font-weight: bold;
     overflow: hidden;
-    
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+.moviehomelist-title>a{
+    font-size: 1.1rem;
+    font-weight: bold;
 }
 .moviehomelist-status{
     flex:10%;

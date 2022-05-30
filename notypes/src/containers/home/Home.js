@@ -54,7 +54,7 @@ const Home=() =>{
               <Grid container rowGap={1} >
                 {mostPopular && mostPopular.length>0? mostPopular.map((movie,index)=>
                 <Grid item xs={12} key={movie.movieid} >
-                  {/* <PostTitle post={post}/>   */}
+                  <MovieHomeList movie={movie} index={index}/>
                 </Grid>
                 ):
                 <Grid item xs={12} className='items-null'>

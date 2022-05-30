@@ -129,18 +129,15 @@ else
                      <Typography variant="subtitle2" component='span'>Language: {movie.language.toUpperCase()}</Typography>
                   </Box> 
                   <Grid container spacing={1} className='popularity-info' >
-                     <Grid item  xs={3} md={3} > 
-                        
-                        <em className='score'>
-                           <StarOutlineIcon fontSize='small' sx={{verticalAlign:'sub'}}/>
+                     <Grid item  xs={6} md={6} className='score'> 
+                           <StarOutlineIcon fontSize='medium' sx={{verticalAlign:'text-bottom'}}/>
                             {movie.rating?movie.rating:'N/A'}
-                        </em>
                      </Grid>
-                     <Grid item  xs={3} md={3}>
-                        <PeopleAltRoundedIcon fontSize='small' sx={{verticalAlign:'sub'}}/>
-                        {movie.popularity?movie.popularity:'N/A'}   
+                     <Grid item  xs={6} md={6}>
+                        <PeopleAltRoundedIcon fontSize='medium' sx={{verticalAlign:'text-bottom'}}/>
+                        {movie.popularity?numFormatter(movie.popularity):'N/A'}   
                      </Grid>
-                     <Grid item xs={3} md={3}> Members: N/A</Grid>
+                     {/* <Grid item xs={3} md={3}> Ranked: N/A</Grid> */}
                   </Grid>  
                   <Box component='div' className='time-info'>
                      <Typography variant="subtitle1" component='span' className='certification'>

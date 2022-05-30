@@ -34,7 +34,7 @@ const Input = ({ maxLength,disabled,value,name, handleChange, label, autoFocus, 
                   </InputAdornment>
                ),
             } : null}
-            inputProps={maxLength?{maxLength}:null}
+            inputProps={maxLength?{maxLength}:{maxLength:100}}
          >
          {children}
          </TextField>

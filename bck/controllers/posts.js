@@ -302,57 +302,215 @@ const addPost = async (req, res) => {
     }
   };
 
-//TODO make empty json with post deleted by x and add it instead + admin delete with different x
-const deletePost = async (req, res) => {
-    try {
+const deletePostUser = async (req, res) => {
+  const restrictAdmin={
+    "blocks": [
+        {
+            "key": "9m832",
+            "text": "  Post removed by user",
+            "type": "blockquote",
+            "depth": 0,
+            "inlineStyleRanges": [
+                {
+                    "offset": 0,
+                    "length": 22,
+                    "style": "color-rgb(226,80,65)"
+                },
+                {
+                    "offset": 0,
+                    "length": 22,
+                    "style": "bgcolor-rgb(239,239,239)"
+                },
+                {
+                    "offset": 0,
+                    "length": 22,
+                    "style": "ITALIC"
+                },
+                {
+                    "offset": 0,
+                    "length": 22,
+                    "style": "fontsize-18"
+                }
+            ],
+            "entityRanges": [],
+            "data": {}
+        }
+    ],
+    "entityMap": {}
+}  
+  try {
+
     const {postid}=req.body;
     const uuid=req.userId
     const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
     
 
-    await Post.destroy({
+    const success=await Post.update(
+      {
+        content:restrictAdmin,
+        updatedAt: new Date(),
+      },
+      {
         where:{
-            postid,
-            userid
-        }
-    })
+          postid,
+          userid
+      }})
   
-    res.status(201).json("Success");
+  
+      if(success===0){
+        res.status(403).json({ message: "Post doesn't exist" });
+      }
+      else{
+        res.status(201).json({ message:"Success"});
+      }
     
-} catch (error) {
-    res.status(403).json({ message: error.message });
-}};
+  } catch (error) {
+    res.status(404).json({ message: "Something went wrong" });
+  }
+};
 
   
 
   const updatePost  = async (req, res) => {
     try {
-        //TODO ADMIN
-    // const useruuid=res.userId
-    //   const role=res.userRole
-    //   const user = await User.findOne({where:{useruuid,role}})
-    //   if(user){
+      const useruuid=req.userId
+      const role=req.userRole
+      const user = await User.findOne({where:{useruuid,role}})
+      if(user){
+      const {title,content,postid}=req.body;
   
-    //ADMIN ONLY
-    const {updateId,content,title}=req.body;
-  
-    await Post.update(
-    {
-
-      title,
-      content,
-      updatedAt: new Date(),
-    },
-    {
-      where:{
-        postid:updateId,
-    }})
-
-    res.status(201).json("Success");
+      const success=await Post.update(
+        {
     
+          title,
+          content,
+          updatedAt: new Date(),
+        },
+        {
+          where:{
+            postid,
+        }})
+    
+        if(success===0){
+          res.status(403).json({ message: "Post doesn't exist" });
+        }
+        else{
+          res.status(201).json({ message:"Success"});
+        }
+      }
+      else {
+        res.status(404).json({ message: "Something went wrong" });  
+      }
     } catch (error) {
-      res.status(403).json({ message: error.message });
+      res.status(500).json({ message: "Something went wrong" });
     }
   };
+  
+  
+  const deletePost  = async (req, res) => {
+    try {
+      const useruuid=req.userId
+      const role=req.userRole
+      const user = await User.findOne({where:{useruuid,role}})
+      if(user){
+      const {postid}=req.params;
+  
+      const success=await Post.destroy(
+        {
+          where:{
+            postid,
+        }})
+    
+        if(success===0){
+          res.status(403).json({ message: "Post doesn't exist" });
+        }
+        else{
+          res.status(201).json({ message:"Success"});
+        }
+      }
+      else {
+        res.status(404).json({ message: "Something went wrong" });  
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Something went wrong" });
+    }
+  };
+    
+  const restrictPost  = async (req, res) => {
+    const restrictAdmin={
+      "blocks": [
+          {
+              "key": "9m832",
+              "text": "  Post removed by admin",
+              "type": "blockquote",
+              "depth": 0,
+              "inlineStyleRanges": [
+                  {
+                      "offset": 0,
+                      "length": 23,
+                      "style": "color-rgb(226,80,65)"
+                  },
+                  {
+                      "offset": 0,
+                      "length": 23,
+                      "style": "bgcolor-rgb(239,239,239)"
+                  },
+                  {
+                      "offset": 0,
+                      "length": 23,
+                      "style": "ITALIC"
+                  },
+                  {
+                      "offset": 0,
+                      "length": 23,
+                      "style": "fontsize-18"
+                  }
+              ],
+              "entityRanges": [],
+              "data": {}
+          }
+      ],
+      "entityMap": {}
+  }
+  
+  
+    try {
+      const useruuid=req.userId
+      const role=req.userRole
+      const user = await User.findOne({where:{useruuid,role}})
+      if(user){
+      const {postid}=req.body;
+  
+      const success=await Post.update(
+        {
+          content:restrictAdmin,
+          updatedAt: new Date(),
+        },
+        {
+          where:{
+            postid,
+        }})
+    
+    
+        if(success===0){
+          res.status(403).json({ message: "Post doesn't exist" });
+        }
+        else{
+          res.status(201).json({ message:"Success"});
+        }
+      }
+      else {
+        res.status(404).json({ message: "Something went wrong" });  
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Something went wrong" });
+    }
+  };
+    
 
-  export {getHomePosts,getMoviePosts,getUserPosts,getUserComments, deletePost, addPost, updatePost,getPostContent,getPostComments, addComment};
+  
+
+
+
+  export {getHomePosts,getMoviePosts,getUserPosts,getUserComments, deletePost, addPost, updatePost,getPostContent,
+    getPostComments, addComment,deletePostUser,restrictPost};

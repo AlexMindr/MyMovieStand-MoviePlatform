@@ -23,7 +23,7 @@ const getHomeMovies = async (req, res) => {
  try{
    console.log(1)
   const mostPopular = await Movie.findAll({
-        attributes:['movieid','title','poster_path'], 
+        attributes:['movieid','title','poster_path','popularity','rating'], 
         limit:5,
         where:{
            popularity:{[Op.ne]:null}
@@ -35,7 +35,7 @@ const getHomeMovies = async (req, res) => {
       })
       console.log(1)
   const bestRated = await Movie.findAll({
-    attributes:['movieid','title','poster_path'], 
+    attributes:['movieid','title','poster_path','popularity','rating'], 
     limit:5,
     where:{
         rating:{[Op.ne]:null}
@@ -117,7 +117,8 @@ const getMoviesFiltered = async (req, res) => {
   movieids.map((item)=>moviefiltergenres.push(item.movieid))
   }
     await Movie.findAndCountAll({
-        attributes:['movieid','title','release_date','poster_path','duration','overview','uscertification','rating','popularity','trailer','keywords','adult'], 
+        attributes:['movieid','title','release_date','poster_path','duration',
+        'overview','uscertification','rating','popularity','trailer','keywords','adult','status'], 
         limit,
         offset,
         distinct: true,
@@ -149,8 +150,12 @@ const getMoviesFiltered = async (req, res) => {
            movieid:checkedGenres?{[Op.in]:moviefiltergenres}:{[Op.ne]:0}
           
         },
-        order:[
-          sorter?[sorter==='duration'?sequelize.cast(sequelize.col('duration'),'integer'):sorter,order?order:'ASC']:['title',order?order:'ASC']
+        order:[ 
+          sorter==='release_date'?[sequelize.fn('isnull', sequelize.col('release_date')),order?order:'ASC']
+          :
+          [sequelize.fn('isnull', sequelize.col('release_date')),order?order==='ASC'?'DESC':'ASC':'ASC'],
+          sorter?
+          [sorter==='duration'?sequelize.cast(sequelize.col('duration'),'integer'):sorter,order?order:'ASC']:['title',order?order:'ASC']
         ],
       })
       .then(data => {
@@ -363,7 +368,6 @@ const populateMovies = async (req, res) => {
     
     try {
             rating=0;
-            //de facut rating update endpoint separat din suma din wl / numarul de oameni din wl; la fel la popularity 
             //no genres update 
             await Movie.update({
                   adult,

@@ -9,7 +9,8 @@ import { addComm } from '../../api'
 const CommAdd = ({postid,addState}) => {
     const [formData, setFormData] = useState({comment_content:null,postid})
     const [formError,setFormError]=useState(null)
-    //const navigate = useNavigate()
+    const {user} = useSelector(state=>state.user)
+    const navigate = useNavigate()
   
     const handleSubmit = async (e) => {
       console.log(formData)
@@ -42,7 +43,7 @@ const CommAdd = ({postid,addState}) => {
     const clearChanges = () =>{
       addState(false)
     }
-  
+    if(user)
     return (
       <Box  sx={{ flexGrow: 1 }} component='form' onSubmit={handleSubmit} className='commadd-form'>
       
@@ -76,6 +77,9 @@ const CommAdd = ({postid,addState}) => {
        </Grid>
       </Box>
     )
+    else
+    return (<></>)
+    
 }
 
 export default CommAdd

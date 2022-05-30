@@ -13,6 +13,15 @@ api.interceptors.request.use((req) => {
 });
 
 
+export const deleteUserAdmin = (username) => api.delete(`/user/delete/${username}`);
+//TODO verify below
+export const addNotification = (formData) => api.post("/notifications/add",formData)
+export const addGlobalNotification = (formData) => api.post("/notifications/add/global",formData)
+export const deletePostAdmin = (postid) => api.delete(`/posts/admin/delete/${postid}`);
+export const restrictPostAdmin = (formData) => api.put(`/posts/admin/restrict/`,formData);
+export const updatePostAdmin = (formData) => api.put(`/posts/update`,formData);
+
+
 
 export const addPost = (formData) => api.post('/posts/add/post',formData);
 export const addComm = (formData) => api.post('/posts/add/comment',formData);
@@ -22,7 +31,8 @@ export const getPostComments = (postid,page,count) => api.get(`posts/get/post/${
 export const getUserPosts = (username,page,count) => api.get(`/posts/get/posts/user/${username}/page=${page}/count=${count}`);
 export const getUserComments = (username,page,count) => api.get(`/posts/get/comments/user/${username}/page=${page}/count=${count}`);
 export const getHomePosts = () => api.get('/posts/get/home');
-export const deletePost = (postid) => api.delete("posts/delete",postid);
+//TODO verify
+export const deletePostUser = (postid) => api.delete("posts/delete",postid);
 
 
 export const getLikesForReview = (reviewid) => api.get(`/reviews/get/likes/${reviewid}`);
@@ -68,7 +78,6 @@ export const deleteWatchlistItem = (formValues) => api.delete("/watchlist",formV
 
 export const getGenres = () => api.get(`/genres`);
 
-export const addNotification = (content) => api.post("/notifications/add",content)
 export const getNotification = () => api.get("/notifications/get")
 export const deleteNotification = (deleteIds) => api.delete("/notifications/delete",deleteIds)
 export const updateNotification = (updateId) => api.put("/notifications/update",updateId)

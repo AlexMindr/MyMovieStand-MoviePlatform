@@ -266,7 +266,7 @@ const Movies=()=>{
                                 <MovieList title={movie.title} genres={movie.Genres} duration={movie.duration} overview={movie.overview}
                                     movieid={movie.movieid} popularity={movie.popularity} posterPath={movie.poster_path} rating={movie.rating}
                                     releaseDate={movie.release_date} uscertification={movie.uscertification} trailer={movie.trailer} keywords={movie.keywords} 
-                                    adult={movie.adult}/>  
+                                    adult={movie.adult} status={movie.status}/>  
                             </li>
                             )
                         }

@@ -239,19 +239,24 @@ const update = async (req, res) => {
 const deleteAdm = async (req, res) => {
   
   try {
-    const useruuid=res.userId
-    const role=res.userRole
+    const useruuid=req.userId
+    const role=req.userRole
     const user = await User.findOne({where:{useruuid,role}})
     if(user){
-    const {id}=req.params;
+    const {username}=req.params;
 
-    await User.destroy({
+    const success=await User.destroy({
         where:{
-          userid:id
+          username,
+          role:{[Op.ne]:'admin'}
       }});
   
-    
-    res.status(201).json({ message:"Success"});
+      if(success===0){
+        res.status(403).json({ message: "User doesn't exist or is an admin" });
+      }
+      else{
+        res.status(201).json({ message:"Success"});
+      }
     }
     else {
       res.status(404).json({ message: "Something went wrong" });  

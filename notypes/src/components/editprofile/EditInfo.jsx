@@ -25,13 +25,11 @@ const EditInfo = ({initialState,currentName,username}) => {
     const {width}=useWindowDimensions()
     const navigate=useNavigate()
 
-
     const handleSubmit = async (e) => {
         e.preventDefault() 
         console.log(formData)
        if (formData.firstName==='' || formData.lasttName===''){
             setFormError("You need to fill both first and last name fields if you want to change your name!")
-        console.log('here')
         }
        else {
             setFormError(false)
@@ -129,8 +127,7 @@ const EditInfo = ({initialState,currentName,username}) => {
         <AutocompleteCountries value={formData.location} setValue={handleChangeLocation}/>
 
         <Grid item xs={12} id='textarea-edit'>
-             {/* <textarea cols={100} rows={10} placeholder="BIO"></textarea>  */}
-            <DraftTextArea field={formData.bio} setField={handleChangeBio} placeholder={"Your bio - Tell us about yourself"}/>
+            <DraftTextArea field={formData.bio} setField={handleChangeBio} placeholder={"Your bio - Tell us about yourself"} textMaxLength={800}/>
         </Grid>
 
         <Grid item xs={12}>

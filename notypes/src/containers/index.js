@@ -16,4 +16,8 @@ export {default as Userposts} from './post/Userposts';
 export {default as Postpage} from './post/Postpage';
 export {default as Postaddpage} from './post/Postaddpage';
 export {default as Movieposts} from './post/Movieposts';
+export {default as AdminMenu} from './admin/AdminMenu';
+export {default as AdminUser} from './admin/AdminUser';
+export {default as AdminMovie} from './admin/AdminMovie';
+
 

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 
 
-const auth = async (req, res, next) => {
+const authAdmin = async (req, res, next) => {
    const jwtSecret=process.env.JWT_SECRET;
    try {
       if(req.headers.authorization){
@@ -11,10 +11,9 @@ const auth = async (req, res, next) => {
       let decodedData;
       if (token) {
          decodedData = jwt.verify(token, jwtSecret)
-
          req.userId = decodedData?.useruuid
          req.userRole= decodedData?.role
-  
+         
       }
       }
 
@@ -25,4 +24,4 @@ const auth = async (req, res, next) => {
    }
 }
 
-export default auth;
+export default authAdmin;

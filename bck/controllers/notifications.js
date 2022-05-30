@@ -17,11 +17,16 @@ const getNotif = async (req, res) => {
     }
   };
 
-const addNotif = async (req, res) => {
+const addNotifAdmin = async (req, res) => {
+  
     try {
-        const {content}=req.body;
-        const uuid=req.userId
-        const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+      const useruuid=req.userId
+      const role=req.userRole
+      const user = await User.findOne({where:{useruuid,role}})
+      if(user){
+        const {content,username}=req.body;
+
+        const {userid}= await User.findOne({attributes:['userid'],where:{username}});
 
         const newNotif=await Notification.create(
         {   
@@ -33,13 +38,49 @@ const addNotif = async (req, res) => {
         }
       );
       
-      res.status(201).json(newNotif);
+      res.status(201).json({ message: "Success" });
+      }
+    else {
+      res.status(404).json({ message: "Something went wrong/User doesn't exist!" });  
+    }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+
+  const addGlobalNotifAdmin = async (req, res) => {
+    try {
+      const useruuid=req.userId
+      const role=req.userRole
+      const user = await User.findOne({where:{useruuid,role}})
+      if(user){
+        const {content}=req.body;
+
+        const userids= await User.findAll({attributes:['userid']});
+        userids.map(async (user)=>{
+          await Notification.create(
+            {   
+                userid:user,
+                content,
+                read:false,
+                createdAt:new Date(),
+                updatedAt:new Date()
+            }
+          );
+        })
+        
+      
+      res.status(201).json({ message: "Success" });
+      }
+    else {
+      res.status(404).json({ message: "Something went wrong" });  
+    }
     } catch (error) {
       res.status(403).json({ message: error.message });
     }
   };
 
-
+  
 const deleteSelected = async (req, res) => {
     try {
     const {deleteIds}=req.body;
@@ -95,4 +136,4 @@ const deleteSelected = async (req, res) => {
     }
   };
 
-  export {getNotif, deleteSelected, addNotif, updateNotif};
+  export {getNotif, deleteSelected, addNotifAdmin,addGlobalNotifAdmin, updateNotif};

@@ -20,8 +20,6 @@
 }
 .title a{
     text-align: center;
-    text-decoration: none;
-    text-overflow: elipsis; 
     width: 90%;
 }
 
@@ -190,7 +188,7 @@
     align-items: center; */
     background: #ffffff;
     width: 20px;
-    padding: 1px 1px 1px 0;
+    padding: 1px 0px 1px 0px;
     /* border: solid 1px #000; */
     border-left: none !important;
     left:15px;
@@ -221,11 +219,12 @@
  flex:50%;
  display:flex;
  font-weight: bold;
- column-gap: 2em;
+ column-gap: 1em;
  align-items: center;
+ margin-right: 15px;
 }
-.bottom-info div:nth-child(2){
-    color:rgb(218, 199, 32);
+.bottom-info>div{
+    margin-left:auto ;
 }
 
 .icn{

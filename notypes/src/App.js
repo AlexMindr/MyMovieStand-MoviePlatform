@@ -4,15 +4,15 @@ import {Routes, Route, BrowserRouter as Router,Outlet,useLocation,useNavigate} f
 import {Navbar} from './components';
 import {Footer,Home,Movies,Errorpage,Moviepage,Login,Signup,Watchlistpage,
   Profile,Editprofile,Editfavourites,Reviewaddpage,Reviewspage,Userreviews,
-  Postaddpage,Postpage,Movieposts,Userposts} from './containers'
+  Postaddpage,Postpage,Movieposts,Userposts,AdminUser,AdminMenu,AdminMovie} from './containers'
 import CssBaseline from '@mui/material/CssBaseline';
 import { useDispatch,useSelector } from 'react-redux';
 import { actionVerify } from './store/userSlice';
 import { actionGetWl } from './store/watchlistSlice';
 import { actionGetRevAndLikes } from './store/reviewSlice';
-import {default as PageAuth} from './auxcomponents/routerchecks/PageAuth'
-import {default as PageRedirect} from './auxcomponents/routerchecks/PageRedirect'
-
+import  PageAuth from './auxcomponents/routerchecks/PageAuth'
+import PageRedirect from './auxcomponents/routerchecks/PageRedirect'
+import PageAdmin from './auxcomponents/routerchecks/PageAdmin'
 
 //TODO switch countries with auto-complete countries from mui autocomplete
 //TODO rating mui ?
@@ -69,6 +69,7 @@ export default function App() {
                 <PageRedirect>
                   <Login />
                 </PageRedirect>
+                
               }/>
               <Route path='/profile/:username' element={ 
                 <PageAuth>
@@ -108,6 +109,21 @@ export default function App() {
                 <PageAuth>
                   <Postaddpage/>
                 </PageAuth>
+              }/>
+              <Route path='/admin' element={ 
+                <PageAdmin>
+                  <AdminMenu/>
+                </PageAdmin>
+              }/>
+              <Route path='/admin/user' element={ 
+                <PageAdmin>
+                  <AdminUser/>
+                </PageAdmin>
+              }/>
+              <Route path='/admin/movie' element={ 
+                <PageAdmin>
+                  <AdminMovie/>
+                </PageAdmin>
               }/>  
               <Route path='*' element={<Errorpage/>}/>
             </Routes>

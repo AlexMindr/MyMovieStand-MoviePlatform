@@ -2,7 +2,7 @@ import React from 'react'
 
 const Errorpage= () => {
   return (
-    <div>Error, page not found</div>
+    <div style={{display:'flex',padding:'5%',alignItems:'center',justifyContent:'center',fontSize:'3rem'}}>Error, page not found</div>
   )
 }
 

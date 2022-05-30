@@ -221,8 +221,11 @@ const Navbar = () => {
                             onClick={()=>{setMenuBars(false)}}>Home</NavLink ></li>
                         <li><NavLink className={({ isActive }) =>isActive ? activeStyle : undefined} to='/movies' 
                             onClick={()=>{setMenuBars(false)}}>Movies</NavLink ></li>
-                        <li><NavLink className={({ isActive }) =>isActive ? activeStyle : undefined} to='/forum' 
-                            onClick={()=>{setMenuBars(false)}}>Forum</NavLink ></li>
+                        <li><NavLink className={({ isActive }) =>isActive ? activeStyle : undefined} to='/news' 
+                            onClick={()=>{setMenuBars(false)}}>News</NavLink ></li>
+                        {user && user.role==='admin'?<li><NavLink className={({ isActive }) =>isActive ? activeStyle : undefined} to='/admin' 
+                            onClick={()=>{setMenuBars(false)}}>Admin</NavLink ></li>
+                        :<></>}    
                       </ul>
                     </nav>
                 </div>
