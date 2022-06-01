@@ -21,7 +21,7 @@ function getPagingData(data, page, limit) {
 
 const getHomeMovies = async (req, res) => {
  try{
-   console.log(1)
+  
   const mostPopular = await Movie.findAll({
         attributes:['movieid','title','poster_path','popularity','rating'], 
         limit:5,
@@ -33,7 +33,7 @@ const getHomeMovies = async (req, res) => {
          ['title','ASC']
         ],
       })
-      console.log(1)
+     
   const bestRated = await Movie.findAll({
     attributes:['movieid','title','poster_path','popularity','rating'], 
     limit:5,

@@ -31,7 +31,8 @@
   height: 100%;
   /* min-height: 70vh; */
   overflow-x: hidden;
-  min-width: 340px;
+  min-width: 350px;
+  min-height: 70.3vh;
 }
 
 a,a:visited { 
@@ -44,7 +45,8 @@ a,a:visited {
 
 @media only screen and (max-width:900px){
   .app__content{
-    margin-top:6rem ;
+    margin-top:6rem;
+    min-height: 72vh;
   }
   
 }
@@ -52,6 +54,7 @@ a,a:visited {
 @media only screen and (max-width:750px){
   .app__content{
     margin-top:5rem ;
+    /* min-height: 75vh; */
   }
   
 }

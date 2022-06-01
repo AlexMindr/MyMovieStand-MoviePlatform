@@ -19,7 +19,7 @@ const Login= () => {
       <StyledEngineProvider injectFirst>        
           <Container component="div"  className='login-container'>
 
-               <Typography component="h3" variant='h4'>Login to your account</Typography>
+               <Typography component="h3" variant='h4'>Login into your account</Typography>
                <Box component='div' className='login-p'>
                   <Typography component='p' variant='p'>
                      If you wish to create a personal watchlist, rate movies, write reviews and discuss on our forum, you will need to login to 

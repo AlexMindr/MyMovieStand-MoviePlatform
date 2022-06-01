@@ -4,7 +4,7 @@ import {Routes, Route, BrowserRouter as Router,Outlet,useLocation,useNavigate} f
 import {Navbar} from './components';
 import {Footer,Home,Movies,Errorpage,Moviepage,Login,Signup,Watchlistpage,
   Profile,Editprofile,Editfavourites,Reviewaddpage,Reviewspage,Userreviews,
-  Postaddpage,Postpage,Movieposts,Userposts,AdminUser,AdminMenu,AdminMovie} from './containers'
+  Postaddpage,Postpage,Movieposts,Userposts,AdminUser,AdminMenu,AdminMovie, Resetpassword} from './containers'
 import CssBaseline from '@mui/material/CssBaseline';
 import { useDispatch,useSelector } from 'react-redux';
 import { actionVerify } from './store/userSlice';
@@ -70,6 +70,11 @@ export default function App() {
                   <Login />
                 </PageRedirect>
                 
+              }/>
+              <Route path='/reset-password' element={ 
+                <PageRedirect>
+                  <Resetpassword />
+                </PageRedirect>
               }/>
               <Route path='/profile/:username' element={ 
                 <PageAuth>

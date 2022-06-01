@@ -6,6 +6,10 @@ import { Op } from '@sequelize/core';
 import nodemailer from 'nodemailer'
 const {User,Notification,Watchlist}=db;
 
+
+
+
+
 async function watchListStatus(wlName,id){
   let wl = await Watchlist.count({
     attributes:['status'],
@@ -268,48 +272,56 @@ const deleteAdm = async (req, res) => {
 
 
 
-let transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.REACT_APP_EMAIL,
-    pass: process.env.REACT_APP_EMAIL_PASS,
-  },
-});
+async function myFunc(userid) {
+  console.log(`arg was => ${userid}`);
+  await User.update({
+    changecode:null,
+    updatedAt:new Date()
+  },{
+    where:{
+      userid
+  }});
 
-let mailOptions = {
-  from: 'myemail@gmail.com',
-  to: "receiver@example.com",
-  subject: `The subject goes here`,
-  html: `The body of the email goes here in HTML`,
-  // attachments: [
-  //   {
-  //     filename: `${name}.pdf`,
-  //     path: path.join(__dirname, `../../src/assets/books/${name}.pdf`),
-  //     contentType: 'application/pdf',
-  //   },
-  // ],
-};
-
-// transporter.sendMail(mailOptions, function (err, info) {
-//   if (err) {
-//     res.json(err);
-//   } else {
-//     res.json(info);
-//   }
-// });
-
+}
 const resetPass = async (req, res) => {
-  
+  const saltHash=parseInt(process.env.SALT);
+  const emailUser=process.env.EMAIL_USER;
+  const emailPass=process.env.EMAIL_PASS
   try {
     const {email}=req.body
-    const newCode = crypto.randomBytes(10).toString('hex');
+    //const email='a@g.com'
+    const newCode = crypto.randomBytes(5).toString('hex');
     
-    const selectUser= await User.findOne({where:email})
+    const selectUser= await User.findOne({where:{email}})
 
-    if (!selectUser)
+    if (!selectUser){
       return res.status(400).json({ message: "Email was incorrect." });
-
-     //send mail with newCode
+    }
+  const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: emailUser,
+        pass: emailPass,
+      },
+    });
+      
+    let mailOptions = {
+        from: 'myemail@gmail.com',
+        to: selectUser.email,
+        subject: `Reset your password`,
+        html: `<h1>Reset your password</h1>
+              <p>The code to reset your password is : ${newCode}</p>
+        `,
+        // attachments: [
+        //   {
+        //     filename: `${name}.pdf`,
+        //     path: path.join(__dirname, `../../src/assets/books/${name}.pdf`),
+        //     contentType: 'application/pdf',
+        //   },
+        // ],
+      };
+      
+      
 
     const changecode= await bcrypt.hash(newCode, saltHash);
     
@@ -318,9 +330,19 @@ const resetPass = async (req, res) => {
         updatedAt:new Date()
       },{
         where:{
-          useruuid
+          userid:selectUser.userid
       }});
-  
+      
+      transporter.sendMail(mailOptions, function (err, info) {
+        if (err) {
+          res.status(500).json({ message: "Something went wrong" });
+        } else {
+          
+        }
+      });
+
+      //Schimbat in 10-15 min = 15 * 60000
+      setTimeout(myFunc, 20000, selectUser.userid);
    
     res.status(201).json({message:"A code has been sent to your email address!"});
   } catch (error) {
@@ -330,11 +352,12 @@ const resetPass = async (req, res) => {
 
 
 const changePass = async (req, res) => {
+  const saltHash=parseInt(process.env.SALT);
   
   try {
     const {email,newPass,changeCode}=req.body
     
-    const selectUser= await User.findOne({attributes:['password','userid','changecode'],where:email})
+    const selectUser= await User.findOne({attributes:['password','userid','changecode'],where:{email}})
     
     if (!selectUser)
       return res.status(400).json({ message: "Email was incorrect." });
@@ -359,8 +382,7 @@ const changePass = async (req, res) => {
           userid:selectUser.userid
       }});
   
-    //send email?
-
+  
     res.status(201).json({message:"The password has been changed!"});
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });

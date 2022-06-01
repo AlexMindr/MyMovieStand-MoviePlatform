@@ -52,6 +52,10 @@ const MovieHomeList = ({movie,index}) => {
             }
         }
       }
+      if(watchlist.length===0){
+         setBgColor('rgb(200,200,200)')
+         setStatus('Add')
+      }
     },[movie,watchlist])
 
 

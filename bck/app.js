@@ -10,7 +10,7 @@ import notificationRoutes from "./routes/notifications.js";
 import watchlistRoutes from "./routes/watchlists.js"
 import reviewsRoutes from "./routes/reviews.js"
 import postsRoutes from "./routes/posts.js"
-
+import recommendationsRoutes from "./routes/recommendations.js"
 
 
 const {sequelize}= db;
@@ -31,6 +31,7 @@ app.use("/notifications", notificationRoutes);
 app.use("/watchlist", watchlistRoutes);
 app.use("/reviews", reviewsRoutes);
 app.use("/posts", postsRoutes);
+app.use("/recommendations", recommendationsRoutes);
 
 
 app.all('*', (req,res,next)=>{
