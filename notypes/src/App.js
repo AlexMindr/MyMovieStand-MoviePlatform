@@ -1,10 +1,10 @@
-import React, {useState,useEffect} from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
-import {Routes, Route, BrowserRouter as Router,Outlet,useLocation,useNavigate} from 'react-router-dom';
+import {Routes, Route, BrowserRouter as Router,} from 'react-router-dom';
 import {Navbar} from './components';
 import {Footer,Home,Movies,Errorpage,Moviepage,Login,Signup,Watchlistpage,
   Profile,Editprofile,Editfavourites,Reviewaddpage,Reviewspage,Userreviews,
-  Postaddpage,Postpage,Movieposts,Userposts,AdminUser,AdminMenu,AdminMovie, Resetpassword} from './containers'
+  Postaddpage,Postpage,Movieposts,Userposts,AdminUser,AdminMenu,AdminMovie,AdminForum, Resetpassword} from './containers'
 import CssBaseline from '@mui/material/CssBaseline';
 import { useDispatch,useSelector } from 'react-redux';
 import { actionVerify } from './store/userSlice';
@@ -48,6 +48,7 @@ export default function App() {
     <>
       <CssBaseline/>
       <Router>
+        <div className='app__container'>
         <Navbar/>
         <div className='app__content'>
             <Routes>
@@ -129,13 +130,19 @@ export default function App() {
                 <PageAdmin>
                   <AdminMovie/>
                 </PageAdmin>
+              }/> 
+              <Route path='/admin/forum' element={ 
+                <PageAdmin>
+                  <AdminForum/>
+                </PageAdmin>
               }/>  
               <Route path='*' element={<Errorpage/>}/>
             </Routes>
 
         </div>
         <Footer/>
-      </Router>
+      </div>
+    </Router>
       
        
     </>

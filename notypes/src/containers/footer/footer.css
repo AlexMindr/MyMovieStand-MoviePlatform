@@ -4,9 +4,11 @@
     width: 100%;
     min-width: 350px;
     background-color: rgb(22, 3, 34);
+    margin-top: auto;
     display: block;
     position:relative;
     color:rgb(255, 209, 209);
+    border-top: 3px solid rgb(170, 0, 212)
 }
 .footer-divider{
     background-image:linear-gradient(to right, rgb(28, 0, 128) , rgb(204, 0, 255));

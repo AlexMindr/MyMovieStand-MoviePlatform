@@ -273,7 +273,7 @@ const deleteAdm = async (req, res) => {
 
 
 async function myFunc(userid) {
-  console.log(`arg was => ${userid}`);
+ // console.log(`arg was => ${userid}`);
   await User.update({
     changecode:null,
     updatedAt:new Date()
@@ -295,7 +295,7 @@ const resetPass = async (req, res) => {
     const selectUser= await User.findOne({where:{email}})
 
     if (!selectUser){
-      return res.status(400).json({ message: "Email was incorrect." });
+      return res.status(400).json({ message: "Invalid email address" });
     }
   const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -333,18 +333,18 @@ const resetPass = async (req, res) => {
           userid:selectUser.userid
       }});
       
-      transporter.sendMail(mailOptions, function (err, info) {
-        if (err) {
-          res.status(500).json({ message: "Something went wrong" });
-        } else {
+      // transporter.sendMail(mailOptions, function (err, info) {
+      //   if (err) {
+      //     res.status(500).json({ message: "Something went wrong" });
+      //   } else {
           
-        }
-      });
+      //   }
+      // });
 
       //Schimbat in 10-15 min = 15 * 60000
-      setTimeout(myFunc, 20000, selectUser.userid);
-   
-    res.status(201).json({message:"A code has been sent to your email address!"});
+      setTimeout(myFunc, 15 * 60000, selectUser.userid);
+      console.log(newCode)
+    res.status(201).json({message:"Success"});
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }
@@ -365,7 +365,7 @@ const changePass = async (req, res) => {
     const isCorrectCode = await bcrypt.compare(changeCode, selectUser.changecode);
 
     if (!isCorrectCode)
-        return res.status(400).json({ message: "Code was incorrect." });
+        return res.status(400).json({ message: "Reset code was incorrect." });
     
     const isOldPass = await bcrypt.compare(newPass, selectUser.password);
 
@@ -383,7 +383,7 @@ const changePass = async (req, res) => {
       }});
   
   
-    res.status(201).json({message:"The password has been changed!"});
+    res.status(201).json({message:"Success"});
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }

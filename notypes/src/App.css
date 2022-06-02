@@ -3,6 +3,11 @@
   margin: 0;
   scroll-behavior: smooth;
 }
+.app__container{
+  display:flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 /*Srollbar*/
 /* width */
 ::-webkit-scrollbar {
@@ -32,7 +37,6 @@
   /* min-height: 70vh; */
   overflow-x: hidden;
   min-width: 350px;
-  min-height: 70.3vh;
 }
 
 a,a:visited { 
@@ -46,7 +50,6 @@ a,a:visited {
 @media only screen and (max-width:900px){
   .app__content{
     margin-top:6rem;
-    min-height: 72vh;
   }
   
 }

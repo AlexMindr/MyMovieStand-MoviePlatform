@@ -27,7 +27,6 @@ const Signup = () => {
     const handleSubmit = async (e) => {
        e.preventDefault()
        if (formData.dateofbirth!==null)formData.dateofbirth=new Date((formData.dateofbirth));
-       //de pus data toDateString() in bd?
        dispatch(actionSignUp(formData))
        .then(res=>{
           if(res)setFormError(res)

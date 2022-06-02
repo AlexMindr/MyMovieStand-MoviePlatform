@@ -7,6 +7,8 @@ export { default as Navbar} from './navbar/Navbar';
 export { default as Scrollbtn} from './scrollbtn/Scrollbtn';
 export { default as LoginForm} from './login/LoginForm';
 export { default as SignupForm} from './signup/SignupForm';
+export { default as CodeForm} from './resetpassword/CodeForm';
+export { default as EmailForm} from './resetpassword/EmailForm';
 export { default as Watchlist} from './watchlist/Watchlist';
 export { default as ProfileAvatar} from './profile/ProfileAvatar'
 export { default as ProfileWatchlist} from './profile/ProfileWatchlist'
@@ -28,3 +30,5 @@ export {default as HomePosts} from './home/HomePosts'
 export {default as HomeRecomm} from './home/HomeRecomm'
 export {default as DeleteUser} from './admin/DeleteUser'
 export {default as AddNotif} from './admin/AddNotif'
+export {default as DelResPost} from './admin/DelResPost'
+export {default as DelResReview} from './admin/DelResReview'

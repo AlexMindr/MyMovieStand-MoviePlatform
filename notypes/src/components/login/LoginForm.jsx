@@ -21,7 +21,8 @@ const Login = () => {
      console.log(toRedirect)
     const handleSubmit = async (e) => {
       e.preventDefault()
-      dispatch(actionLogin(formData,navigate,toRedirect))
+      
+      dispatch(actionLogin(formData,navigate,toRedirect==='reset-password'?'/':toRedirect))
       .then(res=>{
          if(res){
             setFormError(res)

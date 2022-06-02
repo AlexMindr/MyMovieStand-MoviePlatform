@@ -247,7 +247,7 @@ const addReview = async (req, res) => {
   };
 
 
-const deleteReview = async (req, res) => {
+const deleteReviewUser = async (req, res) => {
     try {
     const {movieid}=req.params;
     const uuid=req.userId
@@ -373,6 +373,106 @@ const deleteReview = async (req, res) => {
     }
   };
 
+  const deleteReview  = async (req, res) => {
+    try {
+      const useruuid=req.userId
+      const role=req.userRole
+      const user = await User.findOne({where:{useruuid,role}})
+      if(user){
+      const {reviewid}=req.params;
+  
+      const success=await Review.destroy(
+        {
+          where:{
+            reviewid,
+        }})
+    
+        if(success===0){
+          res.status(403).json({ message: "Review doesn't exist" });
+        }
+        else{
+          res.status(201).json({ message:"Success"});
+        }
+      }
+      else {
+        res.status(404).json({ message: "Something went wrong" });  
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Something went wrong" });
+    }
+  };
+    
+  const restrictReview  = async (req, res) => {
+    const restrictAdmin={
+      "blocks": [
+          {
+              "key": "9m832",
+              "text": "  Review removed by admin",
+              "type": "blockquote",
+              "depth": 0,
+              "inlineStyleRanges": [
+                  {
+                      "offset": 0,
+                      "length": 23,
+                      "style": "color-rgb(226,80,65)"
+                  },
+                  {
+                      "offset": 0,
+                      "length": 23,
+                      "style": "bgcolor-rgb(239,239,239)"
+                  },
+                  {
+                      "offset": 0,
+                      "length": 23,
+                      "style": "ITALIC"
+                  },
+                  {
+                      "offset": 0,
+                      "length": 23,
+                      "style": "fontsize-18"
+                  }
+              ],
+              "entityRanges": [],
+              "data": {}
+          }
+      ],
+      "entityMap": {}
+  }
+  
+  
+    try {
+      const useruuid=req.userId
+      const role=req.userRole
+      const user = await User.findOne({where:{useruuid,role}})
+      if(user){
+      const {postid}=req.body;
+  
+      const success=await Review.update(
+        {
+          content:restrictAdmin,
+          updatedAt: new Date(),
+        },
+        {
+          where:{
+            reviewid,
+        }})
+    
+    
+        if(success===0){
+          res.status(403).json({ message: "Review doesn't exist" });
+        }
+        else{
+          res.status(201).json({ message:"Success"});
+        }
+      }
+      else {
+        res.status(404).json({ message: "Something went wrong" });  
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Something went wrong" });
+    }
+  };
+  
 
   export {getHomeReviews,getMovieReviews,getUserReviews, deleteReview, addReview, updateReview,
-    getUserReviewsAndLikes,getReview,likeReview,dislikeReview,getLikesForReview};
+    getUserReviewsAndLikes,getReview,likeReview,dislikeReview,getLikesForReview,deleteReviewUser,restrictReview};

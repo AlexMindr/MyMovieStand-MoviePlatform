@@ -19,7 +19,12 @@ export const addNotification = (formData) => api.post("/notifications/add",formD
 export const addGlobalNotification = (formData) => api.post("/notifications/add/global",formData)
 export const deletePostAdmin = (postid) => api.delete(`/posts/admin/delete/${postid}`);
 export const restrictPostAdmin = (formData) => api.put(`/posts/admin/restrict/`,formData);
-export const updatePostAdmin = (formData) => api.put(`/posts/update`,formData);
+export const deleteCommAdmin = (commid) => api.delete(`/posts/admin/comment/delete/${commid}`);
+export const restrictCommAdmin = (formData) => api.put(`/posts/admin/comment/restrict/`,formData);
+export const deleteReviewAdmin = (reviewid) => api.delete(`/reviews/admin/delete/${reviewid}`);
+export const restrictReviewAdmin = (formData) => api.put(`/reviews/admin/restrict/`,formData);
+
+//export const updatePostAdmin = (formData) => api.put(`/posts/update`,formData);
 
 
 
@@ -45,6 +50,7 @@ export const addReview = (formData) => api.post('/reviews/add',formData);
 export const updateReview = (formData) => api.put('/reviews/update',formData);
 export const likeReview = (formData) => api.put(`/reviews/like`,formData);
 export const dislikeReview = (formData) => api.put(`/reviews/dislike`,formData);
+//TODO verify
 export const deleteReview = (movieid) => api.delete(`/reviews/delete/${movieid}`);
 
 
@@ -64,6 +70,8 @@ export const getSimpleProfile = () => api.get(`/user/myprofile`);
 export const login = (formValues) => api.post("/user/login", formValues);
 export const signup = (formValues) => api.post("/user/signup", formValues);
 export const update = (formValues) => api.put("/user/update", formValues);
+export const reset = (formValues) => api.put("/user/reset", formValues);
+export const change = (formValues) => api.put("/user/change", formValues);
 
 
 export const getFavouritesProfile = (username) => api.get(`/watchlist/fav/u/${username}`);

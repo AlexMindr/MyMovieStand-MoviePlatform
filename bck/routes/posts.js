@@ -29,7 +29,7 @@ router.get("/get/posts/user/:username/page=:page/count=:count",auth,getUserPosts
 router.get("/get/comments/user/:username/page=:page/count=:count",auth,getUserComments);
 router.put("/user/delete",auth,deletePostUser);
 
-router.put("/update",authAdmin,updatePost);
+//router.put("/update",authAdmin,updatePost);
 router.put("/admin/restrict",authAdmin,restrictPost)
 router.delete("/admin/delete/:postid",authAdmin,deletePost)
 

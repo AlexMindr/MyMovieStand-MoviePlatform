@@ -20,5 +20,6 @@ export {default as Movieposts} from './post/Movieposts';
 export {default as AdminMenu} from './admin/AdminMenu';
 export {default as AdminUser} from './admin/AdminUser';
 export {default as AdminMovie} from './admin/AdminMovie';
+export {default as AdminForum} from './admin/AdminForum';
 
 
