@@ -182,11 +182,15 @@
 
 }
 
+/* .app__navbar-left_nav{
+    box-sizing: border-box;
+} */
 .app__navbar-left_nav_menu {
     text-align: center;   
     display:flex;
     list-style-type:none;
     font-size: 1.1rem;
+    box-sizing: border-box;
 }
 
 

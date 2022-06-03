@@ -248,7 +248,7 @@ const populateMovies = async (req, res) => {
             let {adult,backdrop_path,budget,genres,homepage,id,imdb_id,popularity,original_title,title,overview,
             poster_path,release_date,revenue,runtime,status,videos,keywords,original_language,releases}=apimovie.data;
             
-            let trailerPath=videos.results[0]!=undefined?videos.results[0].key:null;
+            let trailerPath=videos.results.length>0?videos.results[0].key:null;
             release_date=release_date?release_date:null
             let genreids=[]
             genres.map((genre)=>{genreids.push({genreid:genre.id})})
@@ -264,8 +264,7 @@ const populateMovies = async (req, res) => {
                 uscertification=item.certification; 
               }
             })
-            /*if (videos.results[0]==undefined)
-            console.log(idtoGet)*/
+            
             await Movie.create({
                   adult,
                   backdrop_path,
@@ -303,6 +302,7 @@ const populateMovies = async (req, res) => {
 
   
   const createMovie = async (req, res) => {
+    const key=process.env.APIKEY;  
     
     //TODO ADMIN
     // const useruuid=res.userId
@@ -311,98 +311,141 @@ const populateMovies = async (req, res) => {
     //   if(user){
     
     try {
-      
-      let {adult,backdrop_path,budget,homepage,tmdb_id,imdb_id,original_title,title,overview,
-        poster_path,release_date,revenue,duration,status,trailer_path,keywords,original_language,uscertification,genres}=req.body;
-          
-          
-          genres=genres.split(',');
-          let genreids=[]
-          genres.map((genre)=>{genreids.push({genreid:genre.id})})
+
+        const {movieid}=req.body
+    
+        const apimovie =await axios.get(`https://api.themoviedb.org/3/movie/${movieid}?api_key=${key}&append_to_response=videos,keywords,releases`)
+    
+        let {adult,backdrop_path,budget,genres,homepage,id,imdb_id,popularity,original_title,title,overview,
+        poster_path,release_date,revenue,runtime,status,videos,keywords,original_language,releases}=apimovie.data;
         
-          await Movie.create({
-                adult,
-                backdrop_path,
-                budget,
-                homepage,
-                imdb_id,
-                tmdb_id,
-                original_title,
-                title,
-                overview,
-                poster_path,
-                release_date,
-                revenue,
-                duration,
-                status,
-                trailer:trailer_path,
-                language:original_language,
-                uscertification,
-                keywords,
-                Moviegenres:genreids,
-                createdAt:new Date(),
-                updatedAt:new Date()
-            },{
-              include: [Moviegenre]
-            })
-      
+        let trailerPath=videos.results.length>0?videos.results[0].key:null;
+        release_date=release_date?release_date:null
+        let genreids=[]
+        genres.map((genre)=>{genreids.push({genreid:genre.id})})
         
-          
-       res.status(201).json("Success");
-      } catch (error) {
-        res.status(404).json({ message: error.message });
-      }
-    };
+        let keywordsarr=""
+        keywords.keywords.map((keyword)=>{keywordsarr+=","+keyword.name})
+        keywordsarr=keywordsarr.substring(1)
+        let popularitydb= parseInt(popularity)
+        let uscertification;
+        releases.countries.map((item)=>{
+          if (item.iso_3166_1==='US')
+          {
+            uscertification=item.certification; 
+          }
+        })
+        
+        await Movie.create({
+              adult,
+              backdrop_path,
+              budget,
+              homepage,
+              imdb_id,
+              tmdb_id:id,
+              original_title,
+              title,
+              overview,
+              poster_path,
+              release_date,
+              revenue,
+              duration:runtime,
+              status,
+              trailer:trailerPath,
+              language:original_language,
+              uscertification,
+              keywords:keywordsarr,
+              popularity:popularitydb,
+              Moviegenres:genreids,
+              createdAt:new Date(),
+              updatedAt:new Date()
+          },{
+            include: [Moviegenre]
+          })
+       
+         
+      res.status(201).json("Success");
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
+  };
   
 
   const updateMovie = async (req, res) => {
+    const key=process.env.APIKEY;  
+    
     //TODO ADMIN
     // const useruuid=res.userId
     //   const role=res.userRole
     //   const user = await User.findOne({where:{useruuid,role}})
     //   if(user){
-  
-    const {movieid}=req.params
-    let {adult,backdrop_path,budget,homepage,tmdb_id,imdb_id,popularity,original_title,title,overview,
-      poster_path,release_date,revenue,duration,status,trailer_path,keywords,original_language,uscertification/*,genres*/}=req.body;
-    
-    try {
-            rating=0;
-            //no genres update 
-            await Movie.update({
-                  adult,
-                  backdrop_path,
-                  budget,
-                  homepage,
-                  imdb_id,
-                  tmdb_id,
-                  original_title,
-                  title,
-                  overview,
-                  poster_path,
-                  release_date,
-                  revenue,
-                  duration,
-                  status,
-                  trailer:trailer_path,
-                  language:original_language,
-                  uscertification,
-                  keywords:keywords,
-                  popularity,
-                  rating,
-                  updatedAt:new Date()
-              },{
-                where:{
-                  movieid
-              }});
-        
+  try{
       
-            
-         res.status(201).json("Success");
-        } catch (error) {
-          res.status(404).json({ message: error.message });
+      const {movieid}=req.body
+      const {tmdb_id}=await Movie.findOne({where:{movieid}})
+      await Moviegenre.destroy({where:{movieid}})
+
+      const apimovie =await axios.get(`https://api.themoviedb.org/3/movie/${tmdb_id}?api_key=${key}&append_to_response=videos,keywords,releases`)
+  
+      let {adult,backdrop_path,budget,genres,homepage,id,imdb_id,popularity,original_title,title,overview,
+      poster_path,release_date,revenue,runtime,status,videos,keywords,original_language,releases}=apimovie.data;
+      
+      let trailerPath=videos.results.length>0?videos.results[0].key:null;
+      release_date=release_date?release_date:null
+      let genreids=[]
+      genres.map((genre)=>{genreids.push({genreid:genre.id})})
+      
+      let keywordsarr=""
+      keywords.keywords.map((keyword)=>{keywordsarr+=","+keyword.name})
+      keywordsarr=keywordsarr.substring(1)
+      let popularitydb= parseInt(popularity)
+      let uscertification;
+      releases.countries.map((item)=>{
+        if (item.iso_3166_1==='US')
+        {
+          uscertification=item.certification; 
         }
-      };
+      })
+      
+      await Movie.update({
+            adult,
+            backdrop_path,
+            budget,
+            homepage,
+            imdb_id,
+            tmdb_id:id,
+            original_title,
+            title,
+            overview,
+            poster_path,
+            release_date,
+            revenue,
+            duration:runtime,
+            status,
+            trailer:trailerPath,
+            language:original_language,
+            uscertification,
+            keywords:keywordsarr,
+            popularity:popularitydb,
+            updatedAt:new Date()
+        },{where:{movieid}})
+
+        genreids.map(async (id) =>{
+          await Moviegenre.create({
+            movieid,
+            genreid:id, 
+            updatedAt:new Date(),
+            createdAt:new Date(),
+          })
+  
+        })
+        
+
+      res.status(201).json("Success");
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
 
       
 const updatePopularityAndRating = async (req, res) => {

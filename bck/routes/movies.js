@@ -22,8 +22,8 @@ router.get("/movie=:id",getMovie)
 router.get("/get/home",getHomeMovies)
 router.post("/populate",populateMovies)
 router.post("/create",createMovie)
-router.put("/update/movie=:movieid",updateMovie)
-router.put("/update/all",updatePopularityAndRating)
+router.put("/update",updateMovie)
+router.put("/update/popularity/all",updatePopularityAndRating)
 router.delete("/delete/:id",deleteMovie)
 
 export default router;

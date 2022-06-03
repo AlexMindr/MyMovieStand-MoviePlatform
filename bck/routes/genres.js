@@ -8,8 +8,8 @@ import {
 
 const router = Router();
 
-router.get("/", getGenres);
-router.post("/create",createGenres)
+router.get("/get", getGenres);
+router.post("/populate",createGenres)
 router.put("/update",updateGenres)
 
 export default router;

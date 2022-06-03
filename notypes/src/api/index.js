@@ -59,8 +59,12 @@ export const getHomeMovies = ()  => api.get(`/movies/get/home`)
 export const getMovie = (id) => api.get(`/movies/movie=${id}`);
 export const getMovies = (page)  => api.get(`/movies/page=${page}`)
 export const getMoviesFiltered = (page,query)  => api.get(`/movies/page=${page}/filter/?${query}`)
-export const updateMovie = (formData) => api.put(`/movies/update/movie`,formData)
-export const updatePopularityAndRating = () => api.get(`/movies/update/all`)
+
+export const populateMovies = (formData) => api.post(`/movies/populate`,formData)
+export const addMovie = (formData) => api.post(`/movies/create`,formData)
+export const updateMovie = (formData) => api.put(`/movies/update`,formData)
+
+export const updatePopularityAndRating = () => api.get(`/movies/update/popularity/all`)
 
 
 
@@ -84,7 +88,10 @@ export const addFavourite = (formValues) => api.put("/watchlist/addfav",formValu
 export const remFavourite = (formValues) => api.put("/watchlist/remfav",formValues);
 export const deleteWatchlistItem = (formValues) => api.delete("/watchlist",formValues);
 
-export const getGenres = () => api.get(`/genres`);
+export const getGenres = () => api.get(`/genres/get`);
+export const updateGenres = () => api.put(`/genres/update`);
+export const populateGenres = () => api.post(`/genres/populate`);
+
 
 export const getNotification = () => api.get("/notifications/get")
 export const deleteNotification = (deleteIds) => api.delete("/notifications/delete",deleteIds)
