@@ -362,6 +362,8 @@ const changePass = async (req, res) => {
     if (!selectUser)
       return res.status(400).json({ message: "Email was incorrect." });
 
+    if(selectUser.changeCode===null)
+      return res.status(400).json({ message: "Reset code has expired!" });
     const isCorrectCode = await bcrypt.compare(changeCode, selectUser.changecode);
 
     if (!isCorrectCode)

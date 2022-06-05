@@ -60,7 +60,7 @@ const addNotifAdmin = async (req, res) => {
         userids.map(async (user)=>{
           await Notification.create(
             {   
-                userid:user,
+                userid:user.userid,
                 content,
                 read:false,
                 createdAt:new Date(),

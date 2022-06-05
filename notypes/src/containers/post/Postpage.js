@@ -15,6 +15,7 @@ const Postpage = () => {
   const [addComm,setAddComm] = useState(false)
   const [movie,setMovie]=useState(null)
   const [err,setErr]=useState(null)
+  const [refreshComm,setRefreshComm]=useState(false)
   const {movieid,postid} = useParams()
   const {user} = useSelector(state=>state.user)
   const location =useLocation()
@@ -30,20 +31,22 @@ const Postpage = () => {
     async function getMoviebck(){
       const res= await getMovie(parseInt(movieid));
       if(res.data)
-      setMovie(res.data);
+        setMovie(res.data);
       else
-      setErr("Movie doesn't exist!")  
+        setErr("Movie doesn't exist!")  
    }
     async function getComments(){ 
        const res= await getPostComments(parseInt(postid),1,8);
-       console.log(res)
        setPostComments(res.data.comments);
        setTotalPages(res.data.totalPages);   
     }
     async function getContent(){ 
       const res= await getPostContent(parseInt(postid));
-      setPostContent(res.data);   
-   }
+      if(res.data)
+        setPostContent(res.data);   
+      else
+        setErr("Post doesn't exist!")
+      }
     getMoviebck()
     //if(err===null){
       getContent()
@@ -51,6 +54,20 @@ const Postpage = () => {
     //}    
    
  },[movieid,postid]);
+
+
+useEffect(()=>{
+  async function getComments(){ 
+    const res= await getPostComments(parseInt(postid),1,8);
+    console.log(res)
+    setPostComments(res.data.comments);
+    setTotalPages(res.data.totalPages);   
+ }
+ if(refreshComm===true){
+   setRefreshComm(false)
+   getComments()
+ }
+},[postid,refreshComm])
 
   return (
     <StyledEngineProvider injectFirst>
@@ -70,7 +87,7 @@ const Postpage = () => {
           <>
             {addComm===false?<Button onClick={handleAddComm} variant='outlined'>Add a comment</Button>
             :
-            <CommAdd postid={postid} addState={setAddComm}/>
+            <CommAdd postid={postid} addState={setAddComm} setRefreshComm={setRefreshComm}/>
             }
           </>:
           <Link to={'/login'} state={{ from: location }}>Login to add comment</Link>

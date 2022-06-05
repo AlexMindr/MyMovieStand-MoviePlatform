@@ -4,7 +4,7 @@ import {
   createGenres,
   updateGenres
 } from "../controllers/genres.js";
-//import auth from "../middlewares/auth.mjs";
+import authAdmin from "../middleware/authAdmin.js";
 
 const router = Router();
 

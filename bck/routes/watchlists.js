@@ -23,5 +23,5 @@ router.post("/",auth,createWatchlistEntry);
 router.put("/",auth,updateWatchlistEntry);
 router.put("/addfav",auth,addFavourite);
 router.put("/remfav",auth,removeFavourite);
-router.delete("/",auth,deleteWatchlistEntry);
+router.delete("/delete/:movieid",auth,deleteWatchlistEntry);
 export default router;

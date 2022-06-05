@@ -109,7 +109,7 @@ const updateWatchlistEntry = async (req, res) => {
 
   const deleteWatchlistEntry = async (req, res) => {
     const uuid=req.userId
-    const {movieid}=req.body
+    const {movieid}=req.params
     try {
         
         const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});

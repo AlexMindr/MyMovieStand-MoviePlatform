@@ -13,16 +13,15 @@ api.interceptors.request.use((req) => {
 });
 
 
-export const deleteUserAdmin = (username) => api.delete(`/user/delete/${username}`);
-//TODO verify below
+export const deleteUserAdmin = (username) => api.delete(`/user/delete/${username}`)
 export const addNotification = (formData) => api.post("/notifications/add",formData)
 export const addGlobalNotification = (formData) => api.post("/notifications/add/global",formData)
-export const deletePostAdmin = (postid) => api.delete(`/posts/admin/delete/${postid}`);
-export const restrictPostAdmin = (formData) => api.put(`/posts/admin/restrict/`,formData);
-export const deleteCommAdmin = (commid) => api.delete(`/posts/admin/comment/delete/${commid}`);
-export const restrictCommAdmin = (formData) => api.put(`/posts/admin/comment/restrict/`,formData);
+export const deletePostAdmin = (postid) => api.delete(`/posts/admin/post/delete/${postid}`);
+export const restrictPostAdmin = (formData) => api.put(`/posts/admin/post/restrict`,formData);
+export const deleteCommAdmin = (commid) => api.delete(`/posts/admin/comm/delete/${commid}`);
+export const restrictCommAdmin = (formData) => api.put(`/posts/admin/comm/restrict`,formData);
 export const deleteReviewAdmin = (reviewid) => api.delete(`/reviews/admin/delete/${reviewid}`);
-export const restrictReviewAdmin = (formData) => api.put(`/reviews/admin/restrict/`,formData);
+export const restrictReviewAdmin = (formData) => api.put(`/reviews/admin/restrict`,formData);
 
 //export const updatePostAdmin = (formData) => api.put(`/posts/update`,formData);
 
@@ -37,7 +36,8 @@ export const getUserPosts = (username,page,count) => api.get(`/posts/get/posts/u
 export const getUserComments = (username,page,count) => api.get(`/posts/get/comments/user/${username}/page=${page}/count=${count}`);
 export const getHomePosts = () => api.get('/posts/get/home');
 //TODO verify
-export const deletePostUser = (postid) => api.delete("posts/delete",postid);
+export const deletePostUser = (formData) => api.put("posts/user/post/delete",formData);
+export const deleteCommtUser = (formData) => api.put("posts/user/comm/delete",formData);
 
 
 export const getLikesForReview = (reviewid) => api.get(`/reviews/get/likes/${reviewid}`);
@@ -86,7 +86,7 @@ export const createWatchlistItem = (formValues) => api.post("/watchlist",formVal
 export const updateWatchlistItem = (formValues) => api.put("/watchlist",formValues);
 export const addFavourite = (formValues) => api.put("/watchlist/addfav",formValues);
 export const remFavourite = (formValues) => api.put("/watchlist/remfav",formValues);
-export const deleteWatchlistItem = (formValues) => api.delete("/watchlist",formValues);
+export const deleteWatchlistItem = (movieid) => api.delete(`/watchlist/delete/${movieid}`);
 
 export const getGenres = () => api.get(`/genres/get`);
 export const updateGenres = () => api.put(`/genres/update`);

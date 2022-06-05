@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react'
 import './watchlistform.css'
 import { Button, Grid, Box,Typography,Container,Divider,Paper } from '@mui/material'
 import Input from '../../auxcomponents/input/Input'
-import { useNavigate,Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { actionCreateOrUpdateItem, actionDelWlItem} from '../../store/watchlistSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -58,7 +58,7 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
    const handleDelete = (e) => {
       //TODO Verificat
       e.preventDefault()
-      dispatch(actionDelWlItem(formData))
+      dispatch(actionDelWlItem(formData.movieid))
       .then(res=>{
          if(res){
             setFormError(res)
@@ -96,8 +96,8 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
                   :
                   <></>
                   }
-                   <Input name="status" label="Status" handleChange={handleChange} select={true} required={true} value={formData.status}>
-                    <option value=' ' hidden></option>
+                   <Input name="status" label="Status" handleChange={handleChange} select={true} required={true} value={formData.status?formData.status:''}>
+                    <option value='' hidden></option>
                     <option value="Plan to watch">Plan to watch</option>
                     <option value="Watching">Watching</option>
                     <option value="Completed">Completed</option>
@@ -110,8 +110,8 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
                    
                    }   
 
-                   <Input name="rating" label="My score" handleChange={handleChangeInt} select={true} value={formData.rating}>
-                    <option value=' ' hidden></option>
+                   <Input name="rating" label="My score" handleChange={handleChangeInt} select={true} value={formData.rating?formData.rating:''}>
+                    <option value='' hidden></option>
                     <option value={1}>1 - Offensive</option>
                     <option value={2}>2 - Appalling</option>
                     <option value={3}>3 - Horrible</option>

@@ -71,8 +71,19 @@ export const actionDeleteReview = (movieid) => async dispatch => {
         dispatch(deleteReview(movieid))
     })
     .catch(err=>{
-        console.error(err)
+        const message=err.response.data.message
+        return message
     })
+
+    // try{
+    //     await apiupdateUser(formData)
+    //     .then(res=>{
+    //         dispatch(updateUser(res.data.result))
+    //         navigate(to, { replace: true });
+    //     })}
+    //     catch(err)  {
+            
+    //     }
 }
 
 export const actionGetRevAndLikes = () => async dispatch => {

@@ -313,22 +313,22 @@ const deletePostUser = async (req, res) => {
             "inlineStyleRanges": [
                 {
                     "offset": 0,
-                    "length": 22,
+                    "length": 25,
                     "style": "color-rgb(226,80,65)"
                 },
                 {
                     "offset": 0,
-                    "length": 22,
+                    "length": 25,
                     "style": "bgcolor-rgb(239,239,239)"
                 },
                 {
                     "offset": 0,
-                    "length": 22,
+                    "length": 25,
                     "style": "ITALIC"
                 },
                 {
                     "offset": 0,
-                    "length": 22,
+                    "length": 25,
                     "style": "fontsize-18"
                 }
             ],
@@ -447,22 +447,22 @@ const deletePostUser = async (req, res) => {
               "inlineStyleRanges": [
                   {
                       "offset": 0,
-                      "length": 23,
+                      "length": 25,
                       "style": "color-rgb(226,80,65)"
                   },
                   {
                       "offset": 0,
-                      "length": 23,
+                      "length": 25,
                       "style": "bgcolor-rgb(239,239,239)"
                   },
                   {
                       "offset": 0,
-                      "length": 23,
+                      "length": 25,
                       "style": "ITALIC"
                   },
                   {
                       "offset": 0,
-                      "length": 23,
+                      "length": 25,
                       "style": "fontsize-18"
                   }
               ],
@@ -508,9 +508,179 @@ const deletePostUser = async (req, res) => {
   };
     
 
+  const deleteCommUser = async (req, res) => {
+    const restrictAdmin={
+      "blocks": [
+          {
+              "key": "9m832",
+              "text": "  Comment removed by user",
+              "type": "blockquote",
+              "depth": 0,
+              "inlineStyleRanges": [
+                  {
+                      "offset": 0,
+                      "length": 25,
+                      "style": "color-rgb(226,80,65)"
+                  },
+                  {
+                      "offset": 0,
+                      "length": 25,
+                      "style": "bgcolor-rgb(239,239,239)"
+                  },
+                  {
+                      "offset": 0,
+                      "length": 25,
+                      "style": "ITALIC"
+                  },
+                  {
+                      "offset": 0,
+                      "length": 25,
+                      "style": "fontsize-18"
+                  }
+              ],
+              "entityRanges": [],
+              "data": {}
+          }
+      ],
+      "entityMap": {}
+  }  
+    try {
+  
+      const {ucid}=req.body;
+      const uuid=req.userId
+      const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+      
+  
+      const success=await UserComment.update(
+        {
+          comment_content:restrictAdmin,
+          updatedAt: new Date(),
+        },
+        {
+          where:{
+            ucid,
+            userid
+        }})
+    
+    
+        if(success===0){
+          res.status(403).json({ message: "Comment doesn't exist" });
+        }
+        else{
+          res.status(201).json({ message:"Success"});
+        }
+      
+    } catch (error) {
+      res.status(404).json({ message: "Something went wrong" });
+    }
+  };
+  
+    
+  
+    
+    
+    const deleteComm  = async (req, res) => {
+      try {
+        const useruuid=req.userId
+        const role=req.userRole
+        const user = await User.findOne({where:{useruuid,role}})
+        if(user){
+        const {ucid}=req.params;
+    
+        const success=await UserComment.destroy(
+          {
+            where:{
+              ucid,
+          }})
+      
+          if(success===0){
+            res.status(403).json({ message: "Comment doesn't exist" });
+          }
+          else{
+            res.status(201).json({ message:"Success"});
+          }
+        }
+        else {
+          res.status(404).json({ message: "Something went wrong" });  
+        }
+      } catch (error) {
+        res.status(500).json({ message: "Something went wrong" });
+      }
+    };
+      
+    const restrictComm  = async (req, res) => {
+      const restrictAdmin={
+        "blocks": [
+            {
+                "key": "9m832",
+                "text": "  Comment removed by admin",
+                "type": "blockquote",
+                "depth": 0,
+                "inlineStyleRanges": [
+                    {
+                        "offset": 0,
+                        "length": 25,
+                        "style": "color-rgb(226,80,65)"
+                    },
+                    {
+                        "offset": 0,
+                        "length": 25,
+                        "style": "bgcolor-rgb(239,239,239)"
+                    },
+                    {
+                        "offset": 0,
+                        "length": 25,
+                        "style": "ITALIC"
+                    },
+                    {
+                        "offset": 0,
+                        "length": 25,
+                        "style": "fontsize-18"
+                    }
+                ],
+                "entityRanges": [],
+                "data": {}
+            }
+        ],
+        "entityMap": {}
+    }
+    
+    
+      try {
+        const useruuid=req.userId
+        const role=req.userRole
+        const user = await User.findOne({where:{useruuid,role}})
+        if(user){
+        const {ucid}=req.body;
+    
+        const success=await UserComment.update(
+          {
+            comment_content:restrictAdmin,
+            updatedAt: new Date(),
+          },
+          {
+            where:{
+              ucid,
+          }})
+      
+      
+          if(success===0){
+            res.status(403).json({ message: "Comment doesn't exist" });
+          }
+          else{
+            res.status(201).json({ message:"Success"});
+          }
+        }
+        else {
+          res.status(404).json({ message: "Something went wrong" });  
+        }
+      } catch (error) {
+        res.status(500).json({ message: "Something went wrong" });
+      }
+    };
   
 
 
 
   export {getHomePosts,getMoviePosts,getUserPosts,getUserComments, deletePost, addPost, updatePost,getPostContent,
-    getPostComments, addComment,deletePostUser,restrictPost};
+    getPostComments, addComment,deletePostUser,restrictPost,restrictComm,deleteComm,deleteCommUser};

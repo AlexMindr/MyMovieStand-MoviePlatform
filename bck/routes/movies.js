@@ -11,7 +11,7 @@ import {
   getHomeMovies,
   updatePopularityAndRating
 } from "../controllers/movies.js";
-//import auth from "../middlewares/auth.mjs";
+import authAdmin from "../middleware/authAdmin.js";
 
 const router = Router();
 

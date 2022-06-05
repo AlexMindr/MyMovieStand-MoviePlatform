@@ -15,7 +15,7 @@ import {
  restrictReview
 } from "../controllers/reviews.js";
 import auth from "../middleware/auth.js";
-import authAdmin from "../middleware/auth.js";
+import authAdmin from "../middleware/authAdmin.js";
 
 
 const router = Router();

@@ -30,9 +30,11 @@ const MovieList = ({status,adult,uscertification,duration,genres,overview,poster
    
    
    useEffect(()=>{
+      setBgColor('rgb(230,230,230,0.7)')
       if(watchlist){
         const wlFill=watchlist.filter(item=>item.movieid===movieid)
-        
+        if(wlFill.length===0)
+            setWlData(null)
         if (wlFill.length>0){
             setWlData({...wlFill[0]})
             switch (wlFill[0].status){

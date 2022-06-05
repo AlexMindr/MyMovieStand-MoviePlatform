@@ -6,14 +6,13 @@ import { useSelector } from 'react-redux'
 import { Link,useNavigate } from 'react-router-dom'
 import { addComm } from '../../api'
 
-const CommAdd = ({postid,addState}) => {
+const CommAdd = ({postid,addState,setRefreshComm}) => {
     const [formData, setFormData] = useState({comment_content:null,postid})
     const [formError,setFormError]=useState(null)
     const {user} = useSelector(state=>state.user)
-    const navigate = useNavigate()
+    //const navigate = useNavigate()
   
     const handleSubmit = async (e) => {
-      console.log(formData)
       e.preventDefault()
       if(formData.comment_content.blocks[0].text.length>=1){
         setFormError(null)
@@ -21,8 +20,7 @@ const CommAdd = ({postid,addState}) => {
         addComm(formData)
         .then(res=>{
            addState(false)
-          //TODO check error from bck?
-          //navigate(`/movies/${movieid}/comms/comm/${commid}`)
+           setRefreshComm(true)
         })
         .catch(e=>setFormError(e))
       }

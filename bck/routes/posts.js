@@ -11,7 +11,10 @@ import {
  getPostContent,
  getUserComments,
  deletePostUser,
- restrictPost
+ restrictPost,
+ deleteComm,
+ restrictComm,
+ deleteCommUser
  
 } from "../controllers/posts.js";
 import auth from "../middleware/auth.js";
@@ -27,11 +30,16 @@ router.get("/get/post/:postid/",getPostContent);
 router.get("/get/post/:postid/comments/page=:page/count=:count",getPostComments);
 router.get("/get/posts/user/:username/page=:page/count=:count",auth,getUserPosts);
 router.get("/get/comments/user/:username/page=:page/count=:count",auth,getUserComments);
-router.put("/user/delete",auth,deletePostUser);
+router.put("/user/post/delete",auth,deletePostUser);
+router.put("/user/comm/delete",auth,deleteCommUser);
+
 
 //router.put("/update",authAdmin,updatePost);
-router.put("/admin/restrict",authAdmin,restrictPost)
-router.delete("/admin/delete/:postid",authAdmin,deletePost)
+router.put("/admin/post/restrict",authAdmin,restrictPost)
+router.delete("/admin/post/delete/:postid",authAdmin,deletePost)
+router.put("/admin/comm/restrict",authAdmin,restrictComm)
+router.delete("/admin/comm/delete/:ucid",authAdmin,deleteComm)
+
 
 
 export default router;

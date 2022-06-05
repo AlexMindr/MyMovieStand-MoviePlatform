@@ -21,9 +21,11 @@ const MovieHomeList = ({movie,index}) => {
     
    
    useEffect(()=>{
+      setBgColor('rgb(200,200,200)')
       if(watchlist){
         const wlFill=watchlist.filter(item=>item.movieid===movie.movieid)
-        
+        if(wlFill.length===0)
+            setStatus('Add')
         if (wlFill.length>0){
             switch (wlFill[0].status){
                case 'Watching':

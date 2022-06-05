@@ -8,9 +8,15 @@ import { Box,Avatar } from '@mui/material';
 import moment from 'moment'
 
 const PostComm = ({postComment}) => {
-  
+  const {user}=useSelector(state=>state.user)
+
+
   if(postComment)
-  return (
+  return (<>
+    {user && user.role==='admin'?
+    <Box sx={{p:1,color:'red',fontSize:'1.2rem'}}>
+    Comment id: {postComment.ucid}
+    </Box>:<></>}
     <Box className='Box-postcomment'>
         
         <Box className='Box-postcomment-header'>
@@ -27,6 +33,7 @@ const PostComm = ({postComment}) => {
           </Box>
         </Box>
     </Box>
+  </>
   )
   else 
   return (

@@ -17,9 +17,6 @@ import MovieImgHoriz from './MovieImgHoriz';
 import {MovieReview,PostTitle} from '../index'
 import {numFormatter} from '../../auxcomponents/functions/NumberFormat'
 
-const post={title:'TITLE TITLE TITLE TITLE TITLE TITLE TITLE TITLE TITLE TITLE TITLETITLETITLETITLETITLETITLETITLE',
-User:{username:'SERNASERNAUSERNAMEEUSERNAMEEUSERNAMEEUSERNAMEEUSERNAMEEUSERNAMEEUSERNAMEE'},createdAt:'DATE',commentCount:100}
-
 const Movie = ({movieid,children}) => {
 
    const [movie, setMovie]=useState(null);
@@ -42,10 +39,13 @@ const Movie = ({movieid,children}) => {
    const handleOpenWatchForm = () => setOpenWatchForm(true);
    const handleCloseWatchForm = () => setOpenWatchForm(false);
    
+
    useEffect(()=>{
+      setBgColor('rgb(224, 155, 63)')
       if(watchlist){
         const wlFill=watchlist.filter(item=>item.movieid===movieid)
-        
+        if(wlFill.length===0)
+            setWlData(null)
         if (wlFill.length>0){
             setWlData({...wlFill[0]})
             switch (wlFill[0].status){
@@ -69,6 +69,7 @@ const Movie = ({movieid,children}) => {
             }
         }
       }
+      
    },[movieid,watchlist])
 
    
@@ -113,8 +114,9 @@ else
                   <Typography variant='h3'>{movie.original_title}</Typography>   
                   <Typography variant='h4'>{movie.title}</Typography>
          </Grid>
-        
-         <Grid item  className='movie-info' sx={{ bgcolor:bgColor  }}  xs={12} md={12}>
+         
+         <Grid item  className={`movie-info`} sx={{ bgcolor:bgColor  }}  xs={12} md={12}>
+         
             <Grid container spacing={1} >
             <Grid item className='media-movie' xs={12} md={4} lg={3}>
                <img src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`} alt={movie.title}/>
@@ -255,8 +257,7 @@ else
             </Grid>
          </Grid>
          </Grid>
-
-
+         
 
          <Grid item  xs={12} md={7} lg={8}>
             <Typography component='h5' variant='h5'>Gallery</Typography>
@@ -345,7 +346,7 @@ else
          <Grid item  xs={12} md={12} lg={12}>
             <Box component='div' className='post-title-box'>
                <Typography component='h5' variant='h5'>Forum Discussions</Typography>
-               <Link to={`/movies/${movieid}/addpost`} sx={{textShadow:'1px 1px 1px orange'}}>Start a discussion</Link>
+               <Link to={`/movies/${movieid}/addpost`} style={{textShadow:'1px 1px 1px orange'}}>Start a discussion</Link>
             </Box>
             <Divider flexItem/>
             {postsList && postsList.length>0?

@@ -55,6 +55,11 @@ const HomeReview =  ({review,MaxHeight=90}) => {
     }
     
     return (
+      <>
+      {user && user.role==='admin'?
+      <Box sx={{p:1,color:'yellow',fontSize:'1.2rem', backgroundColor:'gray'}}>
+        Review id: {review.reviewid}
+      </Box>:<></>}
       <Card sx={user.username===review.User.username?
         { minWidth: 250,p:0.5, marginInline:1, maxWidth:'100%' , border:'2px solid red',}
         :
@@ -104,6 +109,7 @@ const HomeReview =  ({review,MaxHeight=90}) => {
           </Box>
         </CardActions>
       </Card>
+      </>
     )
   }
 

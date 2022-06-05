@@ -6,6 +6,7 @@ import {Footer,Home,Movies,Errorpage,Moviepage,Login,Signup,Watchlistpage,
   Profile,Editprofile,Editfavourites,Reviewaddpage,Reviewspage,Userreviews,
   Postaddpage,Postpage,Movieposts,Userposts,AdminUser,AdminMenu,AdminMovie,AdminForum, Resetpassword} from './containers'
 import CssBaseline from '@mui/material/CssBaseline';
+import StyledEngineProvider from '@mui/material/StyledEngineProvider';
 import { useDispatch,useSelector } from 'react-redux';
 import { actionVerify } from './store/userSlice';
 import { actionGetWl } from './store/watchlistSlice';
@@ -15,7 +16,7 @@ import PageRedirect from './auxcomponents/routerchecks/PageRedirect'
 import PageAdmin from './auxcomponents/routerchecks/PageAdmin'
 
 //TODO switch countries with auto-complete countries from mui autocomplete
-//TODO rating mui ?
+
 //TODO redirect from form to login with saved location
 export default function App() {
   const dispatch=useDispatch()
@@ -50,6 +51,7 @@ export default function App() {
       <Router>
         <div className='app__container'>
         <Navbar/>
+        <StyledEngineProvider injectFirst>
         <div className='app__content'>
             <Routes>
               <Route path='/' element={<Home/>}/>
@@ -140,6 +142,7 @@ export default function App() {
             </Routes>
 
         </div>
+        </StyledEngineProvider>
         <Footer/>
       </div>
     </Router>

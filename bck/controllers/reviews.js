@@ -269,7 +269,7 @@ const deleteReviewUser = async (req, res) => {
 }};
 
   
- //TODO updaterevadmin
+ 
   const updateReview  = async (req, res) => {
     try {
     
@@ -413,22 +413,22 @@ const deleteReviewUser = async (req, res) => {
               "inlineStyleRanges": [
                   {
                       "offset": 0,
-                      "length": 23,
+                      "length": 25,
                       "style": "color-rgb(226,80,65)"
                   },
                   {
                       "offset": 0,
-                      "length": 23,
+                      "length": 25,
                       "style": "bgcolor-rgb(239,239,239)"
                   },
                   {
                       "offset": 0,
-                      "length": 23,
+                      "length": 25,
                       "style": "ITALIC"
                   },
                   {
                       "offset": 0,
-                      "length": 23,
+                      "length": 25,
                       "style": "fontsize-18"
                   }
               ],
@@ -445,7 +445,7 @@ const deleteReviewUser = async (req, res) => {
       const role=req.userRole
       const user = await User.findOne({where:{useruuid,role}})
       if(user){
-      const {postid}=req.body;
+      const {reviewid}=req.body;
   
       const success=await Review.update(
         {
@@ -470,6 +470,7 @@ const deleteReviewUser = async (req, res) => {
       }
     } catch (error) {
       res.status(500).json({ message: "Something went wrong" });
+      console.log(error)
     }
   };
   

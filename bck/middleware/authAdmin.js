@@ -13,8 +13,7 @@ const authAdmin = async (req, res, next) => {
          decodedData = jwt.verify(token, jwtSecret)
          req.userId = decodedData?.useruuid
          req.userRole= decodedData?.role
-         
-      }
+          }
       }
 
       next();
