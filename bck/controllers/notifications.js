@@ -2,20 +2,84 @@ import db from '../models/index.cjs';
 //import { Op } from '@sequelize/core';
 const {Notification,User}=db;
 
+function getPagination(page, size) {
+  const limit = size ? +size : 20;
+  const offset = page? page * limit : 0;
+  return { limit, offset };
+};
 
-//de adaugat read field in model, si functie de update on notif click aici
+function getPagingData(data, page, limit) {
+  const { count: totalItems, rows: notifications } = data;
+  const currentPage = page ? +page : 0;
+  const totalPages = Math.ceil(totalItems / limit);
+  return {  notifications, totalPages };
+};
+
+const getNotifPag = async (req, res) => {
+    
+
+    const {page}=req.params;
+    const { limit, offset } = getPagination(page-1);
+      const uuid=req.userId
+      const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
+      await Notification.findAndCountAll({limit,offset,where:{userid},order:[['createdAt','DESC']]})
+      .then(data => {
+        const {notifications,totalPages} = getPagingData(data, page, limit);
+        
+        res.status(200).json({notifications,totalPages});
+      })
+
+      .catch(error=>{
+        res.status(404).json({ message: error.message });
+        //console.log(error)
+    })
+  }
+
 const getNotif = async (req, res) => {
     
     try {
         const uuid=req.userId
         const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
-        const notifications = await Notification.findAll({where:userid});
-  
+        const notifications = await Notification.findAll({where:{userid},order:[['createdAt','DESC']]});
+      //console.log(notifications)
       res.status(200).json(notifications);
     } catch (error) {
       res.status(404).json({ message: error.message });
     }
   };
+
+
+  const addNotif = async (req, res) => {
+  
+    try {
+      const useruuid=req.userId
+      //const role=req.userRole
+      const {userid} = await User.findOne({where:{useruuid}})
+      if(userid){
+        const {content}=req.body;
+
+        const newNotif=await Notification.create(
+        {   
+            userid,
+            content,
+            read:false,
+            createdAt:new Date(),
+            updatedAt:new Date()
+        }
+      );
+      
+      res.status(201).json(newNotif);
+      }
+    else {
+      res.status(404).json({ message: "Something went wrong" });  
+    }
+    } catch (error) {
+      res.status(500).json({ message: "Something went wrong" });
+    }
+  };
+
+
+
 
 const addNotifAdmin = async (req, res) => {
   
@@ -81,21 +145,19 @@ const addNotifAdmin = async (req, res) => {
   };
 
   
-const deleteSelected = async (req, res) => {
+const deleteNotif = async (req, res) => {
     try {
-    const {deleteIds}=req.body;
+    const {notificationid}=req.params;
     const uuid=req.userId
     const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
     
 
-    deleteIds=deleteIds.split(',');
-    deleteIds.map(async (notificationid)=>{
-        await Notification.destroy(
-            {where:{
-                notificationid,
-                userid
-            }})})
-  
+    await Notification.destroy(
+        {where:{
+            notificationid,
+            userid
+        }})
+
     //const updatedNotifications = await Notification.findAll({where:userid});
    
     //res.status(201).json(updatedNotifications);
@@ -111,7 +173,8 @@ const deleteSelected = async (req, res) => {
   const updateNotif  = async (req, res) => {
     try {
     
-    const {updateId}=req.body;
+    const {notificationid}=req.body;
+    //console.log(notificationid)
     const uuid=req.userId
     const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
 
@@ -122,18 +185,18 @@ const deleteSelected = async (req, res) => {
     },
     {
       where:{
-        notificationid:updateId,
+        notificationid,
         userid
     }})
 
     //const updatedNotifications = await Notification.findAll({where:userid});
    
     //res.status(201).json(updatedNotifications);
-    res.status(201).json("Success");
+    res.status(201).json({message:"Success"});
     
     } catch (error) {
       res.status(403).json({ message: error.message });
     }
   };
 
-  export {getNotif, deleteSelected, addNotifAdmin,addGlobalNotifAdmin, updateNotif};
+  export {getNotif, deleteNotif, addNotifAdmin,addGlobalNotifAdmin, updateNotif,addNotif,getNotifPag};

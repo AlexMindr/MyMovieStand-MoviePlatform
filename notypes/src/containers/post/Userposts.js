@@ -72,21 +72,27 @@ const Userposts = () => {
   
     useEffect(() => {
      
-      async function getPosts(){ 
-         const res= await getUserPosts(username,1,5);
-         setPostList(res.data.posts);
-         setPostTotalPages(res.data.totalPages);   
-      }
       async function getComms(){ 
-        const res= await getUserComments(username,1,5);
+        const res= await getUserComments(username,pageComm,5);
         setCommList(res.data.posts);
         setCommTotalPages(res.data.totalPages);   
      }
 
       getComms();
+     
+   },[username,pageComm]);
+
+    useEffect(() => {
+     
+      async function getPosts(){ 
+         const res= await getUserPosts(username,pagePost,5);
+         setPostList(res.data.posts);
+         setPostTotalPages(res.data.totalPages);   
+      }
+    
       getPosts();
      
-   },[username]);
+   },[username,pagePost]);
   
   //console.log(commList.UserComments)
   return (

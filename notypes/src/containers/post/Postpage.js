@@ -15,6 +15,7 @@ const Postpage = () => {
   const [addComm,setAddComm] = useState(false)
   const [movie,setMovie]=useState(null)
   const [err,setErr]=useState(null)
+  const [refreshContent,setRefreshContent]=useState(false)
   const [refreshComm,setRefreshComm]=useState(false)
   const {movieid,postid} = useParams()
   const {user} = useSelector(state=>state.user)
@@ -59,15 +60,31 @@ const Postpage = () => {
 useEffect(()=>{
   async function getComments(){ 
     const res= await getPostComments(parseInt(postid),1,8);
-    console.log(res)
     setPostComments(res.data.comments);
     setTotalPages(res.data.totalPages);   
  }
  if(refreshComm===true){
-   setRefreshComm(false)
+  setPostComments()
+  setRefreshComm(false)
    getComments()
  }
 },[postid,refreshComm])
+
+
+useEffect(()=>{
+  async function getContent(){ 
+    const res= await getPostContent(parseInt(postid));
+    if(res.data)
+      setPostContent(res.data);   
+    else
+      setErr("Post doesn't exist!")
+    }
+ if(refreshContent===true){
+   setPostContent()
+   setRefreshContent(false)
+   getContent()
+ }
+},[postid,refreshContent])
 
   return (
     <StyledEngineProvider injectFirst>
@@ -81,7 +98,7 @@ useEffect(()=>{
         </Typography>
         <Divider flexItem sx={{m:1}}/>
         
-        <PostContent postContent={postContent}/>
+        <PostContent postContent={postContent} setRefresh={setRefreshContent}/>
         <Box className='postpage-addcomment'>
           {user?
           <>
@@ -104,7 +121,7 @@ useEffect(()=>{
               <Grid container rowGap={2} columnSpacing={'10px'}>
                 {postComments.map((post) =>
                     <Grid item xs={12}  key={post.ucid} className='postpage-postcomm'> 
-                      <PostComm postComment={post}/>  
+                      <PostComm postComment={post} setRefreshComm={setRefreshComm}/>  
                     </Grid>
                 )}
               </Grid>

@@ -9,7 +9,7 @@
     flex-grow: 1;
     border-radius: 5px;
     margin-left:auto ;
-    margin-right: 20px;
+    margin-right: 5px;
 }
 .Box-postcomment-header{
     padding-left: 20px;
@@ -23,6 +23,9 @@
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     /* margin-bottom: 5px; */
+}
+.Box-postcomment-header>div{
+    margin-left: auto;
 }
 .Box-postcomment-comment{
     display: flex;

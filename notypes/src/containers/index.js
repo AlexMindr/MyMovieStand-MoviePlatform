@@ -22,4 +22,5 @@ export {default as AdminUser} from './admin/AdminUser';
 export {default as AdminMovie} from './admin/AdminMovie';
 export {default as AdminForum} from './admin/AdminForum';
 
+export {default as Notifications} from './notificationpage/Notifications';
 

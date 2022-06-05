@@ -28,6 +28,9 @@
     border-top-right-radius: 4px;
     /* margin-bottom: 5px; */
 }
+.Box-postcontent-header>div{
+    margin-left: auto;
+}
 .Box-postcontent-content{
     display: flex;
     flex-grow: 1;

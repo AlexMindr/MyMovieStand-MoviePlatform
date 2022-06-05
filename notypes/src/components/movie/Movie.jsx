@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react';
 import './movie.css'
 import {getMovie,getImages,getCredits, getMovieReviews,getMoviePosts} from '../../api';
 import moment from 'moment'
-import { Divider,Box, Button, Typography,Grid,ImageList,ImageListItem,Modal,Paper } from '@mui/material'
+import { Divider,Box, Button, Typography,Grid,ImageList,ImageListItem,Modal,Paper, setRef } from '@mui/material'
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import imageUnknown from '../../images/unknown.jpg'
@@ -28,6 +28,7 @@ const Movie = ({movieid,children}) => {
    const [wlData,setWlData]=useState(null)
    const [reviewsList,setReviewsList]=useState(null)
    const [postsList,setPostsList]=useState(null)
+   const [refresh,setRefresh]=useState(false)
    const {watchlist}= useSelector(state=>state.watchlist)
    const {user}=useSelector(state=>state.user)
    const {reviews}=useSelector(state=>state.review)
@@ -92,7 +93,18 @@ const Movie = ({movieid,children}) => {
       
       getData();
    },[movieid]);
-      
+   
+   
+   useEffect(()=>{
+      async function getReviews(){
+         const res4= await getMovieReviews(movieid,1,4);
+         setReviewsList(res4.data.reviews);
+      }
+      if(refresh===true){
+         setRefresh(false)
+         getReviews()
+      }
+   },[refresh,movieid])
     //console.log(location.pathname)
 //ramas homepage,tmdb link, imdb link 
   
@@ -329,7 +341,7 @@ else
             {reviewsList && reviewsList.length>0?
                <Box component='div' className='review-reviews-box'>
                   {reviewsList.map(reviewItem=>
-                  <MovieReview key={reviewItem.reviewid} review={reviewItem}/>
+                  <MovieReview key={reviewItem.reviewid} review={reviewItem} setRefresh={setRefresh}/>
                   )}
                </Box>
                :

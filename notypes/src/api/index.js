@@ -37,7 +37,7 @@ export const getUserComments = (username,page,count) => api.get(`/posts/get/comm
 export const getHomePosts = () => api.get('/posts/get/home');
 //TODO verify
 export const deletePostUser = (formData) => api.put("posts/user/post/delete",formData);
-export const deleteCommtUser = (formData) => api.put("posts/user/comm/delete",formData);
+export const deleteCommUser = (formData) => api.put("posts/user/comm/delete",formData);
 
 
 export const getLikesForReview = (reviewid) => api.get(`/reviews/get/likes/${reviewid}`);
@@ -93,9 +93,11 @@ export const updateGenres = () => api.put(`/genres/update`);
 export const populateGenres = () => api.post(`/genres/populate`);
 
 
+export const addNotificationUser = (formData) => api.post("/notifications/add",formData)
 export const getNotification = () => api.get("/notifications/get")
-export const deleteNotification = (deleteIds) => api.delete("/notifications/delete",deleteIds)
-export const updateNotification = (updateId) => api.put("/notifications/update",updateId)
+export const getNotificationPag = (page) => api.get(`/notifications/get/page=${page}`)
+export const deleteNotification = (notificationid) => api.delete(`/notifications/delete/${notificationid}`)
+export const updateNotification = (notificationid) => api.put("/notifications/update",{notificationid})
 
 
 //external api

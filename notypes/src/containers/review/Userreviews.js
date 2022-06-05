@@ -11,7 +11,9 @@ const Userreviews = () => {
 
     const [reviewList,setReviewsList]=useState(null)
     const [page, setPage] = useState(1);
+    const [refresh,setRefresh]=useState(false)
     const [totalPages,setTotalPages]=useState()
+    
     const {username} = useParams()
     const {user} = useSelector(state=>state.user)
 
@@ -24,15 +26,28 @@ const Userreviews = () => {
     useEffect(() => {
      
       async function getData(){ 
-         const res= await getUserReviews(username,1,5);
+         const res= await getUserReviews(username,page,5);
          setReviewsList(res.data.reviews);
          setTotalPages(res.data.totalPages);   
       }
       
       getData();
      
-   },[username]);
+   },[username,page]);
   
+   useEffect(() => {
+     
+    async function getData(){ 
+       const res= await getUserReviews(username,page,5);
+       setReviewsList(res.data.reviews);
+       setTotalPages(res.data.totalPages);   
+    }
+    
+    if(refresh===true){
+      setRefresh(false)
+      getData();
+    }
+ },[username,refresh,page]);
    
   return (
     <StyledEngineProvider injectFirst>
@@ -56,7 +71,7 @@ const Userreviews = () => {
                         <Typography variant='h5' component='h4'>Movie: &nbsp;<Link to={`/movies/${review.movieid}`}>{review.Movie.title}</Link></Typography>
                         <Link className='userreviews-review-edit' to={`/movies/${review.movieid}/addreview`}>Edit your review</Link>
                       </Box>
-                      <MovieReview review={review}/>  
+                      <MovieReview review={review} setRefresh={setRefresh}/>  
                     </Grid>
                 )}
               </Grid>

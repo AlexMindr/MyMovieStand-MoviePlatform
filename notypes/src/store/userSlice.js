@@ -70,7 +70,7 @@ export const actionVerify = () => async dispatch => {
         
     })
     .catch(err=>{
-        console.error(err)
+        //console.error(err)
         dispatch(tokenVerifyFailed())
         //useNavigate('/')
     })

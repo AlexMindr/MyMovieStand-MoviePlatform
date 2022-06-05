@@ -20,7 +20,6 @@ const Movieposts = () => {
   };
 
    
-
   useEffect(() => {
     async function getMoviebck(){
       const res= await getMovie(parseInt(id));
@@ -29,16 +28,21 @@ const Movieposts = () => {
       else
       setErr("Movie doesn't exist!")  
    }
-    async function getData(){ 
-       const res= await getMoviePosts(parseInt(id),1,10);
+    getMoviebck()    
+   
+ },[id]);
+
+
+  useEffect(() => {
+      async function getData(){ 
+       const res= await getMoviePosts(parseInt(id),page,10);
        setPostsList(res.data.posts);
        setTotalPages(res.data.totalPages);   
     }
     
     getData();
-    getMoviebck()    
    
- },[id]);
+ },[id,page]);
 
   return (
     <StyledEngineProvider injectFirst>

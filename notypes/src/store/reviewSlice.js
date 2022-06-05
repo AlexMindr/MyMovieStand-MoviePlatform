@@ -23,6 +23,7 @@ export const reviewSlice = createSlice({
         deleteReview: (state,action) => {
             state.reviews= state.reviews.filter((reviewsItem)=> 
             reviewsItem.movieid!==action.payload.movieid)
+            //state.likes=state.likes.filter(likedItem=>likedItem.reviewid!==action.payload.reviewid)
         },
         getReviewsAndLikes:(state,action) => {
             state.reviews=[...action.payload.reviews]
@@ -65,10 +66,12 @@ export const actionDislikeReview = (formData) => async dispatch =>{
     })
 
 }
-export const actionDeleteReview = (movieid) => async dispatch => {
+export const actionDeleteReview = (movieid,handleClickAway) => async dispatch => {
+    
     apiDelReview(movieid)
     .then(res =>{
         dispatch(deleteReview(movieid))
+        handleClickAway()
     })
     .catch(err=>{
         const message=err.response.data.message

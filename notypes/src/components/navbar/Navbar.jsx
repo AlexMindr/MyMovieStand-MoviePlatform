@@ -20,12 +20,13 @@ import {actionLogOut} from '../../store/userSlice'
 import {stringAvatar} from '../../auxcomponents/avatar/Avatarfct'
 import { setAfterLogout } from '../../store/watchlistSlice';
 import { setAfterLogout as logoutReview } from '../../store/reviewSlice';
+import { setAfterLogout as logoutNotif,actionGetNotif,actionUpdateNotif } from '../../store/notificationSlice';
 import debounce from 'lodash/debounce';
 import {getMoviesSimpleFilter} from '../../api'
-import {MovieSearchList} from '../index'
+import {MovieSearchList,SimpleNotif} from '../index'
 
 
-let notifications=[{id:1,content:"texttext",read:false},{id:2,content:"texttext2",read:true}]
+//let notifications=[{id:1,content:"texttext",read:false},{id:2,content:"texttext2",read:true}]
 function getUnreadNotif(notifications){
   let unreadNotif=notifications.filter(notif=>notif.read===false)
   return unreadNotif 
@@ -47,11 +48,17 @@ const Navbar = () => {
   const [inputSearch, setInputSearch]=useState('')
   const [searchResult, setSearchResult]=useState(null)
   const {user}=useSelector(state=>state.user)
+  const {notifications}=useSelector(state=>state.notification)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const location = useLocation()
   var activeStyle = "active-link";
   
+  useEffect(() => {
+    if(user)
+    dispatch(actionGetNotif())
+    // console.log('handle route change here', location)
+  }, [location,dispatch,user])
 
   const changeInput = (e) =>{
     setInputSearch(e.target.value)
@@ -73,6 +80,7 @@ const Navbar = () => {
     dispatch(actionLogOut())
     dispatch(setAfterLogout())
     dispatch(logoutReview())
+    dispatch(logoutNotif())
     navigate('/')
   }
 
@@ -103,7 +111,12 @@ const Navbar = () => {
     }, [])
 
   
+    const refreshNotif=async () =>{
+      if(user)
+        dispatch(actionGetNotif())
+    }
 
+    
 
   function useCloseOnClickOutside(ref) {
     useEffect(() => {
@@ -165,16 +178,17 @@ const Navbar = () => {
                 </div>
                 <Divider orientation="vertical" flexItem  />
                 <div className="dropdown-submenu">
-                    <IconButton><CircleNotificationsIcon fontSize='large'/></IconButton> 
-                    {notifications.length>0 && getUnreadNotif(notifications).length>0?
+                    <IconButton onClick={refreshNotif}><CircleNotificationsIcon fontSize='large'/></IconButton> 
+                    { notifications.length>0 && getUnreadNotif(notifications).length>0?
                     <span className='notification-length-unread'>
                       {getUnreadNotif(notifications).length}
                     </span>
                     :
                     <></>}
-                  <div className="dropdown-content">
-                    {getUnreadNotif(notifications).map(notif=>
-                      <div key={notif.id}>{notif.content}</div>
+                  <div className="dropdown-content-notif">
+                    {getUnreadNotif(notifications).slice(0,5).map(notif=>
+                        <SimpleNotif key={notif.notificationid} notification={notif}/>
+                      
                       )}
                      <NavLink to={`/notifications`}>Se all notifications</NavLink>
                   </div>

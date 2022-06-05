@@ -28,7 +28,7 @@ const styles = {
 };
 
 
-const MovieReview = ({review,MaxHeight=140}) => {
+const MovieReview = ({review,MaxHeight=140,setRefresh}) => {
   const [show,setShow]=useState(false)
   const [liked,setLiked]=useState(null)
   const {likes} = useSelector(state=>state.review)
@@ -39,9 +39,13 @@ const MovieReview = ({review,MaxHeight=140}) => {
   const [open, setOpen] = useState(false);
 
 
-  const handleDeleteReview = () =>{
-    const res = actionDeleteReview(review.movieid)
-    console.log(res)
+  const handleDeleteReview = async () =>{
+    dispatch(actionDeleteReview(review.movieid,handleClickAway))
+    .then(res=>{
+      if(!res)
+        setRefresh(true)
+    })
+    
     //.then(res=>console.log(res))
     //.catch(e=>console.log(e))
   }
