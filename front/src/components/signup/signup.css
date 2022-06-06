@@ -1,0 +1,16 @@
+.signup-form{
+    max-width: 50%;
+}
+
+
+.cancel-signup{
+    margin-left: 1rem;
+    text-decoration: none;
+}
+
+@media only screen and (max-width:700px){
+    .signup-form{
+        max-width: 100%;
+    }
+    
+}

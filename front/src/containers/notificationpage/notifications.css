@@ -1,0 +1,13 @@
+.loading-notifications{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin-top: 20vh;
+}
+.notifications-pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}

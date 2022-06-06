@@ -1,0 +1,13 @@
+.signup-container{
+    background-color: var(--color-bg-container);
+}
+.signup-login {
+    text-decoration: none;
+    color:var(--button-submit);
+    font-weight: bold;
+}
+.signup-p,.signup-login-p{
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+    text-align: justify;
+}
