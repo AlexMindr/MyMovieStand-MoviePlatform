@@ -1,10 +1,6 @@
-/* .watchlist-table-rows{
-    display:flex;
-
-} */
-/* .cell--title button{
-    /* justify-content: right !important; */
-    
+.watchlistpage-container{
+    background-color: var(--color-bg-container);
+}    
 .cell--title{
     font-weight: bold;
 }

@@ -6,7 +6,7 @@ const { Watchlist, Movie, User, sequelize, Sequelize } = db;
 const getUserRecommendations = async (req, res) => {
   try {
     const useruuid = req.userId;
-    const { userid } = await Movie.findOne({ where: { useruuid } });
+    const { userid } = await User.findOne({ where: { useruuid } });
 
     const watchlist = await Watchlist.findAll({
       attributes: [
@@ -29,10 +29,8 @@ const getUserRecommendations = async (req, res) => {
       for (let i = 1; i <= 5; i++) {
         let randomElement =
           watchlist[Math.floor(Math.random() * watchlist.length)];
-        //apelare ia
-        //const res = await axios.post(`http://127.0.0.1:5002/predict-overview?Title=${randomElement.Movie.title}`)
         const res = await axios.post(
-          `http://127.0.0.1:5002/predict-soup?Title=${"The Dark Knight"}`
+          `http://127.0.0.1:5002/predict-soup?Title=${randomElement}`
         );
         let predictions = res.data;
         let randomRes =
@@ -73,10 +71,8 @@ const getMovieRecommendations = async (req, res) => {
     if (title) {
       let recommendations = [];
       for (let i = 1; i <= 5; i++) {
-        //apelare ia
-        //const res = await axios.post(`http://127.0.0.1:5002/predict-overview?Title=${title}`)
         const res = await axios.post(
-          `http://127.0.0.1:5002/predict-overview?Title=${"The Dark Knight"}`
+          `http://127.0.0.1:5002/predict-overview?Title=${title}`
         );
         let predictions = res.data;
         let randomRes =

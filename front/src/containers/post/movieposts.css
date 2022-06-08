@@ -1,3 +1,8 @@
+.allposts-container{
+    background-color: var(--color-bg-container);
+    min-height: 60vh;
+    padding:10px; 
+}
 .loading-allposts{
     display: flex;
     justify-content: center;
@@ -10,6 +15,12 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
+}
+.allposts-addpost{
+    display: flex;
+}
+.allposts-addpost>a{
+    margin-left: auto;
 }
 /* .allposts-post{
     background-color: aliceblue;

@@ -376,6 +376,14 @@
                     "field": "lastName",
                     "seqType": "Sequelize.TEXT"
                 },
+                "fullName": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": "guest user"
+                    },
+                    "field": "fullName",
+                    "seqType": "Sequelize.TEXT"
+                },
                 "dateofbirth": {
                     "field": "dateofbirth",
                     "seqType": "Sequelize.DATE"
@@ -600,6 +608,6 @@
     },
     "path": "E:\\ProiecteVSCode\\Licenta\\finalapp\\back\\migrations\\_current.json",
     "backupPath": "E:\\ProiecteVSCode\\Licenta\\finalapp\\back\\migrations\\_current_bak.json",
-    "exists": false,
-    "revision": 1
+    "exists": true,
+    "revision": 3
 }

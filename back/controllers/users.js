@@ -61,10 +61,12 @@ const getProfile = async (req, res) => {
           joined,
         });
     } else {
-      res.status(400).json({ message: "Profile does not exist" });
+      res.status(200).json({ message: "Profile does not exist" });
+      
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ message:'Something went wrong' });
+    
   }
 };
 
@@ -72,7 +74,7 @@ const getSimpleProfile = async (req, res) => {
   try {
     const useruuid = req.userId;
     const profileUser = await User.findOne({
-      attributes: ["fullname", "dateofbirth", "location", "gender", "bio"],
+      attributes: ["fullname",'firstName','lastName', "dateofbirth", "location", "gender", "bio"],
       where: { useruuid },
     });
 
@@ -193,12 +195,14 @@ const signup = async (req, res) => {
       if (password !== confirmPassword)
         return res.status(400).json({ message: "Passwords don't match" });
       else {
-        const fullname = firstName + " " + lastName;
+        const fullname=firstName+' '+lastName
         const encryptedPassword = await bcrypt.hash(password, saltHash);
         const newUser = await User.create({
           email,
           password: encryptedPassword,
           username,
+          firstName,
+          lastName,
           fullname,
           dateofbirth,
           location,
@@ -216,7 +220,6 @@ const signup = async (req, res) => {
           }
         );
 
-        //send mail?
         let result = {
           fullname,
           email,
@@ -229,7 +232,8 @@ const signup = async (req, res) => {
       }
     })
     .catch((error) => {
-      res.status(500).json({ message: `Something went wrong, ${error}` });
+      res.status(500).json({ message: `Something went wrong` });
+      console.log(error.message)
     });
 };
 
@@ -274,10 +278,11 @@ const update = async (req, res) => {
     await User.update(
       {
         fullname: fullName,
+        firstName,
+        lastName,
         dateofbirth: dateofbirth,
         location: location,
         bio,
-        //:JSON.stringify(bio)
         gender: gender,
         password: updatePass ? updatePass : checkPass.password,
         updatedAt: new Date(),

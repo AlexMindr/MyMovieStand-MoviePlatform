@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from 'react'
+import React,{useState} from 'react'
 import './postcomment.css'
 import DraftDisplay from '../../auxcomponents/input/DraftDisplay'
 import { useSelector } from 'react-redux';
@@ -59,7 +59,7 @@ const PostComm = ({postComment,setRefreshComm}) => {
             <div>
             <ClickAwayListener onClickAway={handleClickAway}>
               <Box sx={{ position: 'relative' }}>
-                <Button variant='text' sx={{color:'red',fontSize:'0.8rem'}} onClick={handleClick}>
+                <Button variant='text' sx={{color:'rgb(255, 208, 189)',fontSize:'0.8rem'}} onClick={handleClick}>
                   Delete comment
                 </Button>
               {open ? (
@@ -78,7 +78,6 @@ const PostComm = ({postComment,setRefreshComm}) => {
         <Box className='Box-postcomment-comment'>
           <Box className='Box-postcomment-left'>
             <Avatar  {...stringAvatar(postComment.User.fullname)} aria-label="fullname"/>
-            {/* <Box>{postComment.User.username}</Box> */}
             <Link to={`/profile/${postComment.User.username}`}>{postComment.User.username}</Link>
           </Box>
           <Box className='Box-postcomment-right'>

@@ -39,6 +39,11 @@
 .profile-avatar-redirect{
     margin-top:0.5rem;
     margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    justify-content: center;
+    align-items: center;
 }
 
 @media only screen and (min-width:950px){

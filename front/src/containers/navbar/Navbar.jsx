@@ -140,9 +140,11 @@ const Navbar = () => {
     <div className="app__header" ref={menuBox}>
       <div className={`app__header-header ${show ? "" : "navbar--hidden"}`}>
         <div className="app__header-logo">
-          <Typography variant="h1" component="h1" className="big-logo">
-            MyMovieStand
-          </Typography>
+          <NavLink to="/home">
+            <Typography variant="h1" component="h1" className="big-logo">
+              MyMovieStand
+            </Typography>
+          </NavLink>
           <Typography variant="h1" component="h1" className="small-logo">
             MMS
           </Typography>

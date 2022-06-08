@@ -12,6 +12,11 @@ api.interceptors.request.use((req) => {
   return req;
 });
 
+
+export const getMovieRecommendations = (movieid) =>api.post(`/recommendations/movie/${movieid}`);
+export const getUserRecommendations = () =>api.post(`/recommendations/user`);
+
+
 export const deleteUserAdmin = (username) =>
   api.delete(`/user/delete/${username}`);
 export const addNotification = (formData) =>

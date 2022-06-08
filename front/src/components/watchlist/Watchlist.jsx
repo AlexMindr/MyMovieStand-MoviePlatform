@@ -1,10 +1,12 @@
-import React,{useState,useEffect,useMemo} from 'react'
+import React,{useState,useMemo} from 'react'
 import './watchlist.css'
 import WatchlistForm from './WatchlistForm'
-import { Box,Button,Modal } from '@mui/material'
+import  Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Modal from '@mui/material/Modal' 
 import { DataGrid, gridStringOrNumberComparator } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
-import {default as useWindowDimensions} from '../../auxcomponents/hooks/windowDimensions'
+import  useWindowDimensions from '../../auxcomponents/hooks/windowDimensions'
 import StarIcon from '@mui/icons-material/Star';
 
 function rows (watchlist){
@@ -284,7 +286,7 @@ const Watchlist = ({watchlist,myProfile}) => {
 
     
 return (
-    <Box component='div'>
+    <Box component='div' className='watchlistpage-container'>
         <Box component='div' style={{height:'100vh',width:'100%'}}>
             {watchlist && width>735?
                 <DataGrid

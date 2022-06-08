@@ -6,19 +6,25 @@ import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import CircularProgress from '@mui/material/CircularProgress'
 import {
-  HomeFeatured,
+  HomeRecomm,
   PostTitle,
   HomeReview,
   MovieHomeList,
 } from "../../components";
-import { getHomeMovies, getHomePosts, getHomeReviews } from "../../api";
+import { getHomeMovies, getHomePosts, getHomeReviews, getUserRecommendations } from "../../api";
+import { useSelector } from "react-redux";
+
 
 const Home = () => {
   const [mostPopular, setMostPopular] = useState(null);
   const [bestRated, setBestRated] = useState(null);
   const [homePosts, setHomePosts] = useState(null);
   const [homeReviews, setHomeReviews] = useState(null);
+  const [homeRecomm, setHomeRecomm] = useState(null);
+  const [loading,setLoading]=useState(true)
+  const {user} = useSelector(state=>state.user)
 
   useEffect(() => {
     async function getPosts() {
@@ -39,11 +45,24 @@ const Home = () => {
     //   const res= await getHomePosts();
     //   setHomePosts(res.data);
     // }
+    async function getRecomm() {
+      const res = await getUserRecommendations();
+      setHomeRecomm(res.data);
+    }
     getMovies();
     getPosts();
     getReviews();
+    getRecomm();
+    setLoading(false)
   }, []);
-
+  if(loading)
+    return(<Box
+      sx={{ display: "flex", position: "absolute", right: "50%", top: "40%" }}
+    >
+      <CircularProgress />
+    </Box>
+    )
+  else
   return (
     <StyledEngineProvider injectFirst>
       <Paper elevation={2}>
@@ -54,7 +73,7 @@ const Home = () => {
         <Box component="div" className="Container-home" sx={{p:2}}>
           <Box>
             <Typography component="h3" variant="h4" className="Section-title">
-              News
+              Latest News
             </Typography>
             <Divider flexItem sx={{ m: 1 }} />
           </Box>
@@ -76,11 +95,12 @@ const Home = () => {
                     <Typography
                       component="h5"
                       variant="h5"
-                      sc={{
+                      sx={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         p: 1,
+                        fontSize:'1.2rem'
                       }}
                     >
                       Not enough movies added by users
@@ -108,11 +128,12 @@ const Home = () => {
                     <Typography
                       component="h5"
                       variant="h5"
-                      sc={{
+                      sx={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         p: 1,
+                        fontSize:'1.2rem'
                       }}
                     >
                       Not enough movies added by users
@@ -122,6 +143,41 @@ const Home = () => {
               </Grid>
             </Box>
           </Box>
+          {user?
+          <Box>
+            <Typography component="h3" variant="h4" className="Section-title">
+              Recommended for you
+            </Typography>
+            <Divider flexItem sx={{ m: 1 }} />
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container rowGap={1} columns={15}>
+                {homeRecomm && homeRecomm.length > 0 ? (
+                   homeRecomm.map((movie, index) => (
+                    <Grid item xs={3} md={5} key={movie.movieid}>
+                      <HomeRecomm movie={movie} />
+                    </Grid>
+                  ))
+                ) : (
+                  <Grid item xs={15} className="items-null">
+                    <Typography
+                      component="h5"
+                      variant="h5"
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        p: 1,
+                        fontSize:'1.2rem'
+                      }}
+                    >
+                      Not enough movies added to you watchlist
+                    </Typography>
+                  </Grid>
+                )} 
+              </Grid>
+            </Box>
+          </Box>
+          :<></>}
           <Box>
             <Typography component="h3" variant="h4" className="Section-title">
               Latest forum discussions
@@ -140,11 +196,12 @@ const Home = () => {
                     <Typography
                       component="h5"
                       variant="h5"
-                      sc={{
+                      sx={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         p: 1,
+                        fontSize:'1.2rem'
                       }}
                     >
                       No discussions have been added
@@ -179,11 +236,12 @@ const Home = () => {
                     <Typography
                       component="h5"
                       variant="h5"
-                      sc={{
+                      sx={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         p: 1,
+                        fontSize:'1.2rem'
                       }}
                     >
                       No reviews have been added

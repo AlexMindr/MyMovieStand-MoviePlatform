@@ -59,10 +59,10 @@ const getHomeReviews = async (req, res) => {
       group: ["reviewid"],
       order: [[sequelize.literal("likeCount"), "DESC"]],
     });
-
     res.status(200).json(reviews);
   } catch (error) {
     res.status(404).json({ message: error.message });
+    
   }
 };
 

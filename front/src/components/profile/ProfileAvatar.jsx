@@ -39,8 +39,18 @@ return (
         </div>
         <div className='profile-avatar-redirect'>
         <Link to={`/watchlist/${profile.username}`}>
+          <Button variant='outlined'>
+            {profile.username}'s Watchlist
+          </Button>
+        </Link>
+        <Link to={`/profile/${profile.username}/reviews`}>
           <Button variant='contained'>
-            Watchlist
+          {profile.username}'s Reviews
+          </Button>
+        </Link>
+        <Link to={`/profile/${profile.username}/posts`}>
+          <Button variant='outlined'>
+          {profile.username}'s Discussions
           </Button>
         </Link>
         </div>

@@ -4,7 +4,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
-const AutocompleteCountries = ({ value, setValue }) => {
+const AutocompleteCountries = ({ value, setValue, helperText }) => {
   //const [val, setVal] = useState(countries.filter((country)=>country.label===value).length>0?countries.filter((country)=>country.label===value)[0]:null);
   const [inputValue, setInputValue] = useState(
     countries.filter((country) => country.label === value).length > 0
@@ -58,6 +58,7 @@ const AutocompleteCountries = ({ value, setValue }) => {
         )}
         renderInput={(params) => (
           <TextField
+            helperText={helperText?helperText:null}
             {...params}
             label="Choose a country"
             inputProps={{

@@ -50,7 +50,6 @@ export const watchlistSlice = createSlice({
 })
 export const { addwlItem,updatewlItem,deletewlItem,getWatchlist,setAfterLogout,addToFav,remFromFav } = watchlistSlice.actions;
 
-//TODO Delete from form
 
 export const actionAddToFav = (formData) => async dispatch =>{
     try{

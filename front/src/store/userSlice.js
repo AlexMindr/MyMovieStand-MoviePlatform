@@ -76,7 +76,6 @@ export const actionVerify = () => async dispatch => {
     })
 
 }
-//TODO De pus ca param navigator pt pag
 export const actionLogOut = () => async dispatch => {
         dispatch(logOut())
         

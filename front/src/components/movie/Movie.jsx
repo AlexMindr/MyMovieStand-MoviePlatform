@@ -6,6 +6,7 @@ import {
   getCredits,
   getMovieReviews,
   getMoviePosts,
+  getMovieRecommendations,
 } from "../../api";
 import moment from "moment";
 import Divider from "@mui/material/Divider";
@@ -23,22 +24,23 @@ import imageUnknown from "../../images/unknown.jpg";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import CircularProgress from "@mui/material/CircularProgress";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import WatchlistForm from "../watchlist/WatchlistForm";
 import StarIcon from "@mui/icons-material/Star";
 import MovieImgHoriz from "./MovieImgHoriz";
-import { MovieReview, PostTitle } from "../index";
+import { MovieReview, PostTitle, HomeRecomm } from "../index";
 import { numFormatter } from "../../auxcomponents/functions/NumberFormat";
-import imdb_icon from "../../images/imdb_icon.webp"
-import tmdb_icon from "../../images/tmdb_icon.png" 
-import website_icon from "../../images/website_icon.png"
+import imdb_icon from "../../images/imdb_icon.webp";
+import tmdb_icon from "../../images/tmdb_icon.png";
+import website_icon from "../../images/website_icon.png";
 
 const Movie = ({ movieid, children }) => {
   const [movie, setMovie] = useState(null);
   const [bgColor, setBgColor] = useState("rgb(224, 155, 63)");
   const [images, setImages] = useState(null);
   const [credits, setCredits] = useState(null);
+  const [recomm, setRecomm] = useState(null);
   const [openTrailer, setOpenTrailer] = useState(false);
   const [openWatchForm, setOpenWatchForm] = useState(false);
   const [wlData, setWlData] = useState(null);
@@ -49,6 +51,7 @@ const Movie = ({ movieid, children }) => {
   const { user } = useSelector((state) => state.user);
   const { reviews } = useSelector((state) => state.review);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const handleOpenTrailer = () => setOpenTrailer(true);
   const handleCloseTrailer = () => setOpenTrailer(false);
@@ -88,21 +91,29 @@ const Movie = ({ movieid, children }) => {
   useEffect(() => {
     async function getData() {
       const res = await getMovie(movieid);
-      setMovie(res.data);
-      const res2 = await getImages(res.data.tmdb_id);
-      const { backdrops, logos, posters } = res2.data;
-      setImages({ backdrops, logos, posters });
-      const res3 = await getCredits(res.data.tmdb_id);
-      const { crew, cast } = res3.data;
-      setCredits({ crew, cast });
-      const res4 = await getMovieReviews(movieid, 1, 4);
-      setReviewsList(res4.data.reviews);
-      const res5 = await getMoviePosts(movieid, 1, 3);
-      setPostsList(res5.data.posts);
+      if (res.data) {
+        setMovie(res.data);
+        const res2 = await getImages(res.data.tmdb_id);
+        const { backdrops, logos, posters } = res2.data;
+        setImages({ backdrops, logos, posters });
+        const res3 = await getCredits(res.data.tmdb_id);
+        const { crew, cast } = res3.data;
+        setCredits({ crew, cast });
+        const res4 = await getMovieReviews(movieid, 1, 4);
+        setReviewsList(res4.data.reviews);
+        const res5 = await getMoviePosts(movieid, 1, 3);
+        setPostsList(res5.data.posts);
+        if (user) {
+          let res6 = await getMovieRecommendations(movieid);
+          setRecomm(res6.data);
+        }
+      } else {
+        navigate("/error");
+      }
     }
 
     getData();
-  }, [movieid]);
+  }, [movieid, user, navigate]);
 
   useEffect(() => {
     async function getReviews() {
@@ -114,8 +125,6 @@ const Movie = ({ movieid, children }) => {
       getReviews();
     }
   }, [refresh, movieid]);
-
-
 
   if (movie === null)
     return (
@@ -178,17 +187,41 @@ const Movie = ({ movieid, children }) => {
                     />
                     {movie.rating ? movie.rating : "N/A"}
                   </Grid>
-                  <Grid item xs={4} >
+                  <Grid item xs={4}>
                     <PeopleAltRoundedIcon
                       fontSize="medium"
                       sx={{ verticalAlign: "text-bottom" }}
                     />
                     {movie.popularity ? numFormatter(movie.popularity) : " N/A"}
                   </Grid>
-                  <Grid item xs={4} >
-                     <a href={`https://www.imdb.com/title/${movie.imdb_id}`} className='popularity-icon-link'><img src={imdb_icon} alt={'imdb'} className='popularity-icon'/></a>
-                     <a href={`https://www.themoviedb.org/movie/${movie.tmdb_id}`} className='popularity-icon-link'><img src={tmdb_icon} alt={'imdb'} className='popularity-icon'/></a>
-                     <a href={movie.homepage} className='popularity-icon-link'><img src={website_icon} alt={'imdb'} className='popularity-icon'/> </a>   
+                  <Grid item xs={4}>
+                    <a
+                      href={`https://www.imdb.com/title/${movie.imdb_id}`}
+                      className="popularity-icon-link"
+                    >
+                      <img
+                        src={imdb_icon}
+                        alt={"imdb"}
+                        className="popularity-icon"
+                      />
+                    </a>
+                    <a
+                      href={`https://www.themoviedb.org/movie/${movie.tmdb_id}`}
+                      className="popularity-icon-link"
+                    >
+                      <img
+                        src={tmdb_icon}
+                        alt={"imdb"}
+                        className="popularity-icon"
+                      />
+                    </a>
+                    <a href={movie.homepage} className="popularity-icon-link">
+                      <img
+                        src={website_icon}
+                        alt={"imdb"}
+                        className="popularity-icon"
+                      />{" "}
+                    </a>
                   </Grid>
                 </Grid>
                 <Box component="div" className="time-info">
@@ -595,6 +628,31 @@ const Movie = ({ movieid, children }) => {
               <></>
             )}
           </Grid>
+          {user ? (
+            <Grid item xs={12}>
+              <Box>
+                <Typography component="h5" variant="h5">
+                  Recommended for you
+                </Typography>
+                <Divider flexItem sx={{ m: 1 }} />
+                <Box sx={{ flexGrow: 1 }}>
+                  <Grid container rowGap={1} columns={15}>
+                    {recomm && recomm.length > 0 ? (
+                      recomm.map((movie, index) => (
+                        <Grid item xs={3} md={5} key={movie.movieid}>
+                          <HomeRecomm movie={movie} />
+                        </Grid>
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </Grid>
+                </Box>
+              </Box>
+            </Grid>
+          ) : (
+            <></>
+          )}
         </Grid>
       </Box>
     );

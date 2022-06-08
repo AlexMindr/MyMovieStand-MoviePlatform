@@ -1,3 +1,6 @@
+.postpage-box{
+    background-color: var(--color-bg-container);
+}
 .loading-postpage{
     display: flex;
     justify-content: center;
@@ -12,9 +15,7 @@
     align-items: center;
     padding: 20px;
 }
-.postpage-comments{
-    /* margin-right: auto; */
-}
+
 .postpage-addcomment{
     display: flex;
     justify-content: center;

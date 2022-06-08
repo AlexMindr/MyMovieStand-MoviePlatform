@@ -11,7 +11,7 @@ import {
   Typography,
   Modal,
 } from "@mui/material";
-import  IconButton  from "@mui/material/IconButton";
+import IconButton from "@mui/material/IconButton";
 import { Link, useLocation } from "react-router-dom";
 import {
   PersonOutline,
@@ -84,7 +84,7 @@ const MovieList = ({
         }
       }
     }
-   }, [movieid, watchlist]);
+  }, [movieid, watchlist]);
 
   return (
     <StyledEngineProvider injectFirst>
@@ -159,11 +159,8 @@ const MovieList = ({
         </Box>
 
         <Box component="div" className="genres-movielist">
-          
           {genres.map((genre) => (
-            <Box key={genre.genreid}>
-              {genre.name}
-            </Box>
+            <Box key={genre.genreid}>{genre.name}</Box>
           ))}
         </Box>
 
@@ -188,20 +185,28 @@ const MovieList = ({
           <Box component="div" className="bottom-button">
             {user ? (
               <>
-                <Button
-                  className="cardButton"
-                  variant="contained"
-                  onClick={handleOpenWatchForm}
-                >
-                  {wlData ? (
-                    <>&nbsp;{wlData.status}&nbsp;</>
-                  ) : (
-                    <>
-                      <AddCircleIcon fontSize="medium" className="icn" />
-                      Add to List&nbsp;
-                    </>
-                  )}
-                </Button>
+                {wlData ? (
+                  <>
+                    <Button
+                      className="cardButton"
+                      variant="contained"
+                      onClick={handleOpenWatchForm}
+                    >
+                      &nbsp;{wlData.status}&nbsp;
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <IconButton
+                      sx={{ color: "rgb(53, 30, 255)", p: 0 }}
+                      className="cardButton"
+                      onClick={handleOpenWatchForm}
+                    >
+                      <AddCircleIcon fontSize="small" className="icn" />
+                    </IconButton>
+                  </>
+                )}
+
                 <Modal
                   open={openWatchForm}
                   onClose={(e) => {
@@ -239,12 +244,12 @@ const MovieList = ({
               </>
             ) : (
               <>
-                 <IconButton
-                  sx={{color:'rgb(53, 30, 255)',p:0}}
+                <IconButton
+                  sx={{ color: "rgb(53, 30, 255)", p: 0 }}
                   className="cardButton"
                   onClick={handleOpenLoginRedirect}
                 >
-                  <AddCircleIcon fontSize="small"  />
+                  <AddCircleIcon fontSize="small" />
                 </IconButton>
                 <Modal
                   open={openLoginRedirect}

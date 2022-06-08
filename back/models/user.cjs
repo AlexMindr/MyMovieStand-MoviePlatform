@@ -85,13 +85,9 @@ module.exports = (sequelize, DataTypes) => {
       firstName: DataTypes.TEXT,
       lastName: DataTypes.TEXT,
       fullName: {
-        type: DataTypes.VIRTUAL,
-        get() {
-          return `${this.firstName} ${this.lastName}`;
-        },
-        set(value) {
-          throw new Error("Do not try to set the `fullName` value!");
-        },
+        type: DataTypes.TEXT,
+        allowNull:false,
+        defaultValue:'guest user',
       },
       dateofbirth: {
         type: DataTypes.DATE,
