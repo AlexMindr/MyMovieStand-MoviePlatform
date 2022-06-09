@@ -24,3 +24,7 @@
 .userposts-post-edit{
     margin-left: auto;
 }
+.userposts-box{
+    background-color: var(--color-bg-container);
+    min-height: 40vh;
+}

@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react'
 import './notifications.css'
 import { getNotificationPag } from '../../api'
 import { useSelector } from 'react-redux'
-import {Grid,CircularProgress,Pagination,Box,Typography,Container,StyledEngineProvider,Paper,Divider} from '@mui/material'
+import {Grid,CircularProgress,Pagination,Box,Typography,StyledEngineProvider,Paper,Divider} from '@mui/material'
 import { Notification } from '../../components'
 
 const Notifications = () => {
@@ -45,10 +45,9 @@ const Notifications = () => {
       };
   return (
     <StyledEngineProvider injectFirst>
-    <Container className='notifications-container'>
-      <Paper elevation={5}>
-        <Typography variant='h4' component='h3' sx={{p:'10px 5px 0 5px',}}>
-          You are viewing all notifications:
+      <Paper elevation={2}>
+      <Typography component="h2" variant="h3" className="Container-title">
+          You are viewing all notifications
         </Typography>
         <Divider flexItem sx={{m:1}}/>
         {notifications===null?
@@ -78,7 +77,6 @@ const Notifications = () => {
         <></>}
       
       </Paper>
-    </Container>
   </StyledEngineProvider>
   )
 }

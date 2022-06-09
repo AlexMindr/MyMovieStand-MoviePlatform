@@ -12,10 +12,9 @@ api.interceptors.request.use((req) => {
   return req;
 });
 
-
-export const getMovieRecommendations = (movieid) =>api.post(`/recommendations/movie/${movieid}`);
-export const getUserRecommendations = () =>api.post(`/recommendations/user`);
-
+export const getMovieRecommendations = (movieid) =>
+  api.post(`/recommendations/movie/${movieid}`);
+export const getUserRecommendations = () => api.post(`/recommendations/user`);
 
 export const deleteUserAdmin = (username) =>
   api.delete(`/user/delete/${username}`);
@@ -35,7 +34,10 @@ export const deleteReviewAdmin = (reviewid) =>
   api.delete(`/reviews/admin/delete/${reviewid}`);
 export const restrictReviewAdmin = (formData) =>
   api.put(`/reviews/admin/restrict`, formData);
-//export const updatePostAdmin = (formData) => api.put(`/posts/update`,formData);
+export const addNews = (formData) =>
+  api.post(`/posts/admin/news/add`, formData);
+export const updateNews = (formData) =>
+  api.post(`/posts/admin/news/edit`, formData);
 
 export const addPost = (formData) => api.post("/posts/add/post", formData);
 export const addComm = (formData) => api.post("/posts/add/comment", formData);
@@ -49,6 +51,8 @@ export const getUserPosts = (username, page, count) =>
 export const getUserComments = (username, page, count) =>
   api.get(`/posts/get/comments/user/${username}/page=${page}/count=${count}`);
 export const getHomePosts = () => api.get("/posts/get/home");
+export const getHomeNews = () => api.get("/posts/get/news/home");
+export const getNews = (page) => api.get(`/posts/get/news/all/page=${page}`);
 export const deletePostUser = (formData) =>
   api.put("posts/user/post/delete", formData);
 export const deleteCommUser = (formData) =>

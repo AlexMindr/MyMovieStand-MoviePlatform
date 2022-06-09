@@ -1,5 +1,4 @@
-/* .editprofile-info{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-} */
+.editprofile-info{
+   background-color: var(--color-bg-container);
+   padding:10px;
+} 

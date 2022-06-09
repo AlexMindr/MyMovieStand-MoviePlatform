@@ -28,6 +28,7 @@ import {
   Resetpassword,
   Notifications,
   Navbar,
+  Newspage,
 } from "./containers";
 import CssBaseline from "@mui/material/CssBaseline";
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
@@ -115,6 +116,10 @@ export default function App() {
                   <Route
                     path="/watchlist/:username"
                     element={<Watchlistpage />}
+                  />
+                  <Route
+                    path="/news/all"
+                    element={<Newspage />}
                   />
 
                   <Route

@@ -1,29 +1,28 @@
-import React,{useState,useEffect} from 'react'
-import './editfavourites.css'
-import {useSelector} from 'react-redux'
-
-import { EditFav } from '../../components'
-import { StyledEngineProvider,Container,Box,Typography,Grid,Divider } from '@mui/material'
+import React from "react";
+import "./editfavourites.css";
+import { EditFav } from "../../components";
+import {
+  StyledEngineProvider,
+  Paper,
+  Box,
+  Typography,
+  Divider,
+} from "@mui/material";
 
 const Editfavourites = () => {
-    
   return (
-    <StyledEngineProvider injectFirst>        
-        <Container component="div"  className='editfav-container'>
-         
-         <Typography component="h3" variant='h4'>Edit your favourite movies</Typography>
-         <Divider flexItem/>
-         <Box component='div' className='editfav-favorites'>
-            {/* {favourites && watchlist  && */}
-             <EditFav 
-              //favourites={favourites} watchlist={watchlist} 
-              // setFavourites={setFavourites} setWatchlist={setWatchlist}
-              />
-         </Box>
-         
-        </Container>
-  </StyledEngineProvider>
-  )
-}
+    <StyledEngineProvider injectFirst>
+      <Paper elevation={2} component="div" className="editfav-container">
+        <Typography component="h2" variant="h3" className="Container-title">
+          Edit your favourites
+        </Typography>
+        <Divider flexItem />
+        <Box component="div" className="editfav-favorites">
+          <EditFav />
+        </Box>
+      </Paper>
+    </StyledEngineProvider>
+  );
+};
 
-export default Editfavourites
+export default Editfavourites;

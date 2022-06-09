@@ -314,7 +314,7 @@ const Navbar = () => {
                     className={({ isActive }) =>
                       isActive ? activeStyle : undefined
                     }
-                    to="/news"
+                    to="/news/all"
                     onClick={() => {
                       setMenuBars(false);
                     }}

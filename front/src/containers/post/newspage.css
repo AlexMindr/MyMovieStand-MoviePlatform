@@ -1,20 +1,27 @@
-.notifications-box{
+.allnews-container{
     background-color: var(--color-bg-container);
-    padding:10px;
-    min-height: 50vh;
+    min-height: 60vh;
+    padding:10px; 
 }
-.loading-notifications{
+.loading-allnews{
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 10px;
     margin-top: 20vh;
-    padding-bottom: 20vh;
-    min-height: 40vh;
 }
-.notifications-pagination{
+.allnews-pagination{
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
 }
+.allnews-addpost{
+    display: flex;
+}
+.allnews-addpost>a{
+    margin-left: auto;
+}
+/* .allnews-post{
+    background-color: aliceblue;
+} */

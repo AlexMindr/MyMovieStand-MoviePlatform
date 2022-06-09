@@ -23,6 +23,44 @@ function getPagingDataGroup(data, page, limit) {
   return { posts, totalPages };
 }
 
+const getHomeNews = async (req, res) => {
+  try {
+    const posts = await Post.findAll({
+      subQuery: false,
+      attributes: [
+        "movieid",
+        "createdAt",
+        "title",
+        "postid",
+        [
+          Sequelize.fn("COUNT", Sequelize.col("usercomments.ucid")),
+          "commentCount",
+        ],
+      ],
+      limit: 5,
+      distinct: true,
+      include: [
+        {
+          model: User,
+          attributes: ["username", "fullname"],
+        },
+        {
+          model: UserComment,
+          required: false,
+          attributes: [],
+        },
+      ],
+      where:{post_type:'news'},
+      group: ["postid"],
+      order: [["createdAt", "DESC"]],
+    });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
 const getHomePosts = async (req, res) => {
   try {
     const posts = await Post.findAll({
@@ -50,6 +88,7 @@ const getHomePosts = async (req, res) => {
           attributes: [],
         },
       ],
+      where:{post_type:'post'},
       group: ["postid"],
       order: [["createdAt", "DESC"]],
     });
@@ -59,6 +98,56 @@ const getHomePosts = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+
+const getNews = async (req, res) => {
+  const { page} = req.params;
+  const { limit, offset } = getPagination(page - 1, 15);
+
+  //const { movieid } = req.params;
+  await Post.findAndCountAll({
+    subQuery: false,
+    attributes: [
+      "movieid",
+      "createdAt",
+      "title",
+      "postid",
+      [
+        Sequelize.fn("COUNT", Sequelize.col("usercomments.ucid")),
+        "commentCount",
+      ],
+    ],
+    limit,
+    offset,
+    distinct: true,
+    include: [
+      {
+        model: User,
+        attributes: ["username", "fullname"],
+      },
+      {
+        model: UserComment,
+        required: false,
+        attributes: [],
+      },
+    ],
+
+    where: {post_type:'news' },
+    group: ["postid"],
+    order: [["createdAt", "DESC"]],
+  })
+    .then((data) => {
+      const { posts, totalPages } = getPagingDataGroup(data, page, limit);
+
+      res.status(200).json({ posts, totalPages });
+    })
+
+    .catch((error) => {
+      res.status(404).json({ message: error.message });
+      //console.log(error)
+    });
+};
+
 
 const getMoviePosts = async (req, res) => {
   const { page, count } = req.params;
@@ -92,7 +181,7 @@ const getMoviePosts = async (req, res) => {
       },
     ],
 
-    where: { movieid },
+    where: { movieid,post_type:'post' },
     group: ["postid"],
     order: [["createdAt", "DESC"]],
   })
@@ -197,7 +286,7 @@ const getUserPosts = async (req, res) => {
       },
     ],
 
-    where: { userid },
+    where: { userid,post_type:'post' },
     group: ["postid"],
     order: [["createdAt", "DESC"]],
   })
@@ -228,8 +317,7 @@ const getUserComments = async (req, res) => {
       "createdAt",
       "title",
       "postid",
-      //[Sequelize.fn("COUNT", Sequelize.col("usercomments.ucid")), "commentCount"]
-    ],
+      ],
     limit,
     offset,
     distinct: true,
@@ -256,9 +344,7 @@ const getUserComments = async (req, res) => {
       },
     ],
 
-    //where:{userid},
-    //group:['postid'],
-    order: [["createdAt", "DESC"]],
+      order: [["createdAt", "DESC"]],
   })
     .then((data) => {
       const { posts, totalPages } = getPagingData(data, page, limit);
@@ -383,7 +469,33 @@ const deletePostUser = async (req, res) => {
   }
 };
 
-const updatePost = async (req, res) => {
+const addNews = async (req, res) => {
+  try {
+    const useruuid = req.userId;
+    const role = req.userRole;
+    const user = await User.findOne({ where: { useruuid, role } });
+    if (user) {
+      const { title, content, movieid } = req.body;
+
+    const newPost = await Post.create({
+      userid:user.userid,
+      movieid,
+      content,
+      title,
+      post_type:'news',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    const postid = newPost.postid;
+    res.status(201).json(postid);
+  }else
+  res.status(403).json({ message: error.message });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const updateNews = async (req, res) => {
   try {
     const useruuid = req.userId;
     const role = req.userRole;
@@ -683,7 +795,6 @@ export {
   getUserComments,
   deletePost,
   addPost,
-  updatePost,
   getPostContent,
   getPostComments,
   addComment,
@@ -692,4 +803,8 @@ export {
   restrictComm,
   deleteComm,
   deleteCommUser,
+  addNews,
+  getHomeNews,
+  getNews,
+  updateNews
 };

@@ -1,6 +1,6 @@
-import React,{useState} from 'react'
+import React from 'react'
 import './posttitle.css'
-import {Box,Divider,Typography} from '@mui/material'
+import {Box,Typography} from '@mui/material'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 

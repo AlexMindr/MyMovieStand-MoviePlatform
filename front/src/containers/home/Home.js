@@ -12,8 +12,9 @@ import {
   PostTitle,
   HomeReview,
   MovieHomeList,
+  NewsTitle
 } from "../../components";
-import { getHomeMovies, getHomePosts, getHomeReviews, getUserRecommendations } from "../../api";
+import { getHomeMovies, getHomePosts, getHomeReviews, getUserRecommendations,getHomeNews } from "../../api";
 import { useSelector } from "react-redux";
 
 
@@ -21,6 +22,7 @@ const Home = () => {
   const [mostPopular, setMostPopular] = useState(null);
   const [bestRated, setBestRated] = useState(null);
   const [homePosts, setHomePosts] = useState(null);
+  const [homeNews, setHomeNews] = useState(null);
   const [homeReviews, setHomeReviews] = useState(null);
   const [homeRecomm, setHomeRecomm] = useState(null);
   const [loading,setLoading]=useState(true)
@@ -41,10 +43,10 @@ const Home = () => {
       setMostPopular(mostPopular);
       setBestRated(bestRated);
     }
-    // async function getNews(){
-    //   const res= await getHomePosts();
-    //   setHomePosts(res.data);
-    // }
+    async function getNews(){
+      const res= await getHomeNews();
+      setHomeNews(res.data);
+    }
     async function getRecomm() {
       const res = await getUserRecommendations();
       setHomeRecomm(res.data);
@@ -53,6 +55,7 @@ const Home = () => {
     getPosts();
     getReviews();
     getRecomm();
+    getNews()
     setLoading(false)
   }, []);
   if(loading)
@@ -76,6 +79,33 @@ const Home = () => {
               Latest News
             </Typography>
             <Divider flexItem sx={{ m: 1 }} />
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container rowGap={1}>
+                {homeNews && homeNews.length > 0 ? (
+                  homeNews.map((news) => (
+                    <Grid item xs={12} key={news.postid}>
+                      <NewsTitle news={news} />
+                    </Grid>
+                  ))
+                ) : (
+                  <Grid item xs={12} className="items-null">
+                    <Typography
+                      component="h5"
+                      variant="h5"
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        p: 1,
+                        fontSize:'1.2rem'
+                      }}
+                    >
+                      No news have been added
+                    </Typography>
+                  </Grid>
+                )}
+              </Grid>
+            </Box>
           </Box>
           <Box>
             <Typography component="h3" variant="h4" className="Section-title">
@@ -170,7 +200,7 @@ const Home = () => {
                         fontSize:'1.2rem'
                       }}
                     >
-                      Not enough movies added to you watchlist
+                      Not enough movies added to your watchlist
                     </Typography>
                   </Grid>
                 )} 
