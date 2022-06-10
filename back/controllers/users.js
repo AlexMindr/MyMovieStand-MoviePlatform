@@ -4,7 +4,7 @@ import db from "../models/index.cjs";
 import crypto from "crypto";
 import { Op } from "@sequelize/core";
 import nodemailer from "nodemailer";
-const { User, Notification, Watchlist } = db;
+const { User, Notification, Watchlist,Review } = db;
 
 async function watchListStatus(wlName, id) {
   let wl = await Watchlist.count({
@@ -24,6 +24,8 @@ const getProfile = async (req, res) => {
     const profileUser = await User.findOne({
       attributes: [
         "fullname",
+        'firstName',
+        'lastName',
         "dateofbirth",
         "location",
         "role",
@@ -110,6 +112,8 @@ const login = async (req, res) => {
     const currentUser = await User.findOne({
       attributes: [
         "fullname",
+        'firstName',
+        'lastName',
         "dateofbirth",
         "location",
         "role",
@@ -141,7 +145,7 @@ const login = async (req, res) => {
     );
 
     let fullname, email, dateofbirth, location, role, result, gender;
-    ({ fullname, email, dateofbirth, location, role } = currentUser);
+    ({ fullname, email, dateofbirth, location, role,gender } = currentUser);
     if (role === "admin")
       result = {
         username,
@@ -153,8 +157,8 @@ const login = async (req, res) => {
         role,
       };
     else result = { username, fullname, email, dateofbirth, gender, location };
-
-    res.status(200).json({ result, token });
+      
+    res.status(200).json({ result, token});
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }
@@ -203,7 +207,7 @@ const signup = async (req, res) => {
           username,
           firstName,
           lastName,
-          fullname,
+          //fullname,
           dateofbirth,
           location,
           gender,
@@ -254,7 +258,6 @@ const update = async (req, res) => {
     } = req.body;
 
     const checkPass = await User.findOne({
-      attributes: ["password", "userid", "email", "username", "fullname"],
       where: { useruuid },
     });
 
@@ -268,22 +271,22 @@ const update = async (req, res) => {
       updatePass = await bcrypt.hash(newPass, saltHash);
     }
 
-    var fullName = checkPass.fullname;
-    if (lastName && firstName) fullName = firstName + " " + lastName;
-    if (!lastName || !firstName)
-      return res
-        .status(400)
-        .json({ message: "Last name or first name cannot be empty!" });
+    // var fullName = checkPass.fullname;
+    // if (lastName && firstName) fullName = firstName + " " + lastName;
+    // if (!lastName || !firstName)
+    //   return res
+    //     .status(400)
+    //     .json({ message: "Last name or first name cannot be empty!" });
 
     await User.update(
       {
-        fullname: fullName,
-        firstName,
-        lastName,
-        dateofbirth: dateofbirth,
-        location: location,
-        bio,
-        gender: gender,
+        //fullname: fullName,
+        firstName:firstName?firstName:checkPass.firstName,
+        lastName:lastName?lastName:checkPass.lastName,
+        dateofbirth: dateofbirth?dateofbirth:checkPass.dateofbirth,
+        location: location?location:checkPass.location,
+        bio:bio?bio:checkPass.bio,
+        gender: gender?gender:checkPass.bio,
         password: updatePass ? updatePass : checkPass.password,
         updatedAt: new Date(),
       },
@@ -295,7 +298,7 @@ const update = async (req, res) => {
     );
 
     let result = {
-      fullname: fullName,
+      fullname: checkPass.fullname,
       email: checkPass.email,
       dateofbirth: dateofbirth ? dateofbirth : null,
       location: location ? location : null,

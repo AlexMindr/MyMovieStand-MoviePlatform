@@ -29,6 +29,8 @@ import {
   Notifications,
   Navbar,
   Newspage,
+  Newspostpage,
+  AdminNews,
 } from "./containers";
 import CssBaseline from "@mui/material/CssBaseline";
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
@@ -42,7 +44,6 @@ import PageAuth from "./auxcomponents/routerchecks/PageAuth";
 import PageRedirect from "./auxcomponents/routerchecks/PageRedirect";
 import PageAdmin from "./auxcomponents/routerchecks/PageAdmin";
 
-//TODO switch countries with auto-complete countries from mui autocomplete
 
 export default function App() {
   const dispatch = useDispatch();
@@ -120,6 +121,10 @@ export default function App() {
                   <Route
                     path="/news/all"
                     element={<Newspage />}
+                  />
+                  <Route
+                    path="/news/movie/:movieid/:postid"
+                    element={<Newspostpage />}
                   />
 
                   <Route
@@ -240,6 +245,15 @@ export default function App() {
                       </PageAdmin>
                     }
                   />
+                  <Route
+                    path="/admin/news"
+                    element={
+                      <PageAdmin>
+                        <AdminNews />
+                      </PageAdmin>
+                    }
+                  />
+
                   <Route path="*" element={<Errorpage />} />
                 </Routes>
               </Container>

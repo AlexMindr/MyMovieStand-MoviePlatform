@@ -48,7 +48,7 @@ const Postpage = () => {
       }
     }
     async function getComments() {
-      const res = await getPostComments(parseInt(postid), 1, 8);
+      const res = await getPostComments(parseInt(postid), page, 8);
       setPostComments(res.data.comments);
       setTotalPages(res.data.totalPages);
     }
@@ -63,11 +63,11 @@ const Postpage = () => {
     getMoviebck();
     getContent();
     getComments();
-  }, [movieid, postid, navigate]);
+  }, [movieid, postid, navigate,page]);
 
   useEffect(() => {
     async function getComments() {
-      const res = await getPostComments(parseInt(postid), 1, 8);
+      const res = await getPostComments(parseInt(postid), page, 8);
       setPostComments(res.data.comments);
       setTotalPages(res.data.totalPages);
     }
@@ -76,7 +76,7 @@ const Postpage = () => {
       setRefreshComm(false);
       getComments();
     }
-  }, [postid, refreshComm]);
+  }, [postid, refreshComm,page]);
 
   useEffect(() => {
     async function getContent() {

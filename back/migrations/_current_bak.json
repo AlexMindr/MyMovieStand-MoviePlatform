@@ -377,6 +377,10 @@
                     "seqType": "Sequelize.TEXT"
                 },
                 "fullName": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": "guest user"
+                    },
                     "field": "fullName",
                     "seqType": "Sequelize.TEXT"
                 },
@@ -605,5 +609,5 @@
     "path": "E:\\ProiecteVSCode\\Licenta\\finalapp\\back\\migrations\\_current.json",
     "backupPath": "E:\\ProiecteVSCode\\Licenta\\finalapp\\back\\migrations\\_current_bak.json",
     "exists": true,
-    "revision": 2
+    "revision": 3
 }

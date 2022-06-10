@@ -54,10 +54,13 @@ const Home = () => {
     getMovies();
     getPosts();
     getReviews();
+    if(user)
     getRecomm();
     getNews()
     setLoading(false)
-  }, []);
+  }, [user]);
+
+  
   if(loading)
     return(<Box
       sx={{ display: "flex", position: "absolute", right: "50%", top: "40%" }}

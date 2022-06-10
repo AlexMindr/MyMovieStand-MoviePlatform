@@ -21,6 +21,8 @@ export { default as AdminMenu } from "./admin/AdminMenu";
 export { default as AdminUser } from "./admin/AdminUser";
 export { default as AdminMovie } from "./admin/AdminMovie";
 export { default as AdminForum } from "./admin/AdminForum";
+export { default as AdminNews } from "./admin/AdminNews";
 export { default as Navbar } from "./navbar/Navbar";
 export { default as Notifications } from "./notificationpage/Notifications";
 export { default as Newspage } from "./post/Newspage";
+export { default as Newspostpage } from "./post/Newspostpage";

@@ -1,0 +1,15 @@
+.newsadd-form {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: var(--color-bg-container);
+  }
+  .newsadd-textarea {
+    max-width: 50vw;
+  }
+  
+  @media only screen and (max-width: 600px) {
+    .newsadd-textarea {
+      max-width: 300px;
+    }
+  }
+  

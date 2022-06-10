@@ -37,7 +37,7 @@ export const restrictReviewAdmin = (formData) =>
 export const addNews = (formData) =>
   api.post(`/posts/admin/news/add`, formData);
 export const updateNews = (formData) =>
-  api.post(`/posts/admin/news/edit`, formData);
+  api.put(`/posts/admin/news/edit`, formData);
 
 export const addPost = (formData) => api.post("/posts/add/post", formData);
 export const addComm = (formData) => api.post("/posts/add/comment", formData);

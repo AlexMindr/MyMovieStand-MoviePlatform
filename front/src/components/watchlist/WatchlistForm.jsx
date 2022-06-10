@@ -1,12 +1,11 @@
 import React,{useState,useEffect} from 'react'
 import './watchlistform.css'
-import { Button, Grid, Box,Typography,Container,Divider,Paper } from '@mui/material'
+import { Button, Grid, Box,Typography,Container,Divider } from '@mui/material'
 import Input from '../../auxcomponents/input/Input'
 import { Link } from 'react-router-dom'
 import { actionCreateOrUpdateItem, actionDelWlItem} from '../../store/watchlistSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
-//de setat state-ul initial cu ce vine din store
 const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,children}) => {
   const [formError,setFormError]= useState(false)
   const [isCreateOrUpdate, setIsCreateOrUpdate]= useState('create')
@@ -84,7 +83,7 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
     
                 <Grid container spacing={2} className='watchlist-form'>
                   <Grid item xs={12}>
-                      <Typography variant='h6' component='h5' color='blue'>Movie title: <br/>{title}</Typography>
+                      <Typography variant='h6' component='h5' color='blue'>Movie: <br/>{title}</Typography>
                    </Grid>
                    <Grid item xs={12}>
                       <Divider orientation='horizontal' flexItem/>

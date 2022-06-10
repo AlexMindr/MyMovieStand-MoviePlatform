@@ -41,8 +41,8 @@ const getHomeNews = async (req, res) => {
       distinct: true,
       include: [
         {
-          model: User,
-          attributes: ["username", "fullname"],
+          model: Movie,
+          attributes: ["title"],
         },
         {
           model: UserComment,
@@ -80,7 +80,7 @@ const getHomePosts = async (req, res) => {
       include: [
         {
           model: User,
-          attributes: ["username", "fullname"],
+          attributes: ["username", "fullname",'firstName','lastName'],
         },
         {
           model: UserComment,
@@ -122,8 +122,8 @@ const getNews = async (req, res) => {
     distinct: true,
     include: [
       {
-        model: User,
-        attributes: ["username", "fullname"],
+        model: Movie,
+        attributes: ["title"],
       },
       {
         model: UserComment,
@@ -172,7 +172,7 @@ const getMoviePosts = async (req, res) => {
     include: [
       {
         model: User,
-        attributes: ["username", "fullname"],
+        attributes: ["username", "fullname",'firstName','lastName'],
       },
       {
         model: UserComment,
@@ -205,7 +205,7 @@ const getPostContent = async (req, res) => {
       include: [
         {
           model: User,
-          attributes: ["username", "fullname"],
+          attributes: ["username", "fullname",'firstName','lastName'],
         },
       ],
       where: { postid },
@@ -230,7 +230,7 @@ const getPostComments = async (req, res) => {
     include: [
       {
         model: User,
-        attributes: ["username", "fullname"],
+        attributes: ["username", "fullname",'firstName','lastName'],
       },
     ],
     where: { postid },
@@ -273,7 +273,7 @@ const getUserPosts = async (req, res) => {
     include: [
       {
         model: User,
-        attributes: ["username", "fullname"],
+        attributes: ["username", "fullname",'firstName','lastName'],
       },
       {
         model: UserComment,
@@ -324,7 +324,7 @@ const getUserComments = async (req, res) => {
     include: [
       {
         model: User,
-        attributes: ["username", "fullname"],
+        attributes: ["username", "fullname",'firstName','lastName'],
       },
       {
         model: UserComment,
@@ -334,7 +334,7 @@ const getUserComments = async (req, res) => {
         include: [
           {
             model: User,
-            attributes: ["username", "fullname"],
+            attributes: ["username", "fullname",'firstName','lastName'],
           },
         ],
       },

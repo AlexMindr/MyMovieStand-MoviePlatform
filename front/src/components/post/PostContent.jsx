@@ -26,7 +26,7 @@ const styles = {
   width: 250,
 };
 
-const PostContent = ({ postContent, setRefresh }) => {
+const PostContent = ({ postContent, setRefresh,news }) => {
   const { user } = useSelector((state) => state.user);
   const [open, setOpen] = useState(false);
 
@@ -57,6 +57,7 @@ const PostContent = ({ postContent, setRefresh }) => {
             <span>
               {moment(postContent.createdAt).format("Do MM YYYY, HH:mm")}
             </span>
+            {news?<></>:<>
             {user.username === postContent.User.username ? (
               <div>
                 <ClickAwayListener onClickAway={handleClickAway}>
@@ -81,6 +82,7 @@ const PostContent = ({ postContent, setRefresh }) => {
             ) : (
               <></>
             )}
+            </>}
           </Box>
           <Box className="Box-postcontent-content">
             <Box className="Box-postcontent-left">
@@ -89,9 +91,10 @@ const PostContent = ({ postContent, setRefresh }) => {
                 aria-label="fullname"
               />
               {/* <Box>{postContent.User.username}</Box> */}
-              <Link to={`/profile/${postContent.User.username}`}>
+             {news?<>admin</>: <Link to={`/profile/${postContent.User.username}`}>
                 {postContent.User.username}
               </Link>
+              }
             </Box>
             <Box className="Box-postcontent-right">
               <DraftDisplay field={postContent.content} />

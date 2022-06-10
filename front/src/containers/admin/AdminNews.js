@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
-import {DelResPost,DelResReview,DelResComm} from '../../components/'
+import {DelResPost,AddNews,EditNews} from '../../components/'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -41,7 +41,7 @@ function TabPanel(props) {
   }
 
 
-const AdminForum = () => {
+const AdminNews = () => {
     const [value, setValue] = useState(0);
     
     const handleChangeTab = (event, newValue) => {
@@ -51,28 +51,28 @@ const AdminForum = () => {
     return (
       <Paper elevation={2} sx={{minHeight:'70vh'}}>
         <Typography component="h2" variant="h3" className="Container-title">
-          Admin dashboard - forum 
+          Admin dashboard - news 
         </Typography>
         <Box sx={{ width: '100%',bgcolor: "var(--color-bg-container)" }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChangeTab} aria-label="forum tabs" variant='fullWidth'>
-                <Tab label="Del/Res Post" {...a11yProps(0)} />
-                <Tab label="Del/Res Comm" {...a11yProps(1)} />
-                <Tab label="Del/Res Review" {...a11yProps(2)} />
+                <Tab label="Add news" {...a11yProps(0)} />
+                <Tab label="Edit news" {...a11yProps(1)} />
+                <Tab label="Delete news" {...a11yProps(2)} />
             </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <DelResPost/>
+                <AddNews/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <DelResComm/>
+                <EditNews/>
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <DelResReview/>
+                <DelResPost/>
             </TabPanel>
         </Box>
       </Paper>
     );
 }
 
-export default AdminForum
+export default AdminNews

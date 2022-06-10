@@ -6,13 +6,14 @@
     text-align: center;
     font-size: 1.5rem;
     flex-direction: column;
-    background-color: blanchedalmond;
+    background-color: var(--color-bg-container);
 }
 
 .Box-admin-menu>a{
     display: block;
     padding: 5px 5px;
     min-width: 100%;
+    background-color: blanchedalmond;
 }
 
 .Box-admin-menu>a:where(:hover,:focus){

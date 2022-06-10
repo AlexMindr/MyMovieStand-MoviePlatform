@@ -191,6 +191,7 @@ const MovieList = ({
                       className="cardButton"
                       variant="contained"
                       onClick={handleOpenWatchForm}
+                      sx={{minWidth:'20px',padding:0,fontSize:'0.8rem'}}
                     >
                       &nbsp;{wlData.status}&nbsp;
                     </Button>
@@ -229,14 +230,14 @@ const MovieList = ({
                 </Modal>
                 {wlData && wlData.rating ? (
                   <div className="movielist-userscore">
-                    <div className="movielist-userscore-content">
+                    <span className="movielist-userscore-content">
                       {wlData.rating === 10 ? (
                         wlData.rating
                       ) : (
                         <>&nbsp;{wlData.rating}</>
                       )}
                       &nbsp;
-                    </div>
+                    </span>
                   </div>
                 ) : (
                   <></>

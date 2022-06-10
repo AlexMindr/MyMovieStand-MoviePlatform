@@ -29,6 +29,8 @@ export { default as HomePosts } from "./home/HomePosts";
 export { default as HomeRecomm } from "./home/HomeRecomm";
 export { default as DeleteUser } from "./admin/DeleteUser";
 export { default as AddNotif } from "./admin/AddNotif";
+export { default as AddNews } from "./admin/AddNews";
+export { default as EditNews } from "./admin/EditNews";
 export { default as DelResPost } from "./admin/DelResPost";
 export { default as DelResComm } from "./admin/DelResComm";
 export { default as DelResReview } from "./admin/DelResReview";

@@ -40,7 +40,7 @@ const getHomeReviews = async (req, res) => {
       include: [
         {
           model: User,
-          attributes: ["username", "fullname"],
+          attributes: ["username", "fullname",'firstName','lastName'],
         },
         {
           model: UserLike,
@@ -87,7 +87,7 @@ const getMovieReviews = async (req, res) => {
     include: [
       {
         model: User,
-        attributes: ["username", "fullname"],
+        attributes: ["username", "fullname",'firstName','lastName'],
       },
       {
         model: UserLike,
@@ -214,7 +214,7 @@ const getUserReviews = async (req, res) => {
     include: [
       {
         model: User,
-        attributes: ["username", "fullname"],
+        attributes: ["username", "fullname",'firstName','lastName'],
       },
       {
         model: UserLike,
