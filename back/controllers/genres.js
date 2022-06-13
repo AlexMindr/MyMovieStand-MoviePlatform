@@ -17,8 +17,8 @@ const createGenres = async (req, res) => {
   const key = process.env.APIKEY;
 
   try {
-    const useruuid = res.userId;
-    const role = res.userRole;
+    const useruuid = req.userId;
+    const role = req.userRole;
     const user = await User.findOne({ where: { useruuid, role } });
     if (user) {
       const resp = await axios.get(
@@ -47,8 +47,8 @@ const createGenres = async (req, res) => {
 const updateGenres = async (req, res) => {
   const key = process.env.APIKEY;
   try {
-    const useruuid = res.userId;
-    const role = res.userRole;
+    const useruuid = req.userId;
+    const role = req.userRole;
     const user = await User.findOne({ where: { useruuid, role } });
     if (user) {
       const resp = await axios.get(

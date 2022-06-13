@@ -88,9 +88,8 @@ export const populateMovies = (formData) =>
   api.post(`/movies/populate`, formData);
 export const addMovie = (formData) => api.post(`/movies/create`, formData);
 export const updateMovie = (formData) => api.put(`/movies/update`, formData);
-
 export const updatePopularityAndRating = () =>
-  api.get(`/movies/update/popularity/all`);
+  api.put(`/movies/update/popularity/all`);
 
 export const verify = () => api.get("/user/verify");
 export const getProfile = (username) => api.get(`/user/profile/${username}`);

@@ -35,6 +35,7 @@ export { default as DelResPost } from "./admin/DelResPost";
 export { default as DelResComm } from "./admin/DelResComm";
 export { default as DelResReview } from "./admin/DelResReview";
 export { default as UpdateGenres } from "./admin/UpdateGenres";
+export { default as UpdatePopAndRat } from "./admin/UpdatePopAndRat";
 export { default as AddUpdateMovie } from "./admin/AddUpdateMovie";
 export { default as PopulateMovGen } from "./admin/PopulateMovGen";
 export { default as Notification } from "./notification/Notification";

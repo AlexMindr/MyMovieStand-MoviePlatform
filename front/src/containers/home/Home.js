@@ -83,10 +83,10 @@ const Home = () => {
             </Typography>
             <Divider flexItem sx={{ m: 1 }} />
             <Box sx={{ flexGrow: 1 }}>
-              <Grid container rowGap={1}>
+              <Grid container rowGap={1} >
                 {homeNews && homeNews.length > 0 ? (
                   homeNews.map((news) => (
-                    <Grid item xs={12} key={news.postid}>
+                    <Grid item xs={12} key={news.postid} >
                       <NewsTitle news={news} />
                     </Grid>
                   ))
@@ -186,7 +186,7 @@ const Home = () => {
               <Grid container rowGap={1} columns={15}>
                 {homeRecomm && homeRecomm.length > 0 ? (
                    homeRecomm.map((movie, index) => (
-                    <Grid item xs={3} md={5} key={movie.movieid}>
+                    <Grid item xs={5} md={3} lg={2} key={movie.movieid}>
                       <HomeRecomm movie={movie} />
                     </Grid>
                   ))

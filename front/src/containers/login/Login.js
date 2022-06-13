@@ -25,6 +25,7 @@ const Login = () => {
             .
           </Typography>
         </Box>
+        <br/>
         <LoginForm />
       </Box>
     </Paper>

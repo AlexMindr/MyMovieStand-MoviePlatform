@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { MovieList } from "../../components";
 import "./movies.css";
 import { getMovies, getGenres, getMoviesFiltered } from "../../api";
@@ -157,7 +157,9 @@ const Movies = () => {
               </div>
             </div>
           </div>
-          <div className="filter-items-selects">
+        </div>
+        
+        <div className="filter-items-selects">
             <div className="dropdown-selectgenres">
               <label className="dropdown-selectgenres-label">
                 Genres &nbsp;&nbsp;&nbsp;
@@ -231,13 +233,12 @@ const Movies = () => {
               </FormControl>
             </Box>
           </div>
-        </div>
         <div className="movie-content-box">
-          <div className="meniuleft">
+          <div className="menu-checkbox">
             <Typography variant="h5" component="h3">
               Select Genres
             </Typography>
-            <FormGroup>
+            <FormGroup sx={{marginLeft:'5px'}}>
               {genres &&
                 genres.map((genre) => (
                   <FormControlLabel

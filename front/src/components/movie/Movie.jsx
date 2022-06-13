@@ -405,7 +405,7 @@ const Movie = ({ movieid, children }) => {
                     }}
                   >
                     <Link to="/login" state={{ from: location }}>
-                      Login to add movie to your list
+                      Login to add movie into your list
                     </Link>
                   </Box>
                 )}
@@ -519,7 +519,7 @@ const Movie = ({ movieid, children }) => {
               ) : (
                 <Link
                   to={`/movies/${movieid}/addreview`}
-                  style={{ textShadow: "1px 1px 1px orange" }}
+                  style={{ textShadow: "1px 1px 1px orange",fontWeight:'bolder' ,color:'black'}}
                 >
                   Add a review
                 </Link>
@@ -563,8 +563,8 @@ const Movie = ({ movieid, children }) => {
               >
                 <Link
                   to={`/movies/${movieid}/reviews/all`}
-                  style={{ textShadow: "1px 1px 1px orange" }}
-                >
+                  style={{ textShadow: "1px 1px 1px orange",fontWeight:'bolder' ,color:'black'}}
+                  >
                   Show all reviews
                 </Link>
               </Box>
@@ -580,8 +580,8 @@ const Movie = ({ movieid, children }) => {
               </Typography>
               <Link
                 to={`/movies/${movieid}/addpost`}
-                style={{ textShadow: "1px 1px 1px orange" }}
-              >
+                style={{ textShadow: "1px 1px 1px orange",fontWeight:'bolder' ,color:'black'}}
+                >
                 Start a discussion
               </Link>
             </Box>
@@ -603,7 +603,7 @@ const Movie = ({ movieid, children }) => {
                   fontStyle: "italic",
                 }}
               >
-                No posts have been added for this movie
+                No discussions have been added for this movie
               </Box>
             )}
 
@@ -619,8 +619,8 @@ const Movie = ({ movieid, children }) => {
               >
                 <Link
                   to={`/movies/${movieid}/posts/all`}
-                  style={{ textShadow: "1px 1px 1px orange" }}
-                >
+                  style={{ textShadow: "1px 1px 1px orange",fontWeight:'bolder' ,color:'black'}}
+                  >
                   Show all forum discussions related to this movie
                 </Link>
               </Box>

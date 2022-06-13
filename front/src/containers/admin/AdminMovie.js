@@ -9,6 +9,7 @@ import {
   AddUpdateMovie,
   UpdateGenres,
   PopulateMovGen,
+  UpdatePopAndRat,
 } from "../../components/";
 
 function TabPanel(props) {
@@ -60,18 +61,22 @@ const AdminMovie = () => {
             aria-label="movie tabs"
             variant="fullWidth"
           >
-            <Tab label="Update genres" {...a11yProps(0)} />
-            <Tab label="Update/Add movie" {...a11yProps(1)} />
-            <Tab label="Populate" {...a11yProps(2)} />
+            <Tab label="Update rankings" {...a11yProps(0)} />
+            <Tab label="Update genres" {...a11yProps(1)} />
+            <Tab label="Update/Add movie" {...a11yProps(2)} />
+            <Tab label="Populate" {...a11yProps(3)} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <UpdateGenres />
+          <UpdatePopAndRat />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <AddUpdateMovie />
+          <UpdateGenres />
         </TabPanel>
         <TabPanel value={value} index={2}>
+          <AddUpdateMovie />
+        </TabPanel>
+        <TabPanel value={value} index={3}>
           <PopulateMovGen />
         </TabPanel>
       </Box>

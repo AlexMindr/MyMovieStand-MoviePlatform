@@ -1,5 +1,6 @@
 .login-container{
     background-color: var(--color-bg-container);
+    min-height: 50vh;
 }
 .login-signup {
     text-decoration: none;

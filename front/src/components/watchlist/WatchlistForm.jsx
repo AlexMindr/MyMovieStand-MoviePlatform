@@ -4,9 +4,10 @@ import { Button, Grid, Box,Typography,Container,Divider } from '@mui/material'
 import Input from '../../auxcomponents/input/Input'
 import { Link } from 'react-router-dom'
 import { actionCreateOrUpdateItem, actionDelWlItem} from '../../store/watchlistSlice'
+import {actionAddNotif} from '../../store/notificationSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
-const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,children}) => {
+const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,children}) => {
   const [formError,setFormError]= useState(false)
   const [isCreateOrUpdate, setIsCreateOrUpdate]= useState('create')
   const dispatch = useDispatch()
@@ -20,18 +21,17 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
       .then(res=>{
          if(res){
             setFormError(res)
-            //TODO notification in loc de eroare
-            //setFormData({id,status:'',episodes:'',rating:''})
+            
          }
          else {
            setFormError(false)
+           dispatch(actionAddNotif({content:`Successfuly ${isCreateOrUpdate==='create'?'added':'updated'} movie ${title}`}))
            handleCloseWatchForm()
           }
         
         })
       .catch(e=>{
          setFormError(e)
-         //setFormData({id,status:'',episodes:'',rating:''})
       })
    }
    
@@ -136,9 +136,9 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,episodesTotal,ch
                
                 
          </Box>
-     :<div>
+     :<Box sx={{display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.5rem',minHeight:'50vh'}}>
         <Link to='/login'>Login to add/edit movie</Link>
-     </div> }
+     </Box> }
     </Container>
   )
 }

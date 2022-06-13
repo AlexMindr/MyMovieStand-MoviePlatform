@@ -51,7 +51,7 @@ const Newspage = () => {
                         <Grid
                           item
                           xs={12}
-                          key={news.newsid}
+                          key={news.postid}
                           className="allnews-news"
                         >
                           <NewsTitle news={news} />

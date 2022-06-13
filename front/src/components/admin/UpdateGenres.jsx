@@ -2,9 +2,7 @@ import React,{useState} from 'react'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import Input from '../../auxcomponents/input/Input';
 import Button from '@mui/material/Button'
-import ToggleButton from '@mui/material/ToggleButton'
 import {updateGenres} from '../../api/'
 
 const UpdateGenres = () => {
@@ -25,14 +23,7 @@ const UpdateGenres = () => {
         setFormError(e.response.data.message)
         }) 
     }
-    // const handleChange = (e) => {
-    //     setFormData({ ...formData, [e.target.name]: e.target.value });
-    //  }
-    // const handleCancel=()=>{
-    //     setFormError(false)
-    //     setFormSucc(false)
-    // //    setFormData({reviewid:''})
-    // }
+  
   
   return (
     <Box  sx={{ flexGrow: 1 }} component='form' onSubmit={handleSubmit}>

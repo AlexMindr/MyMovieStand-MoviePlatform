@@ -10,6 +10,7 @@ import {
   updatePopularityAndRating,
   updateMovie,
   //deleteMovie,
+  pop
 } from "../controllers/movies.js";
 import authAdmin from "../middleware/authAdmin.js";
 
@@ -20,6 +21,8 @@ router.get("/page=:page/search", getMoviesSimpleFilter);
 router.get("/page=:page", getMovies);
 router.get("/movie=:id", getMovie);
 router.get("/get/home", getHomeMovies);
+
+router.post("/pop",  pop);
 
 router.post("/populate", authAdmin, populateMovies);
 router.post("/create", authAdmin, createMovie);

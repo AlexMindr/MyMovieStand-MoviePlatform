@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Component } from "react";
+import React, { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -8,6 +8,7 @@ export default function DraftTextArea({
   setField,
   placeholder,
   textMaxLength,
+  link=false,
 }) {
   //const [editorState, setEditorState] = useState(()=>field?EditorState.createWithContent(convertFromRaw(JSON.parse(field))):EditorState.createEmpty())
   const [editorState, setEditorState] = useState(
@@ -108,14 +109,13 @@ export default function DraftTextArea({
       >
         <Editor
           editorState={editorState}
-          //toolbarOnFocus
           toolbarClassName="toolbarClassName"
           wrapperClassName="wrapperClassName"
           editorClassName="editorClassName"
           onEditorStateChange={onChange}
           placeholder={placeholder}
           toolbar={{
-            options: [
+            options: link?[
               "inline",
               "blockType",
               "fontSize",
@@ -124,7 +124,17 @@ export default function DraftTextArea({
               "colorPicker",
               "emoji",
               "history",
-            ],
+              "link"
+            ]:[
+              "inline",
+              "blockType",
+              "fontSize",
+              "fontFamily",
+              "list",
+              "colorPicker",
+              "emoji",
+              "history",
+             ],
             inline: {
               inDropdown: true,
             },

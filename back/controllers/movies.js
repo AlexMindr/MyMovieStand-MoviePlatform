@@ -258,122 +258,16 @@ const getMovie = async (req, res) => {
   }
 };
 
-
-// const postTest = async (req, res) => {
-//   try {
-//     const key = process.env.APIKEY;
-//     var movies = [];
-//     var movies2 = [];
-//     const data2 = fs.readFileSync("./data/bypopularity.txt", "utf8", (err) => {
-//       if (err) console.log(err);
-//     });
-//     let idList = data2.split(/\r?\n/);
-//     //commentat/sters ulterior
-//     idList = idList.slice(0, 10);
-//     for (let i = 0; i < idList.length; i++) {
-//       // const apimovie =await
-//       // axios.get(`https://api.themoviedb.org/3/movie/${idList[i]}?api_key=${key}&append_to_response=credits`)
-//       // let {id,title}=apimovie.data
-//       // let {cast,crew}=apimovie.data.credits
-//       // crew=JSON.stringify(crew)
-//       // cast=JSON.stringify(cast)
-//       // movies.push({movie_id:id,title,cast,crew})
-//       // movies.push(apimovie.data)
-//       const apimovie = await axios.get(
-//         `https://api.themoviedb.org/3/movie/${idList[i]}?api_key=${key}&append_to_response=keywords,credits`
-//       );
-//       let {
-//         budget,
-//         genres,
-//         homepage,
-//         id,
-//         original_language,
-//         original_title,
-//         overview,
-//         popularity,
-//         production_companies,
-//         production_countries,
-//         release_date,
-//         revenue,
-//         runtime,
-//         spoken_languages,
-//         status,
-//         tagline,
-//         title,
-//         vote_average,
-//         vote_count,
-//       } = apimovie.data;
-//       let { cast, crew } = apimovie.data.credits;
-//       let { keywords } = apimovie.data.keywords;
-//       crew = JSON.stringify(crew);
-//       cast = JSON.stringify(cast);
-//       genres = JSON.stringify(genres);
-//       keywords = JSON.stringify(keywords);
-//       production_companies = JSON.stringify(production_companies);
-//       production_countries = JSON.stringify(production_countries);
-//       spoken_languages = JSON.stringify(spoken_languages);
-//       movies.push({ movie_id: id, title, cast, crew });
-//       movies2.push({
-//         budget,
-//         genres,
-//         homepage,
-//         id,
-//         keywords,
-//         original_language,
-//         original_title,
-//         overview,
-//         popularity,
-//         production_companies,
-//         production_countries,
-//         release_date,
-//         revenue,
-//         runtime,
-//         spoken_languages,
-//         status,
-//         tagline,
-//         title,
-//         vote_average,
-//         vote_count,
-//       });
-//     }
-
-//     const path1 = `./data/tmdb_credits.csv`;
-//     const path2 = `./data/tmdb_movies.csv`;
-//     //const data = [{ name: 'Stevie', id: 10 }, { name: 'Ray', id: 20 }];
-//     const options = { headers: true, quoteColumns: false };
-
-//     writeToPath(path1, movies, options)
-//       .on("error", (err) => console.error(err))
-//       .on("finish", () => console.log("Done writing."));
-
-//     writeToPath(path2, movies2, options)
-//       .on("error", (err) => console.error(err))
-//       .on("finish", () => console.log("Done writing."));
-
-//     res.status(201).json("Success");
-//   } catch (error) {
-//     res.status(404).json({ message: error.message });
-//   }
-// };
-const populateMovies = async (req, res) => {
-  //TODO ADMIN
-  // const useruuid=res.userId
-  //   const role=res.userRole
-  //   const user = await User.findOne({where:{useruuid,role}})
-  //   if(user){
-  //TODO get oldest video?
+const pop = async (req,res) => {
   const key = process.env.APIKEY;
-  try {
-    var movies = [];
+   var movies = [];
     var movies2 = [];
     const data = fs.readFileSync("./data/bypopularity.txt", "utf8", (err) => {
       if (err) console.log(err);
     });
     let idList = data.split(/\r?\n/);
-    //commentat/sters ulterior
-    //idList = idList.slice(19,20 );
+    idList=idList.slice(0,1304)
     for(let i=0;i<idList.length;i++){
-      //await sleep(100)
       const apimovie = await axios.get(
         `https://api.themoviedb.org/3/movie/${idList[i]}?api_key=${key}&append_to_response=videos,keywords,releases,credits`
       );
@@ -408,8 +302,10 @@ const populateMovies = async (req, res) => {
       let { cast, crew } = apimovie.data.credits;
       let { keywords } = apimovie.data.keywords;
       
-      let trailers=videos.results.length > 0 ? videos.results.filter(item=>(item.type==='Trailer' || item.type==='Teaser')&&item.site==='YouTube'):[]
-      let trailerPath =trailers.length>0? trailers[trailers.length-1].key:null
+      let trailers=videos.results.length > 0 ? videos.results.filter(item=>item.type==='Trailer'&&item.site==='YouTube'):[]
+      if(trailers.length===0)
+          trailers=videos.results.length > 0 ? videos.results.filter(item=>item.type==='Teaser'&&item.site==='YouTube'):[]
+      let trailerPath =trailers.length>0? trailers[0].key:null
       
       release_date = release_date ? release_date : null;
       let genreids = [];
@@ -495,18 +391,172 @@ const populateMovies = async (req, res) => {
     const path2 = `./data/tmdb_movies.csv`;
     const options = { headers: true, quoteColumns: false };
 
-    // writeToPath(path1, movies, options)
-    //   .on("error", (err) => console.error(err))
-    //   .on("finish", () => console.log("Done writing."));
+    writeToPath(path1, movies, options)
+      .on("error", (err) => console.error(err))
+      .on("finish", () => console.log("Done writing."));
 
-    // writeToPath(path2, movies2, options)
-    //   .on("error", (err) => console.error(err))
-    //   .on("finish", () => console.log("Done writing."));
+    writeToPath(path2, movies2, options)
+      .on("error", (err) => console.error(err))
+      .on("finish", () => console.log("Done writing."));
 
 
     res.status(201).json("Success");
+}
+const populateMovies = async (req, res) => {
+  try {
+    const useruuid=req.userId
+    const role=req.userRole
+    const user = await User.findOne({where:{useruuid,role}})
+  if(user){
+  const key = process.env.APIKEY;
+   var movies = [];
+    var movies2 = [];
+    const data = fs.readFileSync("./data/bypopularity.txt", "utf8", (err) => {
+      if (err) console.log(err);
+    });
+    let idList = data.split(/\r?\n/);
+    idList=idList.slice(0,1304)
+    for(let i=0;i<idList.length;i++){
+      const apimovie = await axios.get(
+        `https://api.themoviedb.org/3/movie/${idList[i]}?api_key=${key}&append_to_response=videos,keywords,releases,credits`
+      );
+      
+      let {
+        production_companies,
+        production_countries,
+        spoken_languages,
+        tagline,
+        vote_average,
+        vote_count,
+        adult,
+        backdrop_path,
+        budget,
+        genres,
+        homepage,
+        id,
+        imdb_id,
+        popularity,
+        original_title,
+        title,
+        overview,
+        poster_path,
+        release_date,
+        revenue,
+        runtime,
+        status,
+        videos,
+        original_language,
+        releases,
+      } = apimovie.data;
+      let { cast, crew } = apimovie.data.credits;
+      let { keywords } = apimovie.data.keywords;
+      
+      let trailers=videos.results.length > 0 ? videos.results.filter(item=>item.type==='Trailer'&&item.site==='YouTube'):[]
+      if(trailers.length===0)
+          trailers=videos.results.length > 0 ? videos.results.filter(item=>item.type==='Teaser'&&item.site==='YouTube'):[]
+      let trailerPath =trailers.length>0? trailers[0].key:null
+      
+      release_date = release_date ? release_date : null;
+      let genreids = [];
+      genres.map((genre) => {
+        genreids.push({ genreid: genre.id });
+      });
+
+      let keywordsarr = "";
+      keywords.map((keyword) => {
+        keywordsarr += "," + keyword.name;
+      });
+      keywordsarr = keywordsarr.substring(1);
+      let uscertification;
+      releases.countries.map((item) => {
+        if (item.iso_3166_1 === "US") {
+          uscertification = item.certification;
+        }
+      });
+
+      await Movie.create(
+        {
+          adult,
+          backdrop_path,
+          budget,
+          homepage,
+          imdb_id,
+          tmdb_id: id,
+          original_title,
+          title,
+          overview,
+          poster_path,
+          release_date,
+          revenue,
+          duration: runtime,
+          status,
+          trailer: trailerPath,
+          language: original_language,
+          uscertification,
+          keywords: keywordsarr,
+          Moviegenres: genreids,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          include: [Moviegenre],
+        }
+      );
+
+      crew = JSON.stringify(crew);
+      cast = JSON.stringify(cast);
+      genres = JSON.stringify(genres);
+      keywords = JSON.stringify(keywords);
+      production_companies = JSON.stringify(production_companies);
+      production_countries = JSON.stringify(production_countries);
+      spoken_languages = JSON.stringify(spoken_languages);
+      movies.push({ movie_id: id, title, cast, crew });
+      movies2.push({
+        budget,
+        genres,
+        homepage,
+        id,
+        keywords,
+        original_language,
+        original_title,
+        overview,
+        popularity,
+        production_companies,
+        production_countries,
+        release_date,
+        revenue,
+        runtime,
+        spoken_languages,
+        status,
+        tagline,
+        title,
+        vote_average,
+        vote_count,
+      });
+    };
+
+
+    const path1 = `./data/tmdb_credits.csv`;
+    const path2 = `./data/tmdb_movies.csv`;
+    const options = { headers: true, quoteColumns: false };
+
+    writeToPath(path1, movies, options)
+      .on("error", (err) => console.error(err))
+      .on("finish", () => console.log("Done writing."));
+
+    writeToPath(path2, movies2, options)
+      .on("error", (err) => console.error(err))
+      .on("finish", () => console.log("Done writing."));
+
+
+    res.status(201).json("Success");
+  }else{
+    res.status(404).json({ message: "You do not have access" });
+  
+  } 
+
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -514,8 +564,8 @@ const createMovie = async (req, res) => {
   const key = process.env.APIKEY;
 
   //TODO ADMIN
-  // const useruuid=res.userId
-  //   const role=res.userRole
+  // const useruuid=req.userId
+  //   const role=req.userRole
   //   const user = await User.findOne({where:{useruuid,role}})
   //   if(user){
 
@@ -609,8 +659,8 @@ const updateMovie = async (req, res) => {
   const key = process.env.APIKEY;
 
   //TODO ADMIN
-  // const useruuid=res.userId
-  //   const role=res.userRole
+  // const useruuid=req.userId
+  //   const role=req.userRole
   //   const user = await User.findOne({where:{useruuid,role}})
   //   if(user){
   try {
@@ -707,13 +757,13 @@ const updateMovie = async (req, res) => {
 };
 
 const updatePopularityAndRating = async (req, res) => {
-  //TODO ADMIN
-  // const useruuid=res.userId
-  //   const role=res.userRole
-  //   const user = await User.findOne({where:{useruuid,role}})
-  //   if(user){
 
   try {
+    const useruuid=req.userId
+    const role=req.userRole
+    const user = await User.findOne({where:{useruuid,role}})
+    if(user){
+
     const movies = await Movie.findAll({ attributes: ["movieid"] });
     movies.map(async (movie) => {
       const countPopularity = await Watchlist.count({
@@ -746,15 +796,18 @@ const updatePopularityAndRating = async (req, res) => {
     });
 
     res.status(201).json("Success");
+  }else{
+    res.status(404).json({ message: 'You do not have access' });
+  } 
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
 const deleteMovie = async (req, res) => {
   //TODO ADMIN
-  // const useruuid=res.userId
-  //   const role=res.userRole
+  // const useruuid=req.userId
+  //   const role=req.userRole
   //   const user = await User.findOne({where:{useruuid,role}})
   //   if(user){
 
@@ -781,4 +834,5 @@ export {
   getMoviesSimpleFilter,
   getHomeMovies,
   updatePopularityAndRating,
+  pop
 };

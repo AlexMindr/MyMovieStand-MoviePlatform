@@ -1,28 +1,22 @@
 .Box-movierecomm {
-  width: 100px;
+  width: 95px;
   display: block;
-  /* align-items: center;
-    justify-content: center;
-    box-sizing: border-box; */
-  /* margin-left: 5px; */
   position: relative;
+  width: 120px;
 }
-.Box-movierecomm-img {
-  /* border: 2px solid purple;
-    position: relative; */
-}
+
 .Box-movierecomm-img img {
-  width: 100px;
-  height: 150px;
+  width: 95px;
+  height: 140px;
   /* box-sizing: border-box; */
 }
 .Box-movierecomm-link {
   display:none;
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 40%;
   transform: translate(-50%, -50%);
-  width: 100px;
+  width: 95px;
   overflow: hidden;
   text-overflow: ellipsis;
   height: 40px;

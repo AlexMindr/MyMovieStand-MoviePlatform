@@ -30,15 +30,15 @@ const getUserRecommendations = async (req, res) => {
         let randomElement =
           watchlist[Math.floor(Math.random() * watchlist.length)];
         const res = await axios.post(
-          `http://127.0.0.1:5002/predict-soup?Title=${randomElement}`
+          `http://127.0.0.1:5002/predict-soup?Title=${randomElement.Movie.title}`
         );
         let predictions = res.data;
+        
+        predictions=predictions.filter((item)=>watchlist.some(wl=>wl.Movie.title===item)===false)
+        console.log(predictions)
         let randomRes =
           predictions[Math.floor(Math.random() * predictions.length)];
-        if (recommendations.find((el) => el === randomRes)) {
-          randomRes =
-            predictions[Math.floor(Math.random() * predictions.length)];
-        }
+        
         recommendations.push(randomRes);
       }
       for (let i = 0; i <= 4; i++) {

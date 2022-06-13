@@ -93,6 +93,7 @@ const AddNews = () => {
               setField={setField}
               placeholder={"Content of news"}
               textMaxLength={5000}
+              link={true}
             />
           </Grid>
           <Grid item xs={12}>
