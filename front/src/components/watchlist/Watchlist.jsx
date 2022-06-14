@@ -150,7 +150,10 @@ const Watchlist = ({watchlist,myProfile}) => {
           }),
           renderCell: (params) => <>
               <Button variant='text' onClick={handleOpenWatchForm}>
-                  Edit
+                  Edit 
+                  {/* <Link to={`/${params.value.title}`}></Link> */}
+                 
+              
               </Button> 
               <Modal
                   open={openWatchForm}
@@ -162,12 +165,14 @@ const Watchlist = ({watchlist,myProfile}) => {
                   aria-describedby="formWatchlist"
                   >
                   <Box className='watchformmodal'>
+                    
                       <Box  sx={{width:'70vw',height:'90vh'}} component="div">
-                      <WatchlistForm movieid={parseInt(params.value.movieid)} type={'movie'}
-                          handleCloseWatchForm={handleCloseWatchForm} title={params.value.title} episodesTotal={1}/>
+                      <WatchlistForm movieid={parseInt(params.row.movieid)} type={'movie'}
+                          handleCloseWatchForm={handleCloseWatchForm} title={params.row.title} />
                       </Box>
                   </Box>
               </Modal>
+              
              </>,
           sortable:false,
           disableColumnMenu: true,
@@ -253,7 +258,7 @@ const Watchlist = ({watchlist,myProfile}) => {
           }),
           renderCell: (params) => <>
               <Button variant='text' onClick={handleOpenWatchForm}>
-                  Edit
+                  Edit 
               </Button> 
               <Modal
                   open={openWatchForm}

@@ -108,9 +108,9 @@ const EditInfo = ({ initialState, currentName, username }) => {
             <></>
           )}
           <Grid item xs={12}>
-            <Typography variant="h6">
+            {/* <Typography variant="h6">
               Your current name is {currentName}
-            </Typography>
+            </Typography> */}
             <br />
             <p>All fields are optional</p>
           </Grid>

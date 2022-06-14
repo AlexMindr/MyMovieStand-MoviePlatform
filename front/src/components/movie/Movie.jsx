@@ -621,7 +621,7 @@ const Movie = ({ movieid, children }) => {
                   to={`/movies/${movieid}/posts/all`}
                   style={{ textShadow: "1px 1px 1px orange",fontWeight:'bolder' ,color:'black'}}
                   >
-                  Show all forum discussions related to this movie
+                  Show all forum discussions
                 </Link>
               </Box>
             ) : (

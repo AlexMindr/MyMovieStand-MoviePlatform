@@ -187,6 +187,7 @@ const Userposts = () => {
                         </Typography>
                       </Box>
                       <PostTitle post={post} />
+                      {/* {post.UserComments.length>0} */}
                       <Box sx={{ flexGrow: 1 }} className="userposts-box">
                         <Grid container rowGap={1} columnSpacing={"10px"}>
                           {post.UserComments.map((comment) => (

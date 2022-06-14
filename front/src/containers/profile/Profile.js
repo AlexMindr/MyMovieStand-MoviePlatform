@@ -75,7 +75,7 @@ const Profile = () => {
       <StyledEngineProvider injectFirst>
         <Paper elevation={2}>
           <Typography component="h2" variant="h3" className="Container-title">
-            {myProfile ? "My" : user.username + "'s"} profile
+            {myProfile ? "My" : profile.username + "'s"} profile
           </Typography>
 
           <Box

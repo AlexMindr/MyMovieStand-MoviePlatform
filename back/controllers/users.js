@@ -245,7 +245,6 @@ const update = async (req, res) => {
   const saltHash = parseInt(process.env.SALT);
   try {
     const useruuid = req.userId;
-    //if new pass not null, change pass
     const {
       firstName,
       lastName,
@@ -271,13 +270,7 @@ const update = async (req, res) => {
       updatePass = await bcrypt.hash(newPass, saltHash);
     }
 
-    // var fullName = checkPass.fullname;
-    // if (lastName && firstName) fullName = firstName + " " + lastName;
-    // if (!lastName || !firstName)
-    //   return res
-    //     .status(400)
-    //     .json({ message: "Last name or first name cannot be empty!" });
-
+    
     await User.update(
       {
         //fullname: fullName,
@@ -341,7 +334,6 @@ const deleteAdm = async (req, res) => {
 };
 
 async function myFunc(userid) {
-  // console.log(`arg was => ${userid}`);
   await User.update(
     {
       changecode: null,
@@ -360,7 +352,6 @@ const resetPass = async (req, res) => {
   const emailPass = process.env.EMAIL_PASS;
   try {
     const { email } = req.body;
-    //const email='a@g.com'
     const newCode = crypto.randomBytes(5).toString("hex");
 
     const selectUser = await User.findOne({ where: { email } });
@@ -369,7 +360,11 @@ const resetPass = async (req, res) => {
       return res.status(400).json({ message: "Invalid email address" });
     }
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      pool: true,
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      //service: "gmail",
       auth: {
         user: emailUser,
         pass: emailPass,
@@ -377,10 +372,11 @@ const resetPass = async (req, res) => {
     });
 
     let mailOptions = {
-      from: "myemail@gmail.com",
+      from: "mymoviestand@no-contact.com",
       to: selectUser.email,
       subject: `Reset your password`,
-      html: `<h1>Reset your password</h1>
+      html: ` <h1>Reset your password</h1>
+              <br/>
               <p>The code to reset your password is : ${newCode}</p>
         `,
       // attachments: [
@@ -406,20 +402,22 @@ const resetPass = async (req, res) => {
       }
     );
 
-    // transporter.sendMail(mailOptions, function (err, info) {
-    //   if (err) {
-    //     res.status(500).json({ message: "Something went wrong" });
-    //   } else {
-
-    //   }
-    // });
+    transporter.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        res.status(500).json({ message: "Something went wrong" });
+        console.log(err.message)
+      } else {
+        setTimeout(myFunc, 15 * 60000, selectUser.userid);
+        console.log(newCode);
+        res.status(201).json({ message: "Success" });
+      }
+    });
 
     //Schimbat in 10-15 min = 15 * 60000
-    setTimeout(myFunc, 15 * 60000, selectUser.userid);
-    console.log(newCode);
-    res.status(201).json({ message: "Success" });
+    
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
+    console.log(error.message)
   }
 };
 

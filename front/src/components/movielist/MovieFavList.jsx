@@ -20,7 +20,7 @@ const MovieFavList = ({posterPath,title,movieid,rating,status,actions,favourite,
   return (
     <Card sx={{ maxWidth: 200, minWidth:150 }} className='moviefavlist-card'>
         <CardHeader className='moviefavlist-header'
-        title={title}
+        title={title.length>21?title.slice(0,21)+'...':title}
         />
         <CardMedia className='moviefavlist-image'
         component="img"
@@ -29,10 +29,10 @@ const MovieFavList = ({posterPath,title,movieid,rating,status,actions,favourite,
         />
         <CardContent className='moviefavlist-content'>
         <Typography variant="body2" color="text.secondary" component='span'>
-            <span>Rated: &nbsp; {rating}</span>&nbsp;<StarIcon sx={{verticalAlign:'bottom',color:'gold'}}/>
+            <span>Rated: &nbsp; {rating?rating:'-'}</span>&nbsp;<StarIcon sx={{verticalAlign:'bottom',color:'gold'}}/>
         </Typography>
         <Typography variant="body2" color="text.secondary" component='span'>
-            Status: {status}
+            Status: {status?status:'-'}
         </Typography>
         </CardContent>
         {actions?<CardActions className='moviefavlist-actions'>

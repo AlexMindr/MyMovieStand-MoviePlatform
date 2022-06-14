@@ -317,7 +317,11 @@ const getUserComments = async (req, res) => {
       "createdAt",
       "title",
       "postid",
-      ],
+      [
+        Sequelize.fn("COUNT", Sequelize.col("usercomments.ucid")),
+        "commentCount",
+      ],  
+    ],
     limit,
     offset,
     distinct: true,
@@ -342,13 +346,14 @@ const getUserComments = async (req, res) => {
         model: Movie,
         attributes: ["title"],
       },
-    ],
 
+    ],
       order: [["createdAt", "DESC"]],
   })
     .then((data) => {
+      data.rows.filter(post=>post.UserComments.length>0)
+      data.count=data.rows.length
       const { posts, totalPages } = getPagingData(data, page, limit);
-
       res.status(200).json({ posts, totalPages });
     })
 

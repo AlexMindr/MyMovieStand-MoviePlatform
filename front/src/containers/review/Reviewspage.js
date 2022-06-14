@@ -66,7 +66,7 @@ const Reviewspage = () => {
                 component="h3"
                 sx={{ fontSize: "1.3rem" }}
               >
-                You are viewing all user reviews about the movie:
+                You are viewing all user reviews for the movie:
               </Typography>
               <Link to={`/movies/${movie.movieid}`}>
                 <Typography variant="h5" component="h4">
