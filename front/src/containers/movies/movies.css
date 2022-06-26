@@ -349,6 +349,9 @@
     min-width: 90px;
     /* font-size: 0.8rem; */
   }
+  .search-filter-container .input {
+    width:80%;
+  }
 
   
 }

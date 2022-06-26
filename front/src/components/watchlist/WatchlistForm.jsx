@@ -55,14 +55,13 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,children}) => {
    }
 
    const handleDelete = (e) => {
-      //TODO Verificat
       e.preventDefault()
       dispatch(actionDelWlItem(formData.movieid))
       .then(res=>{
          if(res){
             setFormError(res)
-            //TODO notification in loc de eroare
-            //setFormData({id,status:'',episodes:'',rating:''})
+            //dispatch(actionAddNotif({content:`Something went wrong when updating the movie`}))
+           
          }
          else {
            setFormError(false)
@@ -128,10 +127,11 @@ const WatchlistForm = ({movieid,type,handleCloseWatchForm,title,children}) => {
                      <Button type="submit"  variant="contained" color="primary" className='submit-watchlist'>
                         Submit
                      </Button>
-                     {/* //TODO ADD logic to delete */}
+                     {isCreateOrUpdate==='update'?
                      <Button variant="contained" color="primary" className='submit-watchlist' onClick={handleDelete}>
                         Delete
                      </Button>
+                     :<></>}
               </Box>
                
                 

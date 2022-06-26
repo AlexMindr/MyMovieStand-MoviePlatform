@@ -639,7 +639,7 @@ const Movie = ({ movieid, children }) => {
                   <Grid container rowGap={1} columns={15}>
                     {recomm && recomm.length > 0 ? (
                       recomm.map((movie, index) => (
-                        <Grid item xs={3} md={5} key={movie.movieid}>
+                        <Grid item xs={5} md={3} lg={2} key={movie.movieid}>
                           <HomeRecomm movie={movie} />
                         </Grid>
                       ))

@@ -3,11 +3,59 @@ import './watchlist.css'
 import WatchlistForm from './WatchlistForm'
 import  Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Modal from '@mui/material/Modal' 
+import Portal from '@mui/material/Portal' 
+import  ClickAwayListener  from '@mui/material/ClickAwayListener'
 import { DataGrid, gridStringOrNumberComparator } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import  useWindowDimensions from '../../auxcomponents/hooks/windowDimensions'
 import StarIcon from '@mui/icons-material/Star';
+
+const styles = {
+  position: 'fixed',
+  top: '60vh',
+  left: '50vw',
+  transform: 'translate(-50%, -50%)',
+  zIndex: 10,
+  border: '1px solid',
+  p: 1,
+  bgcolor: 'var(--color-bg-noncontainer)',
+  width:'70vw',
+  height:'75vh'
+};
+
+
+
+const Popover=({movieid,title})=>{
+  const [open, setOpen] = useState(false);
+   
+  const handleClick = () => {
+    setOpen((prev) => !prev);
+  };
+
+  const handleClickAway = () => {
+    setOpen(false);
+  };
+
+  return (<ClickAwayListener onClickAway={handleClickAway}>
+  <Box sx={{ position: 'relative' }}>
+    <Button onClick={handleClick}>
+      Edit
+    </Button>
+    {open ? (
+   <Portal>
+    <Box sx={styles}>
+        <WatchlistForm movieid={movieid} type={'movie'}
+            handleCloseWatchForm={handleClickAway} title={title} />
+      
+    </Box>
+   </Portal>
+) : null}
+  </Box>
+</ClickAwayListener>)
+}
+
+
+
 
 function rows (watchlist){
    
@@ -33,15 +81,10 @@ const titleSortComparator = (v1, v2, param1, param2) => {
   };
   
 
-
+  
 
 const Watchlist = ({watchlist,myProfile}) => {
-    const [openWatchForm, setOpenWatchForm] = useState(false);
     const { width } = useWindowDimensions();
-
-    const handleOpenWatchForm = () => setOpenWatchForm(true);
-    const handleCloseWatchForm = () => setOpenWatchForm(false);
-
     
     const columns = useMemo(() =>
      [ 
@@ -149,29 +192,7 @@ const Watchlist = ({watchlist,myProfile}) => {
             movieid:params.row.movieid,
           }),
           renderCell: (params) => <>
-              <Button variant='text' onClick={handleOpenWatchForm}>
-                  Edit 
-                  {/* <Link to={`/${params.value.title}`}></Link> */}
-                 
-              
-              </Button> 
-              <Modal
-                  open={openWatchForm}
-                  onClose={(e) => {
-                      e.preventDefault();
-                      handleCloseWatchForm();
-                  }}
-                  aria-labelledby={'add'+params.value.title}
-                  aria-describedby="formWatchlist"
-                  >
-                  <Box className='watchformmodal'>
-                    
-                      <Box  sx={{width:'70vw',height:'90vh'}} component="div">
-                      <WatchlistForm movieid={parseInt(params.row.movieid)} type={'movie'}
-                          handleCloseWatchForm={handleCloseWatchForm} title={params.row.title} />
-                      </Box>
-                  </Box>
-              </Modal>
+              <Popover movieid={parseInt(params.row.movieid)} title={params.row.title}/> 
               
              </>,
           sortable:false,
@@ -179,7 +200,7 @@ const Watchlist = ({watchlist,myProfile}) => {
           
         },
       
-      ],[openWatchForm]);
+      ],[]);
       
 
       const columns2 = useMemo(() =>
@@ -257,25 +278,8 @@ const Watchlist = ({watchlist,myProfile}) => {
             movieid:params.row.movieid,
           }),
           renderCell: (params) => <>
-              <Button variant='text' onClick={handleOpenWatchForm}>
-                  Edit 
-              </Button> 
-              <Modal
-                  open={openWatchForm}
-                  onClose={(e) => {
-                      e.preventDefault();
-                      handleCloseWatchForm();
-                  }}
-                  aria-labelledby={'add'+params.value.title}
-                  aria-describedby="formWatchlist"
-                  >
-                  <Box className='watchformmodal'>
-                      <Box  sx={{width:'70vw',height:'90vh'}} component="div">
-                      <WatchlistForm movieid={parseInt(params.value.movieid)} type={'movie'}
-                          handleCloseWatchForm={handleCloseWatchForm} title={params.value.title} episodesTotal={1}/>
-                      </Box>
-                  </Box>
-              </Modal>
+              <Popover movieid={parseInt(params.row.movieid)} title={params.row.title}/> 
+    
              </>,
           sortable:false,
           disableColumnMenu: true,
@@ -287,12 +291,12 @@ const Watchlist = ({watchlist,myProfile}) => {
           },
         },
       
-      ],[openWatchForm]);
+      ],[]);
 
     
 return (
     <Box component='div' className='watchlistpage-container'>
-        <Box component='div' style={{height:'100vh',width:'100%'}}>
+        <Box component='div' sx={{minHeight:'100vh',width:'100%',height:'900px'}}>
             {watchlist && width>735?
                 <DataGrid
                 rows={rows(watchlist)}

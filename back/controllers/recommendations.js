@@ -70,11 +70,12 @@ const getMovieRecommendations = async (req, res) => {
     let moviesPredicted = [];
     if (title) {
       let recommendations = [];
+      const res = await axios.post(
+        `http://127.0.0.1:5002/predict-overview?Title=${title}`
+      );
+      let predictions = res.data; 
       for (let i = 1; i <= 5; i++) {
-        const res = await axios.post(
-          `http://127.0.0.1:5002/predict-overview?Title=${title}`
-        );
-        let predictions = res.data;
+        
         let randomRes =
           predictions[Math.floor(Math.random() * predictions.length)];
         if (recommendations.find((el) => el === randomRes)) {
