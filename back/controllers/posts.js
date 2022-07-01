@@ -310,18 +310,10 @@ const getUserComments = async (req, res) => {
     where: { username },
   });
 
-  await Post.findAndCountAll({
+  
+  await UserComment.findAndCountAll({
     subQuery: false,
-    attributes: [
-      "movieid",
-      "createdAt",
-      "title",
-      "postid",
-      [
-        Sequelize.fn("COUNT", Sequelize.col("usercomments.ucid")),
-        "commentCount",
-      ],  
-    ],
+    attributes: ["comment_content", "ucid", "createdAt"],
     limit,
     offset,
     distinct: true,
@@ -331,28 +323,36 @@ const getUserComments = async (req, res) => {
         attributes: ["username", "fullname",'firstName','lastName'],
       },
       {
-        model: UserComment,
-        required: false,
-        attributes: ["comment_content", "ucid", "createdAt"],
-        where: { userid },
+        model: Post,
+        required: true,
+        attributes: [
+          "movieid",
+          "createdAt",
+          "title",
+          "postid",
+        ],
+       
         include: [
           {
             model: User,
             attributes: ["username", "fullname",'firstName','lastName'],
           },
+          {
+            model: Movie,
+            attributes: ["title"],
+          },
+         
         ],
       },
-      {
-        model: Movie,
-        attributes: ["title"],
-      },
+      
 
     ],
+      where: { userid },
       order: [["createdAt", "DESC"]],
   })
     .then((data) => {
-      data.rows.filter(post=>post.UserComments.length>0)
-      data.count=data.rows.length
+      // data.rows.filter(post=>post.UserComments.length>0)
+      // data.count=data.rows.length
       const { posts, totalPages } = getPagingData(data, page, limit);
       res.status(200).json({ posts, totalPages });
     })

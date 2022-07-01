@@ -29,18 +29,21 @@ const Signup = () => {
 
     const handleSubmit = async (e) => {
        e.preventDefault()
-       if(formData.dateofbirth!==null && new Date().getFullYear()-new Date(formData.dateofbirth).getFullYear()>1)
+        if(formData.dateofbirth!==null && new Date().getFullYear()-new Date(formData.dateofbirth).getFullYear()>1){
         setFormError(false)
+        if (formData.dateofbirth!==null)formData.dateofbirth=new Date((formData.dateofbirth));
+        if(!errorCPassForm && !errorPassForm && !errorUserForm && !errorfirstNameForm && !errorlastNameForm && !formError)
+          dispatch(actionSignUp(formData))
+          .then(res=>{
+            if(res)setFormError(res)
+            else navigate(`/home`)
+          })
+          .catch(e=>setFormError(e))
+        }
        else 
         setFormError('Invalid date')
-       if (formData.dateofbirth!==null)formData.dateofbirth=new Date((formData.dateofbirth));
-       if(!errorCPassForm && !errorPassForm && !errorUserForm && !errorfirstNameForm && !errorlastNameForm && !formError)
-       dispatch(actionSignUp(formData))
-       .then(res=>{
-          if(res)setFormError(res)
-          else navigate(`/home`)
-         })
-       .catch(e=>setFormError(e))
+      
+      
         
     }
     

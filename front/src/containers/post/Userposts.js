@@ -175,31 +175,31 @@ const Userposts = () => {
                     <Grid
                       item
                       xs={12}
-                      key={post.postid}
+                      key={`${post.Post.postid} & ${post.ucid}`}
                       className="userposts-post"
                     >
                       <Box component="div" className="userposts-post-title">
                         <Typography variant="h5" component="h4">
                           Movie: &nbsp;
-                          <Link to={`/movies/${post.movieid}`}>
-                            {post.Movie.title}
+                          <Link to={`/movies/${post.Post.movieid}`}>
+                            {post.Post.Movie.title}
                           </Link>
                         </Typography>
                       </Box>
-                      <PostTitle post={post} />
+                      <PostTitle post={post.Post} />
                       {/* {post.UserComments.length>0} */}
                       <Box sx={{ flexGrow: 1 }} className="userposts-box">
                         <Grid container rowGap={1} columnSpacing={"10px"}>
-                          {post.UserComments.map((comment) => (
+                          {/* {post.UserComments.map((comment) => ( */}
                             <Grid
                               item
                               xs={12}
-                              key={comment.ucid}
+                              // key={comment.ucid}
                               className="userposts-post"
                             >
-                              <PostComm postComment={comment} />
+                              <PostComm postComment={post} />
                             </Grid>
-                          ))}
+                          {/* ))} */}
                         </Grid>
                       </Box>
                     </Grid>
@@ -217,7 +217,7 @@ const Userposts = () => {
               </div>
             )}
 
-            {postList !== null && postList.length >= 1 ? (
+            {commList !== null && commList.length >= 1 ? (
               <div className="userposts-pagination">
                 <Pagination
                   count={commTotalPages}

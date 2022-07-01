@@ -17,11 +17,7 @@ const SimpleNotif = ({ notification }) => {
     <Box onClick={handleUpdate} className="simplenotif-box">
       <Box className="simplenotif-date">
         {moment(notif.createdAt)
-          .startOf(
-            new Date(notif.createdAt).toDateString() === new Date().toDateString()
-              ? "hour"
-              : "day"
-          )
+          .startOf("minute")
           .fromNow()}
       </Box>
       <Box className="simplenotif-content">{notif.content}</Box>

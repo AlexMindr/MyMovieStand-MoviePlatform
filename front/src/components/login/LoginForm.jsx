@@ -18,7 +18,7 @@ const Login = () => {
     const navigate = useNavigate()
 
     const toRedirect = location.state?.from?.pathname || "/";
-     console.log(toRedirect)
+     //console.log(toRedirect)
     const handleSubmit = async (e) => {
       e.preventDefault()
       

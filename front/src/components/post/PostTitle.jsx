@@ -24,7 +24,7 @@ const PostTitle = ({post}) => {
             </Typography>
         </Box>
         <Box className='Box-posttitle-comms'>
-            {post.commentCount} replies
+            {post.commentCount>=0?`${post.commentCount} replies`:``}
         </Box>
     </Box>
   )

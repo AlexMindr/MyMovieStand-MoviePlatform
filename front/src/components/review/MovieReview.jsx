@@ -46,8 +46,6 @@ const MovieReview = ({review,MaxHeight=140,setRefresh}) => {
         setRefresh(true)
     })
     
-    //.then(res=>console.log(res))
-    //.catch(e=>console.log(e))
   }
   const handleClick = () => {
     setOpen((prev) => !prev);
@@ -84,10 +82,12 @@ const MovieReview = ({review,MaxHeight=140,setRefresh}) => {
   const likeReview = () => {
     const formData={reviewid:review.reviewid,liked:true}
     dispatch(actionLikeReview(formData))
+    setRefresh(true)
   }
   const dislikeReview = () => {
     const formData={reviewid:review.reviewid,liked:false}
     dispatch(actionDislikeReview(formData))
+    setRefresh(true)
   }
   
   return (
