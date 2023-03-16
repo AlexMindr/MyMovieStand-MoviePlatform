@@ -1,0 +1,20 @@
+.notifications-box{
+    background-color: var(--color-bg-container);
+    padding:10px;
+    min-height: 50vh;
+}
+.loading-notifications{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin-top: 20vh;
+    padding-bottom: 20vh;
+    min-height: 40vh;
+}
+.notifications-pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}

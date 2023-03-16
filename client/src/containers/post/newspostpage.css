@@ -1,0 +1,24 @@
+.newspostpage-box{
+    background-color: var(--color-bg-container);
+}
+.loading-newspostpage{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    margin-top: 10%;
+    padding-bottom: 10%;
+}
+.newspostpage-pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.newspostpage-addcomment{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}

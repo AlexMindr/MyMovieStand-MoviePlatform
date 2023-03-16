@@ -1,0 +1,357 @@
+.container-movies{
+    width: 100%;
+    padding:5px 10px 10px 10px;
+    /* margin-inline:2%; */
+}
+.filter-items{
+  display:flex;
+  background: radial-gradient(circle, rgba(122,122,122,1) 10%, rgba(255,255,255,1) 100%);
+  /* padding-bottom: 0.25rem; */
+  align-items: center;
+  /* justify-content: center; */
+  height: 50px;
+}
+
+/*search*/
+.search-filter{
+  /* margin-right:5vw ;
+  margin-left: auto; */
+  margin-inline:10vw;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  width: 70vw;
+  height: 40px;
+}
+.search-filter-container{
+  width: 100%;
+  height: 90%;
+  border-radius: 10px;
+  background-color: white;
+  position: relative;
+  
+}
+
+.search-filter-container .icon{
+  position: absolute;
+  /* margin-left:calc(1vw + 0.5em); */
+  left:20px;
+  top:50%;
+  transform: translate(-50%,-50%);
+
+}
+.search-filter-container .icon .search{
+  cursor: pointer;
+  color:black;
+}
+
+.search-filter-container button{
+  min-width: 20px;
+
+}
+
+
+
+.search-filter-container .input{
+  position:relative;
+  top:10%;
+  width: 90%;
+  height: 80%;
+  left:35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.search-filter-container .input input{
+  position: absolute;
+  top:0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  font-size:1rem;
+  outline:none;
+}
+
+.search-filter-container .input .clear{
+  position: absolute;
+  right: -1em;
+  top:50%;
+  transform: translate(-50%,-50%);
+  cursor: pointer;
+  color: rgb(167, 167, 167);
+}
+
+
+/*selects*/
+.filter-items-selects{
+  display:flex;
+  /* flex:40%; */
+  align-items: center;
+  justify-content: flex-end;
+  margin-inline: 20px;
+}
+.filter-items-selects hr{
+  margin-inline:5px;
+}
+.select-item div,.select-item label,.select-item svg{
+  color:rgb(0, 0, 0) !important;
+}
+.select-item div,.select-item label{
+  font-size: 0.8rem !important;
+}
+
+.select-item>div>div{
+  padding:5px 5px 5px 5px !important;
+}
+
+
+/*dropdown*/
+.dropdown-selectgenres {
+  position: relative;
+  display: none;
+  height: 100%;
+  cursor: pointer;
+  min-width: 90px;
+}
+.dropdown-selectgenres-label {
+  display: block;
+  margin-top: 1.25rem;
+  font-size: 0.9rem;
+  padding-bottom: 3.4px;
+  border-bottom: 0.75px solid  rgb(133, 133, 133);
+  min-width: 70px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-selectgenres-content {
+  display: none;
+  position: absolute;
+  background-color: #f5f5fb;
+  min-width: 70px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1000;
+  font-size: 0.7rem;
+  max-height: 80vh;
+  overflow-y: scroll;
+}
+
+.dropdown-selectgenres-content>div>label{
+  margin-left: 0;
+}
+/* Change color of dropdown links on hover */
+/* .dropdown-selectgenres-content a:hover,.dropdown-selectgenres-content button:hover {
+    background-color: white;
+    color:rgb(48, 48, 48);
+  } */
+
+/* Show the dropdown menu on hover */
+.dropdown-selectgenres:hover .dropdown-selectgenres-content {display: block; z-index: 1000;}
+
+
+
+
+
+
+.movie-content-box{
+  display:flex;
+  flex-grow: 1;
+  margin-top: 0.5rem;
+
+}
+.menu-checkbox{
+    display:inline-block;
+    flex:20%;
+    background-color: rgb(194, 194, 194);
+    border: solid;
+    border-color: black;
+    height:100%;
+    margin-right:10px;
+    margin-left:5px;
+}
+.menu-checkbox span{
+  font-size: 0.9rem;
+}
+.menu-checkbox h3{
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+
+.container-movies-content{
+    flex:80%;
+  
+}
+
+
+
+
+.container-movies-grid{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  row-gap: 1rem;
+  column-gap: 10px;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  padding-inline-start: 0;
+  justify-content: center; 
+  flex-grow: 1; 
+} 
+
+.container-movies-grid>li {
+  /* display:flex;
+  justify-content: center; */
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  list-style-type: none;
+  text-decoration: none;  
+}
+
+
+.loading-movies{
+  display:flex;
+  position:relative;
+  overflow-y: hidden;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.loading-movies svg{
+ color:red;
+}
+
+.container-pagination{
+  position:relative;
+  width: 100%;
+  left:25%;
+  margin-top: 4rem;
+  margin-bottom: 3rem;
+}
+
+
+
+
+@media only screen and (max-width: 1160px){
+  .container-movies-content{
+    flex:100%; 
+  }
+  .menu-checkbox{
+    display:none;
+    flex:0;  
+  }
+  .dropdown-selectgenres {
+    display: inline-block;
+  }
+  /* .search-filter{
+    margin-left:4vw ;
+    min-width: 275px;
+  } */
+  /* .search-filter-container{
+  
+    min-width: 90%;
+  }    */
+
+}
+@media only screen and (max-width: 930px){
+  .container-movies-content{
+    flex:80%; 
+  }
+  .menu-checkbox{
+    display:inline-block;
+    flex:20%;  
+  }
+  .menu-checkbox h3{
+   font-size: 1.2rem;
+  }
+  .container-movies-grid{
+    grid-template-columns: repeat(2,48%);
+  }
+  .dropdown-selectgenres {
+    display: none;
+  }
+  
+  
+}
+
+@media only screen and (max-width: 812px){
+  .container-movies-content{
+    flex:100%; 
+  }
+  .menu-checkbox{
+    display:none;
+    flex:0;  
+  }
+  .container-movies-grid{
+    margin-left: 3%;
+    grid-template-columns: repeat(2,46%);
+  } 
+  .dropdown-selectgenres {
+    display: inline-block;
+  }
+  
+}
+
+@media only screen and (max-width: 730px){
+  .container-movies-grid{
+    margin-left: 0;
+    grid-template-columns: repeat(2,1fr);
+  } 
+  
+  
+}
+
+@media only screen and (max-width: 690px){
+  .container-movies-content{
+    flex:70%; 
+  }
+  .menu-checkbox{
+    display:inline-block;
+    flex:30%;  
+  }
+  .container-movies-grid{
+    grid-template-columns: repeat(1,1fr);
+  }
+  
+  .dropdown-selectgenres {
+    display: none;
+  }
+}
+
+
+@media only screen and (max-width: 490px){
+  
+  .container-movies-content{
+    flex:100%; 
+  }
+  .menu-checkbox{
+    display:none;
+    flex:0%;  
+  }
+  
+  .container-movies-grid{
+    grid-template-columns: repeat(1,1fr);
+  }
+  
+  .dropdown-selectgenres {
+    display: inline-block;
+    margin-left:5px;
+  }
+
+  .filter-items-selects{
+   margin-inline: 1px;
+   
+  }
+  .filter-items-selects>div{
+    min-width: 90px;
+    /* font-size: 0.8rem; */
+  }
+  .search-filter-container .input {
+    width:80%;
+  }
+
+  
+}
