@@ -364,7 +364,6 @@ const resetPass = async (req, res) => {
       host: "smtp.gmail.com",
       port: 587,
       secure: false,
-      //service: "gmail",
       auth: {
         user: emailUser,
         pass: emailPass,
@@ -413,7 +412,6 @@ const resetPass = async (req, res) => {
       }
     });
 
-    //Schimbat in 10-15 min = 15 * 60000
     
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });

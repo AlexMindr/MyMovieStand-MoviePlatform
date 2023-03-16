@@ -6,7 +6,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const Input = ({
   maxLength=100,
-  minLength=3,
+  minLength=0,
   disabled,
   value,
   name,

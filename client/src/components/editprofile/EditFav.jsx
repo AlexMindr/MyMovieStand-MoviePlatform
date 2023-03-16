@@ -3,7 +3,7 @@ import "./editfav.css";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Box, Grid, Typography, Divider, Button } from "@mui/material";
-import { MovieFavList } from "../";
+import { MovieFavList } from "..";
 import { getFavourites } from "../../api/index";
 import { actionAddToFav, actionRemFromFav } from "../../store/watchlistSlice";
 import { useSelector } from "react-redux";

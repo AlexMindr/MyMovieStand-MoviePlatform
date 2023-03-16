@@ -10,7 +10,7 @@ import {
   UpdateGenres,
   PopulateMovGen,
   UpdatePopAndRat,
-} from "../../components/";
+} from "../../components";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

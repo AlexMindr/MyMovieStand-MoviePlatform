@@ -19,7 +19,7 @@ export const getUserRecommendations = () => api.post(`/recommendations/user`);
 export const deleteUserAdmin = (username) =>
   api.delete(`/user/delete/${username}`);
 export const addNotification = (formData) =>
-  api.post("/notifications/add", formData);
+  api.post("/notifications/add/single", formData);
 export const addGlobalNotification = (formData) =>
   api.post("/notifications/add/global", formData);
 export const deletePostAdmin = (postid) =>

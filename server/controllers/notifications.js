@@ -96,7 +96,6 @@ const addNotifAdmin = async (req, res) => {
         attributes: ["userid"],
         where: { username },
       });
-
       const newNotif = await Notification.create({
         userid,
         content,

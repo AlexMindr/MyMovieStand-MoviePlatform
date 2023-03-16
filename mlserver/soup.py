@@ -1,9 +1,17 @@
 import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import linear_kernel
-from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.metrics.pairwise import linear_kernel, cosine_similarity
+# from sklearn.metrics.pairwise import cosine_similarity
 from ast import literal_eval
+import json
+
+# credits_df = pd.read_csv("https://drive.google.com/uc?export=download&id=1L6posz44Zp0noUKoI5himdR-sh45masE")
+# movies_df = pd.read_csv("https://drive.google.com/uc?export=download&id=1QBQf3JuLhj9PUDyhwQlT2QDnP-F-7m16")
+
+
+# credits_df = pd.read_csv("./tmdb_credits_exp.csv")
+# movies_df = pd.read_csv("./tmdb_movies_exp.csv")
 
 credits_df = pd.read_csv("./tmdb_credits.csv")
 movies_df = pd.read_csv("./tmdb_movies.csv")
@@ -11,23 +19,12 @@ movies_df = pd.read_csv("./tmdb_movies.csv")
 credits_df.columns = ['id', 'tittle', 'cast', 'crew']
 movies_df = movies_df.merge(credits_df, on="id")
 
-# tfidf = TfidfVectorizer(stop_words="english")
-# movies_df["overview"] = movies_df["overview"].fillna("")
-#
-# tfidf_matrix = tfidf.fit_transform(movies_df["overview"])
-#
-# # Compute similarity
-# cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
-#
-# indices = pd.Series(movies_df.index, index=movies_df["title"]).drop_duplicates()
-
-
 features = ["cast", "crew", "keywords", "genres"]
 
-for feature in features:
-    movies_df[feature] = movies_df[feature].apply(literal_eval)
 
-movies_df[features].head(10)
+for feature in features:
+    movies_df[feature] = movies_df[feature].apply(json.loads)
+#    movies_df[feature] = movies_df[feature].apply(literal_eval)
 
 
 def get_director(x):
@@ -37,12 +34,14 @@ def get_director(x):
     return np.nan
 
 
+#
+#
 def get_list(x):
     if isinstance(x, list):
         names = [i["name"] for i in x]
 
-        if len(names) > 3:
-            names = names[:3]
+        if len(names) > 5:
+            names = names[:5]
 
         return names
 
@@ -82,14 +81,14 @@ movies_df["soup"] = movies_df.apply(create_soup, axis=1)
 count_vectorizer = CountVectorizer(stop_words="english")
 count_matrix = count_vectorizer.fit_transform(movies_df["soup"])
 
-# cosine_sim2 = cosine_similarity(count_matrix, count_matrix)
+#cosine_sim2 = cosine_similarity(count_matrix, count_matrix)
 cosine_sim2 = linear_kernel(count_matrix, count_matrix)
 
 movies_df = movies_df.reset_index()
 indices = pd.Series(movies_df.index, index=movies_df['title'])
 
 
-def get_recommendations(title, cosine_sim=cosine_sim2):
+def get_recommendations2(title, cosine_sim=cosine_sim2):
     """
     in this function,
         we take the cosine score of given movie
@@ -111,8 +110,11 @@ def get_recommendations(title, cosine_sim=cosine_sim2):
 
 
 def get_itemspredicted2(prediction):
-    recommendations = get_recommendations(prediction)
+    recommendations = get_recommendations2(prediction)
     movies = []
     for movie in recommendations:
         movies.append(movie)
     return movies
+
+
+#print(get_itemspredicted2("No Exit"))

@@ -26,7 +26,7 @@ import {
 } from "../../store/notificationSlice";
 import debounce from "lodash/debounce";
 import { getMoviesSimpleFilter } from "../../api";
-import { MovieSearchList, SimpleNotif } from "../../components/";
+import { MovieSearchList, SimpleNotif } from "../../components";
 
 function getUnreadNotif(notifications) {
   let unreadNotif = notifications.filter((notif) => notif.read === false);

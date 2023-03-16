@@ -30,7 +30,7 @@ const getUserRecommendations = async (req, res) => {
         let randomElement =
           watchlist[Math.floor(Math.random() * watchlist.length)];
         const res = await axios.post(
-          `http://127.0.0.1:5002/predict-soup?Title=${randomElement.Movie.title}`
+          `http://127.0.0.1:5002/predict-soup?Title=${encodeURIComponent(randomElement.Movie.title)}`
         );
         let predictions = res.data;
         
@@ -71,7 +71,7 @@ const getMovieRecommendations = async (req, res) => {
     if (title) {
       let recommendations = [];
       const res = await axios.post(
-        `http://127.0.0.1:5002/predict-overview?Title=${title}`
+        `http://127.0.0.1:5002/predict-overview?Title=${encodeURIComponent(title)}`
       );
       let predictions = res.data; 
       for (let i = 1; i <= 5; i++) {

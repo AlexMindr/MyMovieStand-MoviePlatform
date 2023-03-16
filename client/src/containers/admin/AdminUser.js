@@ -5,7 +5,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import { DeleteUser, AddNotif } from "../../components/";
+import { DeleteUser, AddNotif } from "../../components";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -44,31 +44,31 @@ const AdminUser = () => {
   };
 
   return (
-      <Paper elevation={2} sx={{ minHeight: "70vh" }}>
-        <Typography component="h2" variant="h3" className="Container-title">
-          Admin dashboard - users
-        </Typography>
-        <Box sx={{ width: "100%", bgcolor: "var(--color-bg-container)" }}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <Tabs
-              value={value}
-              onChange={handleChangeTab}
-              aria-label="movie tabs"
-              variant="fullWidth"
-            >
-              <Tab label="Delete User" {...a11yProps(0)} />
-              <Tab label="Send notification" {...a11yProps(1)} />
-            </Tabs>
-          </Box>
-          <TabPanel value={value} index={0}>
-            <DeleteUser />
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <AddNotif />
-          </TabPanel>
+    <Paper elevation={2} sx={{ minHeight: "70vh" }}>
+      <Typography component="h2" variant="h3" className="Container-title">
+        Admin dashboard - users
+      </Typography>
+      <Box sx={{ width: "100%", bgcolor: "var(--color-bg-container)" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Tabs
+            value={value}
+            onChange={handleChangeTab}
+            aria-label="movie tabs"
+            variant="fullWidth"
+          >
+            <Tab label="Delete User" {...a11yProps(0)} />
+            <Tab label="Send notification" {...a11yProps(1)} />
+          </Tabs>
         </Box>
-      </Paper>
-    );
+        <TabPanel value={value} index={0}>
+          <DeleteUser />
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <AddNotif />
+        </TabPanel>
+      </Box>
+    </Paper>
+  );
 };
 
 export default AdminUser;

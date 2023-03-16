@@ -19,7 +19,7 @@ router.get("/get/page=:page", auth, getNotifPag);
 router.put("/update", auth, updateNotif);
 router.delete("/delete/:notificationid", auth, deleteNotif);
 
-router.post("/add", authAdmin, addNotifAdmin);
+router.post("/add/single", authAdmin, addNotifAdmin);
 router.post("/add/global", authAdmin, addGlobalNotifAdmin);
 
 export default router;
