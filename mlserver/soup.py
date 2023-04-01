@@ -6,9 +6,6 @@ from sklearn.metrics.pairwise import linear_kernel, cosine_similarity
 from ast import literal_eval
 import json
 
-# credits_df = pd.read_csv("https://drive.google.com/uc?export=download&id=1L6posz44Zp0noUKoI5himdR-sh45masE")
-# movies_df = pd.read_csv("https://drive.google.com/uc?export=download&id=1QBQf3JuLhj9PUDyhwQlT2QDnP-F-7m16")
-
 
 # credits_df = pd.read_csv("./tmdb_credits_exp.csv")
 # movies_df = pd.read_csv("./tmdb_movies_exp.csv")

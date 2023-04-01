@@ -131,7 +131,7 @@ export const updateNotification = (notificationid) =>
   api.put("/notifications/update", { notificationid });
 
 //external api
-const apikey = "api_key=d05a8d2156e4230aded1c48bf6f75b82";
+const apikey = process.env.API_TMDB_KEY;
 
 export const getCredits = (id) => tmdb.get(`/${id}/credits?${apikey}`);
 export const getImages = (id) => tmdb.get(`/${id}/images?${apikey}`);
