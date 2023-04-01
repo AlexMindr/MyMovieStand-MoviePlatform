@@ -200,13 +200,13 @@ Each logged user has a profile where he can tell others about themselves, they a
 In the about section the user can add customised text.
 
 The user's watchlist, discussions and reviews can be viewed by clicking the respective button.
-![Profile](_readmeimg/profile.png)
+![Profile](_readmeimg/profile.PNG)
 
 The user that owns the profile can edit the information about themselves at anytime and the already existing information is auto-completed.
-![Edit Profile](_readmeimg/profileEdit.png)
+![Edit Profile](_readmeimg/profileEdit.PNG)
 
 They can also edit their favorites, with a limit of 6 max movies displayed, by clicking on the 'heart' or the '-' buttons. An error is displayed if the user tries to add more than 6 movies.
-![Edit Fav](_readmeimg/profileFav.png)
+![Edit Fav](_readmeimg/profileFav.PNG)
 
 ##### User Watchlist
 
@@ -215,17 +215,17 @@ The watchlist page displays all the movies added by the user, with any status.
 Movies can be filtered by different criterias by clicking on the headers.
 
 Movies have the representative status color and they can be edited with a portal by clicking EDIT.
-![Watchlist](_readmeimg/watchlist.png)
+![Watchlist](_readmeimg/watchlist.PNG)
 
 ##### User Posts
 
 The user's discussions(either their own or comments) can also be viewed into a paginated state from the profile buttons that link to them.
 
 All posts can be viewed into the posts tab and have the movie title they are made about.
-![User Discussions](_readmeimg/userPosts.png)
+![User Discussions](_readmeimg/userPosts.PNG)
 
 The comments and the post where the comment was made can also be viewed in the comments tab.
-![User Comments](_readmeimg/userComments.png)
+![User Comments](_readmeimg/userComments.PNG)
 
 ##### News page
 
@@ -234,18 +234,18 @@ The news page is similar to the discussions page, but the users can only comment
 ##### Admin Dashboard
 
 The admin can moderate (delete/restrict) posts/reviews of every type with the following interface:
-![Admin Forum](_readmeimg/adminForum.png)
+![Admin Forum](_readmeimg/adminForum.PNG)
 
 Admins can find the id required for the actions by viewing the actual post/review, for example when there is a review it's id is displayed above it, for other types of posts the id is either near it or in the url.
-![Admin Review](_readmeimg/adminReview.png)
+![Admin Review](_readmeimg/adminReview.PNG)
 
 Admins can update movie data such as global rating by pressing a button in the admin movie dashboard.
 
 For creating news the admins have the following interface:
-![Admin News](_readmeimg/adminNews.png)
+![Admin News](_readmeimg/adminNews.PNG)
 
 For sending notifications the admins have the following interface:
-![Admin Review](_readmeimg/adminNotif.png)
+![Admin Review](_readmeimg/adminNotif.PNG)
 
 ### How do recommendations work?
 
