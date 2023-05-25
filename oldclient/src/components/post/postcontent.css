@@ -1,0 +1,94 @@
+.postcontent-title {
+  text-align: center;
+  padding: 10px;
+  background-color: rgba(233, 10, 130, 0.5);
+  color: rgb(102, 88, 255);
+}
+.Box-postcontent {
+  width: 98%;
+  min-width: 300px;
+  margin-inline: auto;
+  border: 2px solid rgb(86, 86, 86);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgb(239, 241, 242);
+  flex-grow: 1;
+  border-radius: 5px;
+}
+.Box-postcontent-header {
+  padding-left: 20px;
+  box-sizing: border-box;
+  height: 50px;
+  background-color: rgb(159, 74, 255);
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  border-bottom: 1px solid blue;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  /* margin-bottom: 5px; */
+}
+.Box-postcontent-header > div {
+  margin-left: auto;
+}
+.Box-postcontent-content {
+  display: flex;
+  flex-grow: 1;
+}
+.Box-postcontent-left {
+  flex: 15%;
+  padding-top: 20px;
+  display: flex;
+  /* padding-left: 10px; */
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  border-right: 2px solid black;
+  row-gap: 10px;
+  overflow: hidden;
+}
+
+.Box-postcontent-left > a {
+  font-size: 1.1rem;
+  width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+.Box-postcontent-right {
+  flex: 85%;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+@media only screen and (max-width: 900px) {
+  .Box-postcontent-left {
+    flex: 25%;
+  }
+  .Box-postcontent-left > a {
+    width: 110px;
+    font-size: 1rem;
+  }
+  .Box-postcontent-right {
+    flex: 75%;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .Box-postcontent-left {
+    flex: 30%;
+  }
+  .Box-postcontent-left > a {
+    width: 80px;
+    font-size: 1rem;
+  }
+  .Box-postcontent-right {
+    flex: 70%;
+  }
+}

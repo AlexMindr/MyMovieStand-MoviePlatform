@@ -1,0 +1,31 @@
+.userreviews-box{
+    background-color: var(--color-bg-container);
+    padding:10px;
+    min-height: 50vh;
+}
+.loading-userreviews{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin-top: 20vh;
+}
+.userreviews-pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.userreviews-review{
+    margin-bottom: 5px;
+}
+.userreviews-review-title{
+    display: flex;
+    background-color: gainsboro;
+    align-items: center;
+    justify-items: center;
+    padding:10px;
+}
+.userreviews-review-edit{
+    margin-left: auto;
+}

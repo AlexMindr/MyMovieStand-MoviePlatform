@@ -1,0 +1,226 @@
+.card {
+    display: block;
+    border: 0.1rem solid;
+    max-width: 320px;
+    position: relative;
+    border-color: rgb(155, 153, 153);
+    height: 100%;
+    min-height: 100%;
+    
+ }
+.title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size:1rem;
+    font-weight: bold;
+    height: 2.75rem; 
+    min-height: 2.75rem;
+      
+}
+.title a{
+    text-align: center;
+    width: 90%;
+}
+
+.trailer-movielist{
+    font-size:0.8rem;
+    border-radius: 0.5em;
+    min-width: 3em;
+    padding: 1px 0.5rem;
+    background-color: rgb(53, 44, 232);
+    color:rgb(255, 255, 255);
+}
+
+
+.trailermodal{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: black;
+    border: 2px solid #000;
+    box-shadow: 24;
+    padding: 4px;
+}
+
+.overlay {
+    display:grid;
+    grid-template-columns: 1fr 2fr 0fr 1fr 2fr;
+    align-items: center;
+    justify-items: center;
+    margin:0.2rem 0.1rem 0.2rem 0.1rem;
+    min-height: 25px;
+}
+
+.overlay .movielist-certification{
+    border-radius: 2px;
+    min-width: 10px;
+    color:rgb(255, 136, 0);
+    text-shadow: 1px 1px 1px rgb(120, 25, 120);
+}
+
+.overlay div{
+    font-size: 0.8rem;
+}
+.date{
+    
+    text-align: center;
+    color:rgb(119, 0, 148);
+    
+}
+
+
+.genres-movielist{
+    display:flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    column-gap: 3px;
+    width:100%;
+    min-height: 2.65rem;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(240, 236, 236);
+    
+}
+
+.genres-movielist>div{
+    
+    background-color: rgb(99, 65, 253);
+    padding: 2px 6px 3px 6px ;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    text-transform: none;
+    color:whitesmoke;
+    font-weight: 500;
+}
+
+
+.description{
+    display:flex;
+    max-width: 320px;
+    border:1px solid rgb(249, 139, 88);
+    margin:1px;
+    padding:1px;
+    min-height: 12rem;
+    
+
+}
+.media {
+    display: block;
+    height: 12rem;
+    
+    width: 100%;
+    flex:45%;
+    padding: 0.1px;
+ }
+.text{
+    flex:55%;
+    overflow: hidden;
+    height:12rem;
+    width: 100%;
+    margin-inline: 0.5rem;
+    text-align: justify;
+    text-indent: 5%;
+    hyphens: auto; 
+    /* text-align-last: left; */
+    /* word-break:break-all;   */
+    
+    word-spacing: -2px; 
+    font-size: 0.8rem;
+}
+.text:hover{
+    padding-right: 3px;
+    overflow: visible;
+    overflow-y: scroll;
+    overflow-x:hidden;
+}
+.details {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+    overflow-y: scroll;
+}
+
+
+.bottom-card {
+    display: flex;
+    max-width: 320px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.2rem;
+    margin-top: 0.1rem;
+    min-height: 25px;
+}
+.bottom-card div{
+    display:flex;
+    font-size: 0.9rem;
+    align-items: center;
+    justify-content: center;
+}
+.bottom-button{
+    align-items: center;
+    justify-self: flex-start;
+    flex:50%;
+    margin-left: 0.15rem;
+}
+.cardButton{
+    margin-top: 1px;
+    color:white;
+    background-color: rgb(53, 30, 255);
+    
+}
+
+.movielist-userscore {
+    border: none;
+    width: 35px;
+    color:rgb(206, 17, 55);
+    font-size: 0.85rem;
+    padding: 0;
+    overflow: hidden;
+    z-index: 10;
+ }
+
+ .movielist-userscore-content {
+    display: block;
+    position: relative;
+    background: #ffffff;
+    width: 22px;
+    padding: 1px 0px 1px 0px;
+    border-left: none !important;
+    left:13px;
+    height:100%;
+ }
+ .movielist-userscore-content:before {
+   content: "";
+   position: absolute;
+   width: 26px;
+   height: 85%;
+   z-index: -1;
+   top: 0;
+   left: -8px;
+   /* border: 1px solid #000; */
+   background: #ffffff;
+   transform: rotate(-45deg);
+
+   }
+ 
+
+.cardButton:hover{
+    
+    color:rgb(255, 183, 3);
+}
+
+
+.bottom-info{
+ flex:50%;
+ display:flex;
+ font-weight: bold;
+ column-gap: 1em;
+ align-items: center;
+ margin-right: 15px;
+}
+.bottom-info>div{
+    margin-left:auto ;
+}
+

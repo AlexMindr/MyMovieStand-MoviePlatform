@@ -1,0 +1,32 @@
+.Box-movierecomm {
+  width: 95px;
+  display: block;
+  position: relative;
+  width: 120px;
+}
+
+.Box-movierecomm-img img {
+  width: 95px;
+  height: 140px;
+  /* box-sizing: border-box; */
+}
+.Box-movierecomm-link {
+  display:none;
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+  width: 95px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 40px;
+  background-color: rgba(88, 88, 88, 0.8);
+  text-align: center;
+  color: white;
+  font-size: 0.8rem;
+}
+
+
+.Box-movierecomm:hover .Box-movierecomm-link{
+    display: block;
+}

@@ -1,0 +1,35 @@
+.simplenotif-box{
+    display:flex;
+    /* align-items: center;
+    justify-content: left; */
+    flex-direction: column;
+    max-width: 200px;
+    border: 2px solid rgb(223, 106, 255);
+    /* background-color: rgb(144, 255, 216); */
+    border-radius: 5px;
+    margin-inline: 10px;
+    padding:2px 2px 2px 2px;
+    margin-top:5px;
+    margin-bottom: 5px;
+    max-height: 100px;
+    overflow: hidden;
+    background-color: aliceblue;
+}
+
+.simplenotif-date{
+    margin-left:auto;
+    font-size: 0.7rem;
+    color: grey;
+}
+
+.simplenotif-content{
+    font-size: 0.8rem;
+    color:rgb(44, 44, 254);
+    margin-left:5px;
+}
+
+
+.simplenotif-box:hover{
+    background-color: rgb(217, 227, 236);
+    cursor:pointer;
+}

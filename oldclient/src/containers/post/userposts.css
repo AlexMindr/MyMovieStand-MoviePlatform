@@ -1,0 +1,44 @@
+.loading-userposts{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin-top: 20vh;
+}
+.userposts-pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.userposts-post{
+    margin-bottom: 5px;
+}
+.userposts-post-title{
+    display: flex;
+    background-color: gainsboro;
+    align-items: center;
+    justify-items: center;
+    padding:10px;
+}
+.userposts-post-edit{
+    margin-left: auto;
+}
+.userposts-box{
+    background-color: var(--color-bg-container);
+    min-height: 40vh;
+}
+
+@media only screen and (max-width:500px) {
+    
+
+.Container-title{
+    font-size: 2rem;
+}
+.Box-container-posttitle{
+    min-width: 100px;
+}
+.Box-postcomment{
+    min-width: 280px;
+}
+}
