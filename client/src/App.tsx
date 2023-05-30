@@ -7,7 +7,9 @@ import {
 } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
-import { themeSettings } from "./theme";
+import { themeSettings } from "@/theme";
+import Scrollbtn from "@/shared/Scrollbtn";
+import Footer from "@/scenes/global/Footer";
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings), []);
@@ -26,6 +28,7 @@ function App() {
           <Footer /> */}
         </Router>
         <Scrollbtn />
+        <Footer />
       </ThemeProvider>
     </div>
   );
