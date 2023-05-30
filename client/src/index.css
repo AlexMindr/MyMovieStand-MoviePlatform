@@ -1,0 +1,49 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap");
+
+html,
+body,
+#root,
+.app {
+  --font-family: "Manrope", sans-serif;
+  --scroll-track: #2c2c5a;
+  --scroll-thumb: #4c4c4e;
+  --scroll-hover: #2a2b2f;
+  --link: rgb(4, 39, 238);
+  --link-visited: rgb(101, 4, 238);
+  height: 100dvh;
+  min-width: 350px;
+  font-family: var(--font-family);
+  scroll-behavior: smooth;
+  /* background-color: var(--color-bg-global); */
+}
+
+a {
+  text-decoration: none !important;
+  color: var(--link);
+}
+a:visited {
+  text-decoration: none !important;
+  color: var(--link-visited);
+}
+
+/*Srollbar*/
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scroll-hover);
+}
