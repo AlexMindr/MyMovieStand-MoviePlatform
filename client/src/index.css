@@ -15,7 +15,6 @@ body,
   min-width: 350px;
   font-family: var(--font-family);
   scroll-behavior: smooth;
-  /* background-color: var(--color-bg-global); */
 }
 
 a {

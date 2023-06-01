@@ -5,7 +5,7 @@ type ScrollbtnProps = {
   showBelow?: number;
 };
 
-const Scrollbtn = ({ showBelow = 300 }: ScrollbtnProps) => {
+const Scrollbtn = ({ showBelow = 200 }: ScrollbtnProps) => {
   const [showScroll, setShowScroll] = useState<boolean>(false);
   useEffect(() => {
     window.addEventListener("scroll", checkScrollTop);

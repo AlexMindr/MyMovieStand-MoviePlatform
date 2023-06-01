@@ -24,7 +24,7 @@ export const tokens = {
   },
   secondary: {
     // blue
-    100: "#ced0e8",
+    100: "#d4d4f9",
     200: "#9ea1d1",
     300: "#6d73b9",
     400: "#3d44a2",
@@ -48,7 +48,7 @@ export const tokens = {
   },
   background: {
     light: "#FFFFFF",
-    main: "#FAE6FF",
+    main: "#F0F0FF",
   },
 };
 
@@ -81,8 +81,8 @@ export const themeSettings = {
     fontFamily: ["Manrope", "sans-serif"].join(","),
     fontSize: 12,
     h1: {
-      fontFamily: ["Manrope", "sans-serif"].join(","),
-      fontSize: 32,
+      fontFamily: ["Orbitron", "sans-serif"].join(","),
+      fontSize: 40,
     },
     h2: {
       fontFamily: ["Manrope", "sans-serif"].join(","),
@@ -110,6 +110,15 @@ export const themeSettings = {
       fontFamily: ["Manrope", "sans-serif"].join(","),
       fontSize: 10,
       color: tokens.grey[700],
+    },
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 400,
+      md: 750,
+      lg: 900,
+      xl: 1200,
     },
   },
 };

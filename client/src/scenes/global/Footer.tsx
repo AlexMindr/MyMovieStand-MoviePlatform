@@ -11,7 +11,7 @@ const Footer = () => {
       width="100%"
       bgcolor={palette.primary[900]}
       marginTop="auto"
-      position="absolute"
+      position="relative"
       color={palette.primary.contrastText}
       borderTop={`3px solid ${palette.primary.main}`}
     >
