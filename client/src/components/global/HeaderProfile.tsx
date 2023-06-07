@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import IconButton from "@mui/material/IconButton";
 import { Theme } from "@mui/material";
 
 function stringToColor(string: string) {
@@ -33,6 +32,9 @@ function stringAvatar(name: string) {
     return {
       sx: {
         bgcolor: stringToColor(name),
+        width: 34,
+        height: 34,
+        marginRight: 1,
       },
       children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
     };
@@ -116,10 +118,7 @@ const HeaderProfile = ({ user, theme }: Props) => {
         </Box>
       </Box>
       <Link to={`/profile/${user.username}`}>
-        <Avatar
-          {...stringAvatar(user.fullname)}
-          sx={{ width: 34, height: 34, marginRight: 1 }}
-        />
+        <Avatar {...stringAvatar(user.fullname)} />
       </Link>
     </>
   );

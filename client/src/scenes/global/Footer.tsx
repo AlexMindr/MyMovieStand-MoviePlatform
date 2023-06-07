@@ -25,7 +25,7 @@ const Footer = () => {
         textAlign="left"
       >
         <span>© Alexandru-Cristian Mindroiu - All rights reserved. </span>
-        <span> Contact: alexandru.mindroiu@email.com </span>
+        {/* <span> Contact: alexandru.mindroiu@email.com </span> */}
         <Divider
           sx={{
             height: "5px",

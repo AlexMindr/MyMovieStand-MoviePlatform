@@ -29,6 +29,7 @@ function App() {
           </header>
           <Container
             component="main"
+            maxWidth="lg"
             sx={{
               height: "100%",
               bgcolor: themeSettings.palette.background.light,

@@ -31,34 +31,19 @@ const Header = () => {
         alignItems="center"
         justifyContent="flex-start"
       >
-        <NavLink to="/home">
-          {isAboveMd ? (
-            <Typography
-              variant="h1"
-              component="h1"
-              fontSize={{ md: 36, lg: 40 }}
-              sx={{
-                background: `linear-gradient(170deg,${theme.palette.secondary[500]} -0.1%,${theme.palette.tertiary[400]} 96.7%)`,
-                backgroundClip: "text",
-                color: "transparent",
-              }}
-            >
-              MyMovieStand
-            </Typography>
-          ) : (
-            <Typography
-              variant="h1"
-              component="h1"
-              fontSize={{ xs: 28, sm: 32 }}
-              sx={{
-                background: `linear-gradient(170deg,${theme.palette.secondary[500]} -0.1%,${theme.palette.tertiary[400]} 96.7%)`,
-                backgroundClip: "text",
-                color: "transparent",
-              }}
-            >
-              MMS
-            </Typography>
-          )}
+        <NavLink to="/">
+          <Typography
+            variant="h1"
+            component="h1"
+            fontSize={{ xs: 28, sm: 32, md: 36, lg: 40 }}
+            sx={{
+              background: `linear-gradient(170deg,${theme.palette.secondary[500]} -0.1%,${theme.palette.tertiary[400]} 96.7%)`,
+              backgroundClip: "text",
+              color: "transparent",
+            }}
+          >
+            {isAboveMd ? " MyMovieStand" : "MMS"}
+          </Typography>
         </NavLink>
       </Box>
       <Box

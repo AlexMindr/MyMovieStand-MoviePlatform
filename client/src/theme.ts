@@ -1,14 +1,23 @@
 export const tokens = {
   grey: {
-    100: "#e8e8e8",
-    200: "#d1d1d1",
-    300: "#bababa",
-    400: "#a3a3a3",
-    500: "#8c8c8c",
-    600: "#707070",
-    700: "#545454",
-    800: "#383838",
-    900: "#1c1c1c",
+    // 100: "#e8e8e8",
+    // 200: "#d1d1d1",
+    // 300: "#bababa",
+    // 400: "#a3a3a3",
+    // 500: "#8c8c8c",
+    // 600: "#707070",
+    // 700: "#545454",
+    // 800: "#383838",
+    // 900: "#1c1c1c",
+    100: "#e0dbe4",
+    200: "#c1b7c9",
+    300: "#a292ad",
+    400: "#836e92",
+    500: "#644a77",
+    600: "#503b5f",
+    700: "#3c2c47",
+    800: "#281e30",
+    900: "#140f18",
   },
   primary: {
     // purple
@@ -49,6 +58,7 @@ export const tokens = {
   background: {
     light: "#FFFFFF",
     main: "#F0F0FF",
+    hover: "#FFE400",
   },
 };
 
@@ -75,6 +85,7 @@ export const themeSettings = {
     background: {
       default: tokens.background.main,
       light: tokens.background.light,
+      hover: tokens.background.hover,
     },
   },
   typography: {

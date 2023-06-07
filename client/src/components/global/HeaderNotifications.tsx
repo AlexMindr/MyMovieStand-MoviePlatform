@@ -32,23 +32,22 @@ const HeaderNotifications = ({ theme }: Props) => {
         bgcolor="red"
         color="white"
         fontWeight={500}
-        fontSize="0.9rem"
+        fontSize="0.8rem"
         minWidth="15px"
         lineHeight="1"
-        p="3px 4px"
+        p="3px 3px"
         height="20px"
         zIndex={1}
         top="0"
         right="0"
         sx={{
           transition: `transform 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms`,
-          transform: "scale(1) translate(0%,5%)",
+          transform: "scale(1) translate(0%,20%)",
           transformOrigin: "100% 0%",
         }}
       >
         10
-      </Box>
-      {/* {notifications.length > 0 &&
+        {/* {notifications.length > 0 &&
               getUnreadNotif(notifications).length > 0 ? (
                 <span className="notification-length-unread">
                   {getUnreadNotif(notifications).length}
@@ -56,6 +55,8 @@ const HeaderNotifications = ({ theme }: Props) => {
               ) : (
                 <></>
               )} */}
+      </Box>
+
       <Box
         className="dropdown-content-notif"
         id="dropdown-notifications"
