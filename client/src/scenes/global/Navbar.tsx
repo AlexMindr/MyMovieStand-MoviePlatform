@@ -5,17 +5,21 @@ import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Link, useLocation } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useRef, useState } from "react";
+import Grow from "@mui/material/Grow";
+import { useEffect, useRef, useState } from "react";
 import Nav from "@/components/global/Nav";
 import SearchBar from "@/components/global/SearchBar";
+import useClickOutside from "@/shared/hooks/clickOutside";
 
 const Navbar = () => {
   const theme = useTheme();
   const location = useLocation();
   const isAboveMd = useMediaQuery(theme.breakpoints.up("md"));
   const [menuBars, setMenuBars] = useState<boolean>(false);
-
+  const menuBox = useRef<HTMLInputElement>(null);
   const activeStyle = "active";
+  const menuClose = useClickOutside<boolean>;
+  menuClose(menuBox, setMenuBars, false);
 
   const user = { username: "adrianus", fullname: "gabi andr", role: "admin" };
   const isLoggedIn = true;
@@ -35,6 +39,7 @@ const Navbar = () => {
     >
       {/* Nav */}
       <Box
+        ref={menuBox}
         display="flex"
         justifyContent="left"
         alignItems="center"
@@ -72,32 +77,39 @@ const Navbar = () => {
         )}
         {isAboveMd ? (
           <Nav
-            menuBars={menuBars}
+            menuBars={true}
             setMenuBars={setMenuBars}
             theme={theme}
             activeStyle={activeStyle}
             user={user}
           />
         ) : (
-          <Nav
-            menuBars={menuBars}
-            setMenuBars={setMenuBars}
-            theme={theme}
-            activeStyle={activeStyle}
-            user={user}
-            divStyle={{
-              position: "absolute",
-              top: "2.5rem",
-              width: "50%",
-              alignItems: "flex-start",
-              justifyContent: "left",
-              paddingBottom: "0.25rem",
-              backgroundImage: `linear-gradient(150deg,${theme.palette.secondary[500]},60%,
+          <Grow
+            in={menuBars}
+            style={{ transformOrigin: "top left 0" }}
+            {...(menuBars ? { timeout: 1000 } : {})}
+          >
+            <Box position="absolute" top="2.5rem">
+              <Nav
+                menuBars={menuBars}
+                setMenuBars={setMenuBars}
+                theme={theme}
+                activeStyle={activeStyle}
+                user={user}
+                divStyle={{
+                  width: "100%",
+                  minWidth: "125px",
+                  alignItems: "flex-start",
+                  justifyContent: "left",
+                  paddingBottom: "0.25rem",
+                  backgroundImage: `linear-gradient(150deg,${theme.palette.secondary[500]},60%,
                 ${theme.palette.primary[500]})`,
-            }}
-            ulFlexDirection="column"
-            ulTextAlign="left"
-          />
+                }}
+                ulFlexDirection="column"
+                ulTextAlign="left"
+              />
+            </Box>
+          </Grow>
         )}
       </Box>
       {/* Search  */}

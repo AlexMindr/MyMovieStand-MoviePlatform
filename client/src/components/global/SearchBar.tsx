@@ -1,12 +1,13 @@
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
-
 import Slide from "@mui/material/Slide";
+import Fade from "@mui/material/Fade";
 import Box from "@mui/material/Box";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
-import { MutableRefObject, SetStateAction, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Theme } from "@mui/material";
+import useClickOutside from "@/shared/hooks/clickOutside";
 
 type Props = {
   flexBasis: { xs: string; sm: string; md: string; lg: string };
@@ -14,8 +15,8 @@ type Props = {
 };
 
 const SearchBar = ({ flexBasis, theme }: Props) => {
-  const searchBox = useRef(null);
-
+  const searchBox = useRef<HTMLInputElement>(null);
+  const searchClose = useClickOutside<boolean>;
   const [inputSearch, setInputSearch] = useState<string>("");
   const [searchToggle, setSearchToggle] = useState<boolean>(false);
 
@@ -23,6 +24,8 @@ const SearchBar = ({ flexBasis, theme }: Props) => {
     setInputSearch(e.target.value);
     //searchContent(inputSearch);
   };
+
+  searchClose(searchBox, setSearchToggle, false);
 
   return (
     <Box
@@ -35,34 +38,37 @@ const SearchBar = ({ flexBasis, theme }: Props) => {
       marginRight={{ xs: "0.2rem", md: "0.5rem" }}
       overflow="hidden"
     >
-      <IconButton
-        sx={
-          searchToggle
-            ? {
-                transition: "1s",
-                cursor: "pointer",
-                color: theme.palette.grey[900],
-                bgcolor: "white",
-                display: "none",
-              }
-            : {
-                transition: "1s",
-                cursor: "pointer",
-                color: theme.palette.grey[900],
-                bgcolor: "white",
-                display: "inline-flex",
-                p: 0.75,
-                position: "absolute",
-                "& :hover": {
-                  color: "whitesmoke",
-                },
-              }
-        }
-        aria-label="open-search"
-        onClick={() => setSearchToggle((prev) => !prev)}
-      >
-        <SearchIcon fontSize="medium" />
-      </IconButton>
+      <Fade in={!searchToggle} timeout={2000}>
+        <IconButton
+          sx={
+            searchToggle
+              ? {
+                  transition: "1s",
+                  cursor: "pointer",
+                  color: theme.palette.grey[900],
+                  bgcolor: "white",
+                  display: "none",
+                }
+              : {
+                  transition: "1s",
+                  cursor: "pointer",
+                  color: theme.palette.grey[900],
+                  bgcolor: "white",
+                  display: "inline-flex",
+                  p: 0.75,
+                  position: "absolute",
+                  "& :hover": {
+                    color: "whitesmoke",
+                  },
+                }
+          }
+          aria-label="open-search"
+          onClick={() => setSearchToggle((prev) => !prev)}
+        >
+          <SearchIcon fontSize="medium" />
+        </IconButton>
+      </Fade>
+
       <Slide
         timeout={500}
         direction="left"
@@ -76,7 +82,7 @@ const SearchBar = ({ flexBasis, theme }: Props) => {
             justifyContent: "space-between",
             borderRadius: "25px",
             maxWidth: "450px",
-            minWidth: "350px",
+            minWidth: { md: "270px", lg: "350px" },
             "& input": {
               width: "90%",
               height: "100%",
