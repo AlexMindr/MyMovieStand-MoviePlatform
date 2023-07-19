@@ -11,8 +11,8 @@ body,
   --scroll-hover: #2a2b2f;
   --link: rgb(4, 39, 238);
   --link-visited: rgb(101, 4, 238);
-  height: 100dvh;
-  min-width: 350px;
+  min-height: 100dvh;
+  min-width: 400px;
   font-family: var(--font-family);
   scroll-behavior: smooth;
 }

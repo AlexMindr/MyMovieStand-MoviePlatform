@@ -60,6 +60,14 @@ export const tokens = {
     main: "#F0F0FF",
     hover: "#FFE400",
   },
+  watchlistBg: {
+    watching: "rgb(153, 255, 51,0.7)",
+    completed: "rgb(79, 116, 227,0.7)",
+    planToWatch: "rgb(204, 204, 204)",
+    onHold: "rgb(240, 230, 140,0.7)",
+    dropped: "rgb(244, 138, 160,0.7)",
+    basic: "rgb(230,230,230,0.7)",
+  },
 };
 
 // mui theme settings
@@ -87,21 +95,27 @@ export const themeSettings = {
       light: tokens.background.light,
       hover: tokens.background.hover,
     },
+    watchlistBg: {
+      ...tokens.watchlistBg,
+      main: tokens.watchlistBg.basic,
+    },
   },
   typography: {
     fontFamily: ["Manrope", "sans-serif"].join(","),
-    fontSize: 12,
+    fontSize: 15,
     h1: {
       fontFamily: ["Orbitron", "sans-serif"].join(","),
       fontSize: 40,
     },
     h2: {
       fontFamily: ["Manrope", "sans-serif"].join(","),
-      fontSize: 24,
+      fontSize: 32,
+      fontWeight: 600,
+      color: tokens.grey[700],
     },
     h3: {
       fontFamily: ["Manrope", "sans-serif"].join(","),
-      fontSize: 20,
+      fontSize: 24,
       fontWeight: 800,
       color: tokens.grey[200],
     },
@@ -129,7 +143,7 @@ export const themeSettings = {
       sm: 400,
       md: 750,
       lg: 900,
-      xl: 1200,
+      xl: 1250,
     },
   },
 };

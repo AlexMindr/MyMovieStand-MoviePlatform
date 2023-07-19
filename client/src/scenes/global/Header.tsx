@@ -15,6 +15,7 @@ const Header = () => {
   const theme = useTheme();
   const isAboveMd = useMediaQuery(theme.breakpoints.up("md"));
   const location = useLocation();
+  //TO BE REMOVED
   const user = { username: "adrianus", fullname: "gabi andr" };
   const isLoggedIn = true;
   return (
