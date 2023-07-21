@@ -11,6 +11,7 @@ api.interceptors.request.use((req) => {
 });
 
 //Movies
+export const getGenres = () => api.get(`/genres/get`);
 export const getMovies = (page = 1) => api.get(`/movies/page=${page}`);
 export const getMoviesFiltered = (page = 1, query: string) =>
   api.get(`/movies/page=${page}/filter/?${query}`);

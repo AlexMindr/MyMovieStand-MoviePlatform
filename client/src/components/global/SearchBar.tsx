@@ -8,6 +8,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { useEffect, useRef, useState } from "react";
 import { Theme } from "@mui/material";
 import useClickOutside from "@/shared/hooks/clickOutside";
+import FlexBox from "@/shared/FlexBox";
 
 type Props = {
   flexBasis: { xs: string; sm: string; md: string; lg: string };
@@ -28,13 +29,11 @@ const SearchBar = ({ flexBasis, theme }: Props) => {
   searchClose(searchBox, setSearchToggle, false);
 
   return (
-    <Box
+    <FlexBox
       ref={searchBox}
       flexBasis={flexBasis}
-      alignItems="center"
       justifyContent="flex-end"
       position="relative"
-      display="flex"
       marginRight={{ xs: "0.2rem", md: "0.5rem" }}
       overflow="hidden"
     >
@@ -152,7 +151,7 @@ const SearchBar = ({ flexBasis, theme }: Props) => {
             </Button>
           )} */}
       </Box>
-    </Box>
+    </FlexBox>
   );
 };
 

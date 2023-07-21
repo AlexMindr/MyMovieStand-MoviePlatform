@@ -32,6 +32,7 @@ const trailerButtonStyle = {
   p: "1px 0.75rem",
   fontWeight: "600",
 };
+const genresMaxLen = 6;
 
 const MovieCard = ({ movie }: Props) => {
   const {
@@ -66,6 +67,7 @@ const MovieCard = ({ movie }: Props) => {
         display: "block",
         border: "0.1rem solid",
         maxWidth: "320px",
+        minWidth: "260px",
         position: "relative",
         borderColor: theme.palette.grey[100],
         height: "100%",
@@ -143,7 +145,7 @@ const MovieCard = ({ movie }: Props) => {
             sx={{
               ...trailerButtonStyle,
               bgcolor: theme.palette.grey[200],
-              ":disabled": {
+              "&:disabled": {
                 color: theme.palette.grey[400],
               },
             }}
@@ -163,7 +165,7 @@ const MovieCard = ({ movie }: Props) => {
         m="0.1rem 0.2rem"
         sx={{
           "&>div": {
-            fontSize: "0.9rem",
+            fontSize: "0.8rem",
             fontWeight: "500",
             textAlign: "center",
           },
@@ -173,7 +175,7 @@ const MovieCard = ({ movie }: Props) => {
         <Typography
           // borderRadius="2px"
           // minWidth="20px"
-          flexBasis="13%"
+          // flexBasis="15%"
           color={theme.palette.secondary[400]}
           sx={{
             textShadow: `1px 1px 1px ${theme.palette.secondary[200]}`,
@@ -193,15 +195,14 @@ const MovieCard = ({ movie }: Props) => {
         >
           {release_date ? moment(release_date).format("MMM YYYY") : "TBA"}
         </Typography>
-        <Divider orientation="vertical" variant="middle" flexItem />
+        {/* <Divider orientation="vertical" variant="middle" flexItem /> */}
         <Typography variant="subtitle1" component="div">
           Movie
         </Typography>
         <Typography variant="subtitle1" component="div">
           {parseInt(duration) > 0 ? (
             <>
-              {Math.round(parseInt(duration) / 60)}h {parseInt(duration) % 60}
-              min
+              {Math.round(parseInt(duration) / 60)}h {parseInt(duration) % 60}m
             </>
           ) : (
             <>-</>
@@ -219,20 +220,34 @@ const MovieCard = ({ movie }: Props) => {
         bgcolor={theme.palette.secondary[100]}
         //className="genres-movielist"
       >
-        {Genres?.map((genre) => (
+        {Genres?.slice(0, genresMaxLen).map((genre) => (
           <Box
             key={genre.genreid}
             bgcolor={theme.palette.tertiary[700]}
             p="2px 6px"
             borderRadius="30px"
             fontSize="0.8rem"
-            // textTransform="none"
             color={theme.palette.grey[100]}
             fontWeight="500"
           >
             {genre.name}
           </Box>
         ))}
+        {Genres.length > genresMaxLen ? (
+          <Box
+            bgcolor={theme.palette.tertiary[700]}
+            p="2px 6px"
+            minWidth="12px"
+            borderRadius="30px"
+            fontSize="0.8rem"
+            color={theme.palette.grey[100]}
+            fontWeight="500"
+          >
+            ...
+          </Box>
+        ) : (
+          <></>
+        )}
       </FlexBoxCenter>
 
       <CardContent

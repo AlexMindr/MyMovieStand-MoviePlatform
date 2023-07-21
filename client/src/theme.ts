@@ -141,9 +141,9 @@ export const themeSettings = {
     values: {
       xs: 0,
       sm: 400,
-      md: 750,
-      lg: 900,
-      xl: 1250,
+      md: 650,
+      lg: 850,
+      xl: 1200,
     },
   },
 };
