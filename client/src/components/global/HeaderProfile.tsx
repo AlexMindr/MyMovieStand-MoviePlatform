@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { Theme } from "@mui/material";
+import { useTheme } from "@mui/material";
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -42,10 +42,10 @@ function stringAvatar(name: string) {
 
 type Props = {
   user: { fullname: string; username: string };
-  theme: Theme;
 };
 
-const HeaderProfile = ({ user, theme }: Props) => {
+const HeaderProfile = ({ user }: Props) => {
+  const theme = useTheme();
   return (
     <>
       <Box

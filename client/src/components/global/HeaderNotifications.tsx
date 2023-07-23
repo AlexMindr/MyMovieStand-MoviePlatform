@@ -2,13 +2,10 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import { Link } from "react-router-dom";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
-import { Theme } from "@mui/material";
+import { useTheme } from "@mui/material";
 
-type Props = {
-  theme: Theme;
-};
-
-const HeaderNotifications = ({ theme }: Props) => {
+const HeaderNotifications = () => {
+  const theme = useTheme();
   return (
     <Box
       position="relative"

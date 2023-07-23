@@ -1,4 +1,4 @@
-import { getMovies, getMovie, getGenres } from "@/api";
+import { getMovies, getGenres } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { GenreType, MovieType } from "@/shared/types";
@@ -25,7 +25,7 @@ import useSetTitle from "@/shared/hooks/setTitle";
 import MovieCard from "@/components/movies/MovieCard";
 import GeneralError from "@/components/error/GeneralError";
 import FlexBoxCenter from "@/shared/FlexBoxCenter";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import FlexBox from "@/shared/FlexBox";
 
 const pageTitle = "Browse Movies";
@@ -48,8 +48,11 @@ const Movies = () => {
   const [selectSort, setSelectSort] = useState("");
   const [selectOrder, setSelectOrder] = useState("");
   const [selectGenres, setSelectGenres] = useState<string[]>([]);
+  //get page param from url and check if it is number and not 0
+  const pageNumber = pageParams?.get("page");
+  const page =
+    pageNumber && parseInt(pageNumber) !== 0 ? parseInt(pageNumber) : 1;
 
-  const page = parseInt(pageParams?.get("page") || "1");
   const {
     isLoading: isLoadingGenres,
     isError: isErrorGenres,
@@ -64,16 +67,20 @@ const Movies = () => {
     },
     staleTime: 60000,
   });
-  console.log(dataGenres);
   const { isLoading, isError, error, data, isFetching } = useQuery({
     queryKey: ["movies", { page }],
     queryFn: async () => {
       const { data } = await getMovies(page);
+      if (pageNumber !== page.toString()) {
+        setPageParams({ page: page.toString() });
+        console.log("abc", pageNumber, page.toString());
+      }
       return data as { movies: MovieType[]; totalPages: number };
     },
     keepPreviousData: true,
     staleTime: 60000,
   });
+
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputSearch(e.target.value);
   };
@@ -122,15 +129,14 @@ const Movies = () => {
       </Breadcrumbs> */}
         {/* Page title */}
         <ContainerTitle variant="h2">{pageTitle}</ContainerTitle>
-        <Box
-          component="div"
-          //display="flex"
-        >
+        <Box component="div">
+          {/* Search & Filter  */}
           <Box
             display={{ xs: "block", lg: "flex" }}
             marginTop={"1rem"}
             marginBottom={"0.25rem"}
           >
+            {/* Search */}
             <FlexBox
               flexBasis={{ lg: "50%" }}
               justifyContent="center"
@@ -166,6 +172,7 @@ const Movies = () => {
                   <SearchIcon fontSize="medium" />
                 </IconButton>
                 <input
+                  id="browse-movies-search"
                   type="text"
                   aria-label="search"
                   placeholder="Search movie..."
@@ -183,17 +190,14 @@ const Movies = () => {
                 </IconButton>
               </FlexBoxCenter>
             </FlexBox>
+            {/* Filter by genre/order/sort */}
             <FlexBox
               flexBasis={{ lg: "50%" }}
               justifyContent="flex-end"
               marginLeft="auto"
             >
               <Box component="div" minWidth="100px" m={1}>
-                <FormControl
-                  fullWidth
-                  variant="standard"
-                  //className="select-item"
-                >
+                <FormControl fullWidth variant="standard">
                   <InputLabel id="select-sort-label">Sort</InputLabel>
                   <Select
                     labelId="select-sort-label"
@@ -214,11 +218,7 @@ const Movies = () => {
                 </FormControl>
               </Box>
               <Box component="div" minWidth="100px" m={1}>
-                <FormControl
-                  fullWidth
-                  variant="standard"
-                  // className="select-item"
-                >
+                <FormControl fullWidth variant="standard">
                   <InputLabel id="select-order-label">Order</InputLabel>
                   <Select
                     labelId="select-order-label"
@@ -265,65 +265,62 @@ const Movies = () => {
               </Box>
             </FlexBox>
           </Box>
-
-          {/* Movies grid */}
-          <Box
-            component="ul"
-            display="grid"
-            gridTemplateColumns={{
-              xs: "repeat(1,1fr)",
-              md: "repeat(2,1fr)",
-              lg: "repeat(3,1fr)",
-              xl: "repeat(4,1fr)",
-            }}
-            rowGap="1rem"
-            columnGap="10px"
-            alignItems="center"
-            sx={{
-              paddingInlineStart: 0,
-              paddingInline: "10px",
-              marginBlockEnd: 0,
-              marginBlockStart: 0,
-              "&>li": {
-                justifySelf: "center",
-              },
-            }}
-          >
+          {/* Movies and pagination */}
+          <Box pt="1rem">
+            {/* Movies grid */}
             {data.movies.length > 1 ? (
-              data.movies.map((movie) => (
-                <MovieCard key={movie.movieid} movie={movie} />
-              ))
-            ) : (
-              <Typography
-                variant="h3"
-                fontStyle="oblique"
-                color={theme.palette.grey[200]}
+              <Box
+                component="ul"
+                display="grid"
+                gridTemplateColumns={{
+                  xs: "repeat(1,1fr)",
+                  md: "repeat(2,1fr)",
+                  lg: "repeat(3,1fr)",
+                  xl: "repeat(4,1fr)",
+                }}
+                rowGap="1rem"
+                columnGap="10px"
+                sx={{
+                  paddingInlineStart: 0,
+                  paddingInline: "10px",
+                  marginBlockEnd: 0,
+                  marginBlockStart: 0,
+                  placeItems: "center",
+                }}
               >
-                There are no movies matching your search criteria!
-              </Typography>
+                {data.movies.map((movie) => (
+                  <MovieCard key={movie.movieid} movie={movie} />
+                ))}
+              </Box>
+            ) : (
+              <FlexBoxCenter minHeight="25dvh">
+                <Typography
+                  variant="h3"
+                  fontStyle="oblique"
+                  color={theme.palette.grey[200]}
+                >
+                  There are no movies matching your search criteria!
+                </Typography>
+              </FlexBoxCenter>
+            )}
+            {/* Movies pagination */}
+            {data.movies != null && data.movies.length >= 1 ? (
+              <FlexBoxCenter p="3rem" minWidth="100%">
+                <Pagination
+                  color="primary"
+                  count={data.totalPages}
+                  page={page ? page : 1}
+                  variant="outlined"
+                  shape="rounded"
+                  showFirstButton
+                  showLastButton
+                  onChange={pageChange}
+                />
+              </FlexBoxCenter>
+            ) : (
+              <></>
             )}
           </Box>
-          {/* Movies pagination */}
-          {data.movies != null && data.movies.length >= 1 ? (
-            <FlexBoxCenter
-              p="1rem"
-              minWidth="100%"
-              //className="container-pagination"
-            >
-              <Pagination
-                color="primary"
-                count={data.totalPages}
-                page={page ? page : 1}
-                variant="outlined"
-                shape="rounded"
-                showFirstButton
-                showLastButton
-                onChange={pageChange}
-              />
-            </FlexBoxCenter>
-          ) : (
-            <></>
-          )}
         </Box>
       </>
     );

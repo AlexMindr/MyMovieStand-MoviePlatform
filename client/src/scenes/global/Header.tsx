@@ -72,11 +72,11 @@ const Header = () => {
 
             <Divider orientation="vertical" flexItem />
 
-            <HeaderNotifications theme={theme} />
+            <HeaderNotifications />
 
             <Divider orientation="vertical" flexItem />
 
-            <HeaderProfile user={user} theme={theme} />
+            <HeaderProfile user={user} />
           </>
         ) : (
           <>

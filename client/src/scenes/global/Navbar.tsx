@@ -79,7 +79,6 @@ const Navbar = () => {
           <Nav
             menuBars={true}
             setMenuBars={setMenuBars}
-            theme={theme}
             activeStyle={activeStyle}
             user={user}
           />
@@ -93,7 +92,6 @@ const Navbar = () => {
               <Nav
                 menuBars={menuBars}
                 setMenuBars={setMenuBars}
-                theme={theme}
                 activeStyle={activeStyle}
                 user={user}
                 divStyle={{
@@ -113,10 +111,7 @@ const Navbar = () => {
         )}
       </Box>
       {/* Search  */}
-      <SearchBar
-        theme={theme}
-        flexBasis={{ xs: "80%", sm: "80%", md: "60%", lg: "40%" }}
-      />
+      <SearchBar flexBasis={{ xs: "80%", sm: "80%", md: "60%", lg: "40%" }} />
     </Box>
   );
 };

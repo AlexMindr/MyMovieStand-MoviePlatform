@@ -10,7 +10,7 @@ const GeneralError = ({ message }: Props) => {
     window.location.reload();
   };
   return (
-    <FlexBoxCenter flexDirection="column">
+    <FlexBoxCenter flexDirection="column" minHeight="20dvh">
       <Typography component="strong" color={"red"} fontSize="1.2em">
         {message ? message : "Something went wrong!"}
       </Typography>

@@ -1,11 +1,10 @@
-import { Theme } from "@mui/material";
+import { useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import { NavLink } from "react-router-dom";
 
 type Props = {
   setMenuBars: React.Dispatch<React.SetStateAction<boolean>>;
   menuBars: boolean;
-  theme: Theme;
   activeStyle: string;
   user?: { role: string };
   divStyle?: {
@@ -23,13 +22,13 @@ type Props = {
 const Nav = ({
   menuBars,
   setMenuBars,
-  theme,
   activeStyle,
   user,
   divStyle,
   ulFlexDirection = "row",
   ulTextAlign = "center",
 }: Props) => {
+  const theme = useTheme();
   return (
     <Box
       display={menuBars ? "flex" : "none"}

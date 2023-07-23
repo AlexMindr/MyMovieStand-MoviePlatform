@@ -5,17 +5,17 @@ import Fade from "@mui/material/Fade";
 import Box from "@mui/material/Box";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
-import { useEffect, useRef, useState } from "react";
-import { Theme } from "@mui/material";
+import { useRef, useState } from "react";
+import { useTheme } from "@mui/material";
 import useClickOutside from "@/shared/hooks/clickOutside";
 import FlexBox from "@/shared/FlexBox";
 
 type Props = {
   flexBasis: { xs: string; sm: string; md: string; lg: string };
-  theme: Theme;
 };
 
-const SearchBar = ({ flexBasis, theme }: Props) => {
+const SearchBar = ({ flexBasis }: Props) => {
+  const theme = useTheme();
   const searchBox = useRef<HTMLInputElement>(null);
   const searchClose = useClickOutside<boolean>;
   const [inputSearch, setInputSearch] = useState<string>("");
@@ -104,6 +104,7 @@ const SearchBar = ({ flexBasis, theme }: Props) => {
             <SearchIcon fontSize="medium" />
           </IconButton>
           <input
+            id="nav-search"
             type="text"
             aria-label="search"
             placeholder="Search movie..."
