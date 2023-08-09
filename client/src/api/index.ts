@@ -20,7 +20,7 @@ export const getMoviesFiltered = (page = 1, query: string) =>
 export const getMovie = (id: number) => api.get(`/movies/movie=${id}`);
 
 //NavSearch
-export const getMoviesSmallSearch = (page = 1, query: string) =>
+export const getMoviesSearch = (page = 1, query: string) =>
   api.get(`/movies/page=${page}/search/?${query}`);
 
 //Home

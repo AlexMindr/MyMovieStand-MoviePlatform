@@ -23,6 +23,7 @@ export default function Layout() {
           component="main"
           maxWidth="xl"
           sx={{
+            zIndex: 0,
             minHeight: "100dvh",
             pl: { xs: 3, md: 2, lg: 1, xl: 0 },
             pr: { xs: 3, md: 2, lg: 1, xl: 0 },

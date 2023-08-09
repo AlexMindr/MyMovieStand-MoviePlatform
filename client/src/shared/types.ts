@@ -27,3 +27,9 @@ export interface MovieType {
   rating: number;
   Genres: GenreType[];
 }
+
+export interface SearchMovieType {
+  movieid: number;
+  poster_path: string;
+  title: string;
+}

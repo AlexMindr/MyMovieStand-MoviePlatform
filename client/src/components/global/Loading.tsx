@@ -1,9 +1,13 @@
 import FlexBoxCenter from "@/shared/FlexBoxCenter";
 import CircularProgress from "@mui/material/CircularProgress";
 
-const Loading = () => {
+type Props = {
+  minHeight?: string;
+};
+
+const Loading = ({ minHeight = "100dvh" }: Props) => {
   return (
-    <FlexBoxCenter minHeight="100dvh" overflow="hidden">
+    <FlexBoxCenter minHeight={minHeight} overflow="hidden">
       <CircularProgress color="primary" />
     </FlexBoxCenter>
   );

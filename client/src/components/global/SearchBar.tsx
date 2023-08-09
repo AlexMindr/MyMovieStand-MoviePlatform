@@ -1,41 +1,66 @@
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
-import Slide from "@mui/material/Slide";
+import Grow from "@mui/material/Grow";
 import Fade from "@mui/material/Fade";
 import Box from "@mui/material/Box";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
-import { useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useTheme } from "@mui/material";
 import useClickOutside from "@/shared/hooks/clickOutside";
 import FlexBox from "@/shared/FlexBox";
+import SearchMovie from "./SearchMovie";
+import { useQuery } from "@tanstack/react-query";
+import { getMoviesSearch } from "@/api";
+import { SearchMovieType } from "@/shared/types";
+import { Link } from "react-router-dom";
+import FlexBoxCenter from "@/shared/FlexBoxCenter";
+import Loading from "./Loading";
 
-type Props = {
-  flexBasis: { xs: string; sm: string; md: string; lg: string };
-};
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const SearchBar = ({ flexBasis }: Props) => {
+const SearchBar = () => {
   const theme = useTheme();
-  const searchBox = useRef<HTMLInputElement>(null);
-  const searchClose = useClickOutside<boolean>;
+  const searchBox = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [inputSearch, setInputSearch] = useState<string>("");
+  const [debouncedSearch, setDebouncedSearch] = useState<string>("");
   const [searchToggle, setSearchToggle] = useState<boolean>(false);
+  //close search when clicking outside
+  useClickOutside<boolean>(searchBox, setSearchToggle, false);
+
+  const { isLoading, isError, error, data, isFetching } = useQuery({
+    queryKey: ["movies", debouncedSearch],
+    queryFn: async () => {
+      const { data } = await getMoviesSearch(1, `search=${debouncedSearch}`);
+      return data as { movies: SearchMovieType[]; totalPages: number };
+    },
+    enabled: debouncedSearch.length > 3 && searchToggle,
+    refetchOnWindowFocus: false,
+  });
+
+  const focusInput = () => {
+    if (inputRef.current) inputRef.current.focus();
+  };
+
+  useLayoutEffect(() => {
+    const waitTimeout = setTimeout(() => focusInput(), 800);
+    if (searchToggle === true) waitTimeout;
+    return () => clearTimeout(waitTimeout);
+  }, [searchToggle]);
 
   const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputSearch(e.target.value);
-    //searchContent(inputSearch);
+    setTimeout(() => {
+      setDebouncedSearch(e.target.value);
+    }, 3000);
   };
-
-  searchClose(searchBox, setSearchToggle, false);
-
   return (
     <FlexBox
+      height="100%"
+      width="100%"
       ref={searchBox}
-      flexBasis={flexBasis}
       justifyContent="flex-end"
-      position="relative"
-      marginRight={{ xs: "0.2rem", md: "0.5rem" }}
-      overflow="hidden"
     >
       <Fade in={!searchToggle} timeout={2000}>
         <IconButton
@@ -54,7 +79,8 @@ const SearchBar = ({ flexBasis }: Props) => {
                   color: theme.palette.grey[900],
                   bgcolor: "white",
                   display: "inline-flex",
-                  p: 0.75,
+                  p: 0.6,
+                  marginRight: { xs: "0.25rem", md: "0.5rem" },
                   position: "absolute",
                   "& :hover": {
                     color: "whitesmoke",
@@ -68,32 +94,41 @@ const SearchBar = ({ flexBasis }: Props) => {
         </IconButton>
       </Fade>
 
-      <Slide
-        timeout={500}
-        direction="left"
+      <Grow
         in={searchToggle}
-        container={searchBox.current}
+        style={{ transformOrigin: "right center 0" }}
+        {...(searchToggle ? { timeout: 1000 } : {})}
       >
         <Paper
           sx={{
+            position: "relative",
+            marginRight: { xs: "0.25rem", md: "0.5rem" },
             display: "flex",
+            height: "85%",
             alignItems: "center",
             justifyContent: "space-between",
             borderRadius: "25px",
-            maxWidth: "450px",
-            minWidth: { md: "270px", lg: "350px" },
-            "& input": {
-              width: "90%",
+            border: `1px solid ${theme.palette.tertiary[500]}`,
+            maxWidth: "min(450px,100%)",
+            minWidth: {
+              xs: "max(270px,100%)",
+              md: "min(250px,100%)",
+              lg: "min(350px,100%)",
+            },
+            "& #nav-search": {
+              width: "100%",
               height: "100%",
               border: "none",
               fontSize: "1rem",
               outline: "none",
-              overflow: "hidden",
+              color: theme.palette.grey[400],
             },
           }}
         >
           <IconButton
+            // disabled
             sx={{
+              height: "90%",
               cursor: "pointer",
               color: theme.palette.grey[500],
               bgcolor: "white",
@@ -104,13 +139,16 @@ const SearchBar = ({ flexBasis }: Props) => {
             <SearchIcon fontSize="medium" />
           </IconButton>
           <input
+            ref={inputRef}
             id="nav-search"
             type="text"
             aria-label="search"
             placeholder="Search movie..."
             value={inputSearch}
             onChange={changeInput}
+            autoComplete="off"
           />
+
           <IconButton
             sx={{
               cursor: "pointer",
@@ -120,38 +158,91 @@ const SearchBar = ({ flexBasis }: Props) => {
           >
             <ClearIcon />
           </IconButton>
+          <Box
+            display={
+              searchToggle && inputSearch.length > 3
+                ? { display: "block" }
+                : { display: "none" }
+            }
+            position="absolute"
+            bgcolor="white"
+            width="99%"
+            boxShadow="0px 8px 10px 0px rgba(0, 0, 0, 0.2)"
+            fontSize="1.1rem"
+            top="105%"
+            zIndex="500"
+            sx={{
+              marginInline: "auto",
+              borderBottomLeftRadius: "15px",
+              borderBottomRightRadius: "15px",
+              borderTopLeftRadius: "10px",
+              borderTopRightRadius: "10px",
+            }}
+          >
+            <Box
+              component="ul"
+              display="flex"
+              flexDirection="column"
+              paddingLeft="10px"
+              rowGap="5px"
+              paddingY="5px"
+              sx={{
+                paddingInlineStart: 0,
+                // flexDirection: ulFlexDirection,
+                listStyleType: "none",
+                marginBlockStart: 0,
+                marginBlockEnd: 0,
+                "&>li": {
+                  textDecoration: "none",
+                  color: theme.palette.grey[300],
+                  marginInline: "auto",
+                  width: "95%",
+                },
+                "&>li>a": {
+                  color: theme.palette.secondary[300],
+                },
+                "&>li.li-result:hover": { bgcolor: theme.palette.primary[100] },
+                "&>li.li-no_result": {
+                  cursor: "not-allowed",
+                  userSelect: "none",
+                  fontSize: "1.1em",
+                  textAlign: "center",
+                },
+              }}
+            >
+              {!isError &&
+              !isFetching &&
+              !isLoading &&
+              data.movies.length > 0 ? (
+                data.movies.map((movie: SearchMovieType) => (
+                  <li className="li-result">
+                    <Link
+                      onClick={() => {
+                        setSearchToggle((prev) => !prev);
+                        setInputSearch("");
+                        setDebouncedSearch("");
+                      }}
+                      key={movie.movieid}
+                      to={`/movies/${movie.movieid}`}
+                    >
+                      <SearchMovie
+                        poster_path={movie.poster_path}
+                        title={movie.title}
+                      />
+                    </Link>
+                  </li>
+                ))
+              ) : isLoading || isFetching ? (
+                <li className="li-no_result">
+                  <Loading minHeight="30svh" />
+                </li>
+              ) : (
+                <li className="li-no_result">Nothing matched your search</li>
+              )}
+            </Box>
+          </Box>
         </Paper>
-      </Slide>
-
-      <Box
-        className={
-          searchToggle && inputSearch !== ""
-            ? "dropdown-search open"
-            : "dropdown-search"
-          // searchToggle === "container2 active" && inputSearch !== ""
-          //   ? "dropdown-search open"
-          //   : "dropdown-search"
-        }
-      >
-        {/* {searchResult && searchResult.length > 0 ? (
-            searchResult.map((movie) => (
-              <Link
-                onClick={closeSearchClick}
-                key={movie.movieid}
-                to={`/movies/${movie.movieid}`}
-              >
-                <MovieSearchList
-                  poster={movie.poster_path}
-                  title={movie.title}
-                />
-              </Link>
-            ))
-          ) : (
-            <Button disabled variant="text">
-              Nothing matched your search
-            </Button>
-          )} */}
-      </Box>
+      </Grow>
     </FlexBox>
   );
 };

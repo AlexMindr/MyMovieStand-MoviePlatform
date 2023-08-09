@@ -43,7 +43,7 @@ const MenuProps = {
 const Movies = () => {
   const theme = useTheme();
   useSetTitle(pageTitle);
-  const [pageParams, setPageParams] = useSearchParams({ page: "1" });
+  const [pageParams, setPageParams] = useSearchParams({ page: "1", });
   const [inputSearch, setInputSearch] = useState("");
   const [selectSort, setSelectSort] = useState("");
   const [selectOrder, setSelectOrder] = useState("");

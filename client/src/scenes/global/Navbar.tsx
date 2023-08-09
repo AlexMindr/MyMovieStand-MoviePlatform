@@ -14,12 +14,12 @@ import useClickOutside from "@/shared/hooks/clickOutside";
 const Navbar = () => {
   const theme = useTheme();
   const location = useLocation();
-  const isAboveMd = useMediaQuery(theme.breakpoints.up("md"));
+  const isAboveMd = useMediaQuery("(min-width:700px)");
   const [menuBars, setMenuBars] = useState<boolean>(false);
-  const menuBox = useRef<HTMLInputElement>(null);
+  const menuBox = useRef<HTMLElement>(null);
   const activeStyle = "active";
-  const menuClose = useClickOutside<boolean>;
-  menuClose(menuBox, setMenuBars, false);
+  //close menu when clicking outside
+  useClickOutside<boolean>(menuBox, setMenuBars, false);
 
   const user = { username: "adrianus", fullname: "gabi andr", role: "admin" };
   const isLoggedIn = true;
@@ -47,7 +47,7 @@ const Navbar = () => {
         flexBasis={{ xs: "20%", sm: "20%", md: "40%", lg: "60%" }}
       >
         {!isAboveMd && (
-          <Box display={{ sm: "block", md: "none" }}>
+          <Box display={isAboveMd ? "none" : "block"}>
             <IconButton
               onClick={() => {
                 setMenuBars((prevMenuBars) => !prevMenuBars);
@@ -65,8 +65,8 @@ const Navbar = () => {
             sx={{
               "&>a>img": {
                 margin: "0.25rem 3rem 0 4rem",
-                width: "2.5rem",
-                maxHeight: "2.5rem",
+                width: "2.4rem",
+                maxHeight: "2.4rem",
               },
             }}
           >
@@ -111,7 +111,12 @@ const Navbar = () => {
         )}
       </Box>
       {/* Search  */}
-      <SearchBar flexBasis={{ xs: "80%", sm: "80%", md: "60%", lg: "40%" }} />
+      <Box
+        flexBasis={{ xs: "80%", sm: "80%", md: "60%", lg: "40%" }}
+        // position="relative"
+      >
+        <SearchBar />
+      </Box>
     </Box>
   );
 };
