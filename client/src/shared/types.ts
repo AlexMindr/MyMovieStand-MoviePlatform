@@ -33,3 +33,11 @@ export interface SearchMovieType {
   poster_path: string;
   title: string;
 }
+
+export interface QueryFilterType {
+  page?: string;
+  order?: string;
+  title?: string;
+  sort?: string;
+  genres?: string;
+}

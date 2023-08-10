@@ -16,7 +16,10 @@ const GeneralError = ({ message }: Props) => {
       </Typography>
       <Typography component="span" fontSize="1em">
         Please{" "}
-        <em onClick={refreshPage} style={{ color: "blueviolet" }}>
+        <em
+          onClick={refreshPage}
+          style={{ color: "blueviolet", cursor: "pointer" }}
+        >
           refresh
         </em>{" "}
         or try again later!

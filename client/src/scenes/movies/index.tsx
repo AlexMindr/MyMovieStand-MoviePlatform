@@ -1,329 +1,191 @@
-import { getMovies, getGenres } from "@/api";
+import { getMovies } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { GenreType, MovieType } from "@/shared/types";
-import Loading from "@/components/global/Loading";
+import { MovieType } from "@/shared/types";
+import { useSearchParams } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
 import Pagination from "@mui/material/Pagination";
-import FormControl from "@mui/material/FormControl";
-import Checkbox from "@mui/material/Checkbox";
-import Input from "@mui/material/Input";
-import ListItemText from "@mui/material/ListItemText";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
 import { useTheme } from "@mui/material";
 import ContainerTitle from "@/shared/ContainerTitle";
-import SearchIcon from "@mui/icons-material/Search";
-import ClearIcon from "@mui/icons-material/Clear";
-//import Breadcrumbs from "@mui/material/Breadcrumbs";
-//import Link as MuiLink from "@mui/material/Link";
-//import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import useSetTitle from "@/shared/hooks/setTitle";
-import MovieCard from "@/components/movies/MovieCard";
-import GeneralError from "@/components/error/GeneralError";
 import FlexBoxCenter from "@/shared/FlexBoxCenter";
-import { useSearchParams } from "react-router-dom";
 import FlexBox from "@/shared/FlexBox";
+import MovieCard from "@/components/movies/MovieCard";
+import SelectGenres from "@/components/movies/SelectGenres";
+import SearchBox from "@/components/movies/SearchBox";
+import SelectSort from "@/components/movies/SelectSort";
+import SelectOrder from "@/components/movies/SelectOrder";
+import Loading from "@/components/global/Loading";
+import GeneralError from "@/components/error/GeneralError";
+import buildQuery, { getParamsObject } from "@/shared/functions/buildQuery";
 
-const pageTitle = "Browse Movies";
-
-const ITEM_HEIGHT = 50;
-const ITEM_PADDING_TOP = 2;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 6 + ITEM_PADDING_TOP,
-    },
-  },
-};
+const PageTitle = "Browse Movies";
 
 const Movies = () => {
   const theme = useTheme();
-  useSetTitle(pageTitle);
-  const [pageParams, setPageParams] = useSearchParams({ page: "1", });
-  const [inputSearch, setInputSearch] = useState("");
-  const [selectSort, setSelectSort] = useState("");
-  const [selectOrder, setSelectOrder] = useState("");
-  const [selectGenres, setSelectGenres] = useState<string[]>([]);
-  //get page param from url and check if it is number and not 0
-  const pageNumber = pageParams?.get("page");
-  const page =
-    pageNumber && parseInt(pageNumber) !== 0 ? parseInt(pageNumber) : 1;
-
-  const {
-    isLoading: isLoadingGenres,
-    isError: isErrorGenres,
-    error: errorGenres,
-    data: dataGenres,
-    isFetching: isFetchingGenres,
-  } = useQuery({
-    queryKey: ["genres"],
-    queryFn: async () => {
-      const { data } = await getGenres();
-      return data as GenreType[];
-    },
-    staleTime: 60000,
+  useSetTitle(PageTitle);
+  const [pageParams, setPageParams] = useSearchParams({
+    page: "1",
+    title: "",
+    sort: "",
+    order: "",
+    genres: "",
   });
+
+  //get params from url after checks/processing
+  const pageParamsObject = getParamsObject(pageParams);
+
+  const [inputSearch, setInputSearch] = useState(pageParamsObject.title);
+  const [searchDebounced, setSearchDebounced] = useState(
+    pageParamsObject.title
+  );
+  const [selectSort, setSelectSort] = useState(pageParamsObject.sort);
+  const [selectOrder, setSelectOrder] = useState(pageParamsObject.order);
+  const [selectGenres, setSelectGenres] = useState<string[]>(
+    pageParamsObject.genres
+  );
+  const [page, setPage] = useState(pageParamsObject.page);
+
+  //build the filter query
+  const query = buildQuery(
+    inputSearch,
+    selectSort,
+    selectOrder,
+    selectGenres,
+    page
+  );
+  //data fetching
   const { isLoading, isError, error, data, isFetching } = useQuery({
-    queryKey: ["movies", { page }],
+    queryKey: [
+      "movies",
+      { page, searchDebounced, selectGenres, selectOrder, selectSort },
+    ],
     queryFn: async () => {
       const { data } = await getMovies(page);
-      if (pageNumber !== page.toString()) {
-        setPageParams({ page: page.toString() });
-        console.log("abc", pageNumber, page.toString());
-      }
+      setPageParams({ ...query });
       return data as { movies: MovieType[]; totalPages: number };
     },
     keepPreviousData: true,
-    staleTime: 60000,
+    refetchOnWindowFocus: false,
+    staleTime: 500,
   });
 
-  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputSearch(e.target.value);
-  };
-  const handleChangeSort = (event: SelectChangeEvent) => {
-    setSelectSort(event.target.value);
-  };
-  const handleChangeOrder = (event: SelectChangeEvent) => {
-    setSelectOrder(event.target.value);
-  };
-  const handleChangeGenres = (
-    event: SelectChangeEvent<typeof selectGenres>
-  ) => {
-    const {
-      target: { value },
-    } = event;
-    setSelectGenres(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
-  };
   const pageChange = (_e: React.ChangeEvent<unknown>, value: number) => {
-    setPageParams({ page: value.toString() });
+    setPage(value);
   };
 
-  if (isLoading || isFetching || isFetchingGenres || isLoadingGenres)
-    return <Loading />;
-  if (isError || isErrorGenres) return <GeneralError />;
-  else
-    return (
-      <>
-        {/* <Breadcrumbs
-        aria-label="breadcrumb"
-        separator={<NavigateNextIcon fontSize="small" />}
-      >
-        <Link underline="hover" color="tertiary" href="/">
-          MMS
-        </Link>
-        <Link
-          underline="hover"
-          color={theme.palette.tertiary[700]}
-          href="/movies"
-          aria-current="page"
+  return (
+    <>
+      {/* Page title */}
+      <ContainerTitle variant="h2">{PageTitle}</ContainerTitle>
+      <Box component="div">
+        {/* Search & Filter  */}
+        <Box
+          display={{ xs: "block", lg: "flex" }}
+          marginTop={"1rem"}
+          marginBottom={"0.25rem"}
         >
-          Movies
-        </Link>
-      </Breadcrumbs> */}
-        {/* Page title */}
-        <ContainerTitle variant="h2">{pageTitle}</ContainerTitle>
-        <Box component="div">
-          {/* Search & Filter  */}
-          <Box
-            display={{ xs: "block", lg: "flex" }}
-            marginTop={"1rem"}
-            marginBottom={"0.25rem"}
+          {/* Search box for filtering*/}
+          <SearchBox
+            inputSearch={inputSearch}
+            setInputSearch={setInputSearch}
+            setSearchDebounced={setSearchDebounced}
+            setPage={setPage}
+          />
+          {/* Filter by genre/order/sort */}
+          <FlexBox
+            flexBasis={{ lg: "50%" }}
+            justifyContent="flex-end"
+            marginLeft="auto"
           >
-            {/* Search */}
-            <FlexBox
-              flexBasis={{ lg: "50%" }}
-              justifyContent="center"
-              maxWidth={"500px"}
-              marginX={"auto"}
-            >
-              <FlexBoxCenter
-                width="100%"
-                borderRadius="10px"
-                border={`2px solid ${theme.palette.primary[700]}`}
-                // maxWidth="450px"
-                // minWidth={{ md: "270px", lg: "350px" }}
-                sx={{
-                  "& input": {
-                    width: "80%",
-                    height: "100%",
-                    border: "none",
-                    fontSize: "1rem",
-                    outline: "none",
-                    overflow: "hidden",
-                  },
-                }}
-              >
-                <IconButton
-                  sx={{
-                    cursor: "pointer",
-                    color: theme.palette.grey[500],
-                    bgcolor: "white",
-                  }}
-                  aria-label="close-search"
-                  // onClick={() => setSearchToggle((prev) => !prev)}
-                >
-                  <SearchIcon fontSize="medium" />
-                </IconButton>
-                <input
-                  id="browse-movies-search"
-                  type="text"
-                  aria-label="search"
-                  placeholder="Search movie..."
-                  value={inputSearch}
-                  onChange={handleChangeInput}
-                />
-                <IconButton
-                  sx={{
-                    cursor: "pointer",
-                    color: theme.palette.grey[200],
-                  }}
-                  onClick={() => setInputSearch(() => "")}
-                >
-                  <ClearIcon />
-                </IconButton>
-              </FlexBoxCenter>
-            </FlexBox>
-            {/* Filter by genre/order/sort */}
-            <FlexBox
-              flexBasis={{ lg: "50%" }}
-              justifyContent="flex-end"
-              marginLeft="auto"
-            >
-              <Box component="div" minWidth="100px" m={1}>
-                <FormControl fullWidth variant="standard">
-                  <InputLabel id="select-sort-label">Sort</InputLabel>
-                  <Select
-                    labelId="select-sort-label"
-                    value={selectSort}
-                    id="select-sort"
-                    label="Sort"
-                    onChange={handleChangeSort}
-                    autoWidth
-                  >
-                    <MenuItem value={""}>
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={"release_date"}>Date</MenuItem>
-                    <MenuItem value={"rating"}>Score</MenuItem>
-                    <MenuItem value={"popularity"}>Popularity</MenuItem>
-                    <MenuItem value={"duration"}>Duration</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-              <Box component="div" minWidth="100px" m={1}>
-                <FormControl fullWidth variant="standard">
-                  <InputLabel id="select-order-label">Order</InputLabel>
-                  <Select
-                    labelId="select-order-label"
-                    id="select-order"
-                    value={selectOrder}
-                    label="Order"
-                    onChange={handleChangeOrder}
-                  >
-                    <MenuItem value={"ASC"}>Ascending</MenuItem>
-                    <MenuItem value={"DESC"}>Descending</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-              <Box
-                component="div"
-                minWidth={{ xs: "100px", md: "150px", lg: "200px" }}
-                m={1}
-              >
-                <FormControl
-                  variant="standard"
-                  sx={{ width: { xs: "100px", md: "150px", lg: "200px" } }}
-                >
-                  <InputLabel id="select-genres-multiple-checkbox-label">
-                    Genres
-                  </InputLabel>
-                  <Select
-                    labelId="select-genres-multiple-checkbox-label"
-                    id="select-genres-multiple-checkbox"
-                    multiple
-                    value={selectGenres}
-                    onChange={handleChangeGenres}
-                    input={<Input />}
-                    renderValue={(selected) => selected.join(", ")}
-                    MenuProps={MenuProps}
-                  >
-                    {dataGenres.map(({ name }) => (
-                      <MenuItem key={name} value={name}>
-                        <Checkbox checked={selectGenres.indexOf(name) > -1} />
-                        <ListItemText primary={name} />
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
-            </FlexBox>
-          </Box>
-          {/* Movies and pagination */}
-          <Box pt="1rem">
-            {/* Movies grid */}
-            {data.movies.length > 1 ? (
-              <Box
-                component="ul"
-                display="grid"
-                gridTemplateColumns={{
-                  xs: "repeat(1,1fr)",
-                  md: "repeat(2,1fr)",
-                  lg: "repeat(3,1fr)",
-                  xl: "repeat(4,1fr)",
-                }}
-                rowGap="1rem"
-                columnGap="10px"
-                sx={{
-                  paddingInlineStart: 0,
-                  paddingInline: "10px",
-                  marginBlockEnd: 0,
-                  marginBlockStart: 0,
-                  placeItems: "center",
-                }}
-              >
-                {data.movies.map((movie) => (
-                  <MovieCard key={movie.movieid} movie={movie} />
-                ))}
-              </Box>
-            ) : (
-              <FlexBoxCenter minHeight="25dvh">
-                <Typography
-                  variant="h3"
-                  fontStyle="oblique"
-                  color={theme.palette.grey[200]}
-                >
-                  There are no movies matching your search criteria!
-                </Typography>
-              </FlexBoxCenter>
-            )}
-            {/* Movies pagination */}
-            {data.movies != null && data.movies.length >= 1 ? (
-              <FlexBoxCenter p="3rem" minWidth="100%">
-                <Pagination
-                  color="primary"
-                  count={data.totalPages}
-                  page={page ? page : 1}
-                  variant="outlined"
-                  shape="rounded"
-                  showFirstButton
-                  showLastButton
-                  onChange={pageChange}
-                />
-              </FlexBoxCenter>
-            ) : (
-              <></>
-            )}
-          </Box>
+            {/* Sort */}
+            <SelectSort
+              selectSort={selectSort}
+              setSelectSort={setSelectSort}
+              setPage={setPage}
+            />
+            {/* Order */}
+            <SelectOrder
+              selectOrder={selectOrder}
+              setSelectOrder={setSelectOrder}
+              setPage={setPage}
+            />
+            {/* Genres Select for filtering*/}
+            <SelectGenres
+              selectGenres={selectGenres}
+              setSelectGenres={setSelectGenres}
+              setPage={setPage}
+            />
+          </FlexBox>
         </Box>
-      </>
-    );
+        {/* Movies and pagination */}
+        <Box pt="1rem">
+          {/* Movies grid */}
+          {isLoading || isFetching ? (
+            <Loading minHeight="50svh" />
+          ) : isError ? (
+            <GeneralError />
+          ) : data.movies.length > 1 ? (
+            <Box
+              component="ul"
+              display="grid"
+              gridTemplateColumns={{
+                xs: "repeat(1,1fr)",
+                md: "repeat(2,1fr)",
+                lg: "repeat(3,1fr)",
+                xl: "repeat(4,1fr)",
+              }}
+              rowGap="1rem"
+              columnGap="10px"
+              sx={{
+                paddingInlineStart: 0,
+                paddingInline: "10px",
+                marginBlockEnd: 0,
+                marginBlockStart: 0,
+                placeItems: "center",
+              }}
+            >
+              {data.movies.map((movie) => (
+                <MovieCard key={movie.movieid} movie={movie} />
+              ))}
+            </Box>
+          ) : (
+            <FlexBoxCenter minHeight="25dvh">
+              <Typography
+                variant="h3"
+                fontStyle="oblique"
+                color={theme.palette.grey[200]}
+              >
+                There are no movies matching your search criteria!
+              </Typography>
+            </FlexBoxCenter>
+          )}
+          {/* Movies pagination */}
+          {!isLoading &&
+          !isFetching &&
+          !isError &&
+          data.movies != null &&
+          data.movies.length >= 1 ? (
+            <FlexBoxCenter p="3rem" minWidth="100%">
+              <Pagination
+                color="primary"
+                count={data.totalPages}
+                page={page ? page : 1}
+                variant="outlined"
+                shape="rounded"
+                showFirstButton
+                showLastButton
+                onChange={pageChange}
+              />
+            </FlexBoxCenter>
+          ) : (
+            <></>
+          )}
+        </Box>
+      </Box>
+    </>
+  );
 };
 
 export default Movies;

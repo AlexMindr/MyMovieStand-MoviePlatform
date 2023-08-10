@@ -14,10 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getMoviesSearch } from "@/api";
 import { SearchMovieType } from "@/shared/types";
 import { Link } from "react-router-dom";
-import FlexBoxCenter from "@/shared/FlexBoxCenter";
 import Loading from "./Loading";
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const SearchBar = () => {
   const theme = useTheme();
@@ -39,6 +36,7 @@ const SearchBar = () => {
     refetchOnWindowFocus: false,
   });
 
+  //auto-focus input after animation
   const focusInput = () => {
     if (inputRef.current) inputRef.current.focus();
   };
@@ -62,6 +60,7 @@ const SearchBar = () => {
       ref={searchBox}
       justifyContent="flex-end"
     >
+      {/* Search icon (not opened) */}
       <Fade in={!searchToggle} timeout={2000}>
         <IconButton
           sx={
@@ -93,7 +92,7 @@ const SearchBar = () => {
           <SearchIcon fontSize="medium" />
         </IconButton>
       </Fade>
-
+      {/* Search input (opened)  */}
       <Grow
         in={searchToggle}
         style={{ transformOrigin: "right center 0" }}
@@ -158,6 +157,7 @@ const SearchBar = () => {
           >
             <ClearIcon />
           </IconButton>
+          {/* Dropdown div with items list */}
           <Box
             display={
               searchToggle && inputSearch.length > 3
