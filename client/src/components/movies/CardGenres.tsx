@@ -3,6 +3,7 @@ import { useTheme } from "@mui/material";
 
 import FlexBoxCenter from "@/shared/FlexBoxCenter";
 import { GenreType } from "@/shared/types";
+import { Link } from "react-router-dom";
 
 type Props = {
   Genres: GenreType[];
@@ -22,7 +23,7 @@ const MovieCardGenres = ({ Genres }: Props) => {
       minHeight="3rem"
       bgcolor={theme.palette.secondary[100]}
     >
-      {Genres?.slice(0, genresMaxLen).map((genre) => (
+      {Genres.slice(0, genresMaxLen).map((genre) => (
         <Box
           key={genre.genreid}
           bgcolor={theme.palette.tertiary[700]}
@@ -32,7 +33,13 @@ const MovieCardGenres = ({ Genres }: Props) => {
           color={theme.palette.grey[100]}
           fontWeight="500"
         >
-          {genre.name}
+          <Link
+            to={`/movies?genres=${encodeURIComponent(genre.name)}`}
+            style={{ color: "inherit" }}
+            reloadDocument
+          >
+            {genre.name}
+          </Link>
         </Box>
       ))}
       {Genres.length > genresMaxLen ? (

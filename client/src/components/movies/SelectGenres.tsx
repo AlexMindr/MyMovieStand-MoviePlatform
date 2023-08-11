@@ -11,7 +11,7 @@ import { GenreType } from "@/shared/types";
 import { getGenres } from "@/api";
 import Loading from "@/components/global/Loading";
 import GeneralError from "@/components/error/GeneralError";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 
 type Props = {
   selectGenres: string[];
@@ -29,6 +29,10 @@ const MenuProps = {
   },
 };
 
+function isArrayContained(subArray: string[], mainArray: string[]): boolean {
+  return subArray.every((item) => mainArray.includes(item));
+}
+
 const SelectGenres = ({ selectGenres, setSelectGenres, setPage }: Props) => {
   const { isLoading, isError, error, data, isFetching } = useQuery({
     queryKey: ["genres"],
@@ -39,6 +43,19 @@ const SelectGenres = ({ selectGenres, setSelectGenres, setPage }: Props) => {
     staleTime: 60000,
     refetchOnWindowFocus: false,
   });
+
+  useEffect(() => {
+    if (!isFetching && !isLoading && !isError) {
+      isArrayContained(
+        selectGenres,
+        data.map(({ name }) => name)
+      )
+        ? setSelectGenres(selectGenres)
+        : setSelectGenres([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, selectGenres]);
+
   const handleChangeGenres = (
     event: SelectChangeEvent<typeof selectGenres>
   ) => {
