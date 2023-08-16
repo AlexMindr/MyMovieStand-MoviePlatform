@@ -51,6 +51,7 @@ const SearchBox = ({
       >
         <IconButton
           sx={{
+            position: "static",
             cursor: "pointer",
             color: theme.palette.grey[500],
             bgcolor: "white",

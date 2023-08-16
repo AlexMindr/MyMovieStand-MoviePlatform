@@ -1,41 +1,36 @@
 import { useTheme } from "@mui/material";
-import Box from "@mui/material/Box";
+import Box, { BoxProps } from "@mui/material/Box";
 import { NavLink } from "react-router-dom";
 
-type Props = {
+interface Props extends BoxProps {
   setMenuBars: React.Dispatch<React.SetStateAction<boolean>>;
   menuBars: boolean;
   activeStyle: string;
   user?: { role: string };
-  divStyle?: {
-    width?: string;
-    alignItems?: string;
-    justifyContent?: string;
-    paddingBottom?: string;
-    backgroundImage?: string;
-    minWidth?: string;
-  };
+  // divStyle?: {
+  //   width?: string;
+  //   alignItems?: string;
+  //   justifyContent?: string;
+  //   paddingBottom?: string;
+  //   backgroundImage?: string;
+  //   minWidth?: string;
+  // };
   ulFlexDirection?: string;
   ulTextAlign?: string;
-};
+}
 
 const Nav = ({
   menuBars,
   setMenuBars,
   activeStyle,
   user,
-  divStyle,
   ulFlexDirection = "row",
   ulTextAlign = "center",
+  ...sx
 }: Props) => {
   const theme = useTheme();
   return (
-    <Box
-      display={menuBars ? "flex" : "none"}
-      sx={{
-        ...divStyle,
-      }}
-    >
+    <Box display={menuBars ? "flex" : "none"} {...sx}>
       <Box
         component="nav"
         width="100%"
@@ -46,7 +41,7 @@ const Nav = ({
         <Box
           component="ul"
           display="flex"
-          fontSize="1.1rem"
+          fontSize={{ xs: "1.5rem", md: "1.1rem" }}
           boxSizing="border-box"
           sx={{
             paddingInlineStart: 0,
@@ -84,6 +79,7 @@ const Nav = ({
             <NavLink
               className={({ isActive }) => (isActive ? activeStyle : undefined)}
               to="/movies"
+              reloadDocument
               onClick={() => {
                 setMenuBars(false);
               }}

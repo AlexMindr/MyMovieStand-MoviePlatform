@@ -5,7 +5,7 @@ import Fade from "@mui/material/Fade";
 import Box from "@mui/material/Box";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTheme } from "@mui/material";
 import useClickOutside from "@/shared/hooks/clickOutside";
 import FlexBox from "@/shared/FlexBox";
@@ -41,10 +41,17 @@ const SearchBar = () => {
     if (inputRef.current) inputRef.current.focus();
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const waitTimeout = setTimeout(() => focusInput(), 800);
-    if (searchToggle === true) waitTimeout;
+    if (searchToggle) waitTimeout;
     return () => clearTimeout(waitTimeout);
+  }, [searchToggle]);
+
+  useEffect(() => {
+    if (!searchToggle) {
+      setInputSearch("");
+      setDebouncedSearch("");
+    }
   }, [searchToggle]);
 
   const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -159,11 +166,8 @@ const SearchBar = () => {
           </IconButton>
           {/* Dropdown div with items list */}
           <Box
-            display={
-              searchToggle && inputSearch.length > 3
-                ? { display: "block" }
-                : { display: "none" }
-            }
+            display={searchToggle && inputSearch.length > 3 ? "block" : "none"}
+            className={searchToggle && inputSearch.length > 3 ? "visible" : ""}
             position="absolute"
             bgcolor="white"
             width="99%"
@@ -172,11 +176,16 @@ const SearchBar = () => {
             top="105%"
             zIndex="500"
             sx={{
+              opacity: 0,
+              transition: "opacity 1s ease-in-out",
               marginInline: "auto",
               borderBottomLeftRadius: "15px",
               borderBottomRightRadius: "15px",
               borderTopLeftRadius: "10px",
               borderTopRightRadius: "10px",
+              "&.visible": {
+                opacity: 1,
+              },
             }}
           >
             <Box
@@ -188,7 +197,6 @@ const SearchBar = () => {
               paddingY="5px"
               sx={{
                 paddingInlineStart: 0,
-                // flexDirection: ulFlexDirection,
                 listStyleType: "none",
                 marginBlockStart: 0,
                 marginBlockEnd: 0,
@@ -201,7 +209,9 @@ const SearchBar = () => {
                 "&>li>a": {
                   color: theme.palette.secondary[300],
                 },
-                "&>li.li-result:hover": { bgcolor: theme.palette.primary[100] },
+                "&>li.li-result:hover": {
+                  bgcolor: theme.palette.primary[100],
+                },
                 "&>li.li-no_result": {
                   cursor: "not-allowed",
                   userSelect: "none",

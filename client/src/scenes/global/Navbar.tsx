@@ -6,7 +6,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { Link, useLocation } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import Grow from "@mui/material/Grow";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Nav from "@/components/global/Nav";
 import SearchBar from "@/components/global/SearchBar";
 import useClickOutside from "@/shared/hooks/clickOutside";
@@ -88,17 +88,16 @@ const Navbar = () => {
             style={{ transformOrigin: "top left 0" }}
             {...(menuBars ? { timeout: 1000 } : {})}
           >
-            <Box position="absolute" top="2.5rem">
+            <Box position="absolute" top="2.5rem" zIndex={300}>
               <Nav
                 menuBars={menuBars}
                 setMenuBars={setMenuBars}
                 activeStyle={activeStyle}
                 user={user}
-                divStyle={{
-                  width: "100%",
-                  minWidth: "125px",
+                sx={{
+                  width: "max(50svw,150px)",
                   alignItems: "flex-start",
-                  justifyContent: "left",
+                  justifyContent: "center",
                   paddingBottom: "0.25rem",
                   backgroundImage: `linear-gradient(150deg,${theme.palette.secondary[500]},60%,
                 ${theme.palette.primary[500]})`,

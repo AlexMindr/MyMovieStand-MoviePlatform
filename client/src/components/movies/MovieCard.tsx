@@ -47,10 +47,8 @@ const MovieCard = ({ movie }: Props) => {
         border: "0.1rem solid",
         maxWidth: "320px",
         minWidth: "260px",
-        position: "relative",
         borderColor: theme.palette.grey[100],
         height: "100%",
-        // minHeight: "100%",
         listStyleType: "none",
         textDecoration: "none",
       }}
