@@ -68,7 +68,6 @@ const SelectGenres = ({ selectGenres, setSelectGenres, setPage }: Props) => {
     );
     setPage(1);
   };
-  if (isFetching || isLoading) return <Loading />;
   if (isError) return <GeneralError />;
   else
     return (
@@ -94,12 +93,16 @@ const SelectGenres = ({ selectGenres, setSelectGenres, setPage }: Props) => {
             renderValue={(selected) => selected.join(", ")}
             MenuProps={MenuProps}
           >
-            {data.map(({ name }) => (
-              <MenuItem key={name} value={name}>
-                <Checkbox checked={selectGenres.indexOf(name) > -1} />
-                <ListItemText primary={name} />
-              </MenuItem>
-            ))}
+            {isFetching || isLoading ? (
+              <Loading />
+            ) : (
+              data.map(({ name }) => (
+                <MenuItem key={name} value={name}>
+                  <Checkbox checked={selectGenres.indexOf(name) > -1} />
+                  <ListItemText primary={name} />
+                </MenuItem>
+              ))
+            )}
           </Select>
         </FormControl>
       </Box>

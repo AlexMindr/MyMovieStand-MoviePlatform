@@ -11,6 +11,7 @@ import MovieCardTrailer from "./CardTrailer";
 import MovieCardGenres from "./CardGenres";
 import MovieCardBottom from "./CardBottom";
 import MovieCardDetails from "./CardDetails";
+import colorRGBA from "@/shared/functions/colorRGBA";
 
 type Props = {
   movie: MovieType;
@@ -42,7 +43,7 @@ const MovieCard = ({ movie }: Props) => {
     <Card
       component="li"
       sx={{
-        bgcolor: theme.palette.watchlistBg.main,
+        bgcolor: colorRGBA(theme.palette.watchlistBg.main, "0.7"),
         display: "block",
         border: "0.1rem solid",
         maxWidth: "320px",

@@ -17,7 +17,7 @@ export const getMoviesFiltered = (page = 1, query: string) =>
   api.get(`/movies/page=${page}/filter/?${query}`);
 
 //Movie
-export const getMovie = (id: number) => api.get(`/movies/movie=${id}`);
+export const getMovie = (id: string) => api.get(`/movies/movie=${id}`);
 
 //NavSearch
 export const getMoviesSearch = (page = 1, query: string) =>

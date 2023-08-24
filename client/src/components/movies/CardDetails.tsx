@@ -1,7 +1,7 @@
-import moment from "moment";
 import Typography from "@mui/material/Typography";
 import FlexBox from "@/shared/FlexBox";
 import { useTheme } from "@mui/material";
+import formatDate from "@/shared/functions/formatDate";
 
 type Props = {
   adult: boolean;
@@ -17,6 +17,10 @@ const MovieCardDetails = ({
   uscertification,
 }: Props) => {
   const theme = useTheme();
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+  };
 
   return (
     <FlexBox
@@ -48,7 +52,7 @@ const MovieCardDetails = ({
         variant="subtitle1"
         component="div"
       >
-        {release_date ? moment(release_date).format("MMM YYYY") : "TBA"}
+        {release_date ? formatDate(release_date, options) : "TBA"}
       </Typography>
       {/* <Divider orientation="vertical" variant="middle" flexItem /> */}
       <Typography variant="subtitle1" component="div">

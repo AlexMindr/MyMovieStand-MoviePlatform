@@ -61,12 +61,12 @@ export const tokens = {
     hover: "#FFE400",
   },
   watchlistBg: {
-    watching: "rgb(153, 255, 51,0.7)",
-    completed: "rgb(79, 116, 227,0.7)",
-    planToWatch: "rgb(204, 204, 204)",
-    onHold: "rgb(240, 230, 140,0.7)",
-    dropped: "rgb(244, 138, 160,0.7)",
-    basic: "rgb(230,230,230,0.7)",
+    watching: "153, 255, 51",
+    completed: "79, 116, 227",
+    planToWatch: "204, 204, 204",
+    onHold: "240, 230, 140",
+    dropped: "244, 138, 160",
+    basic: "230,230,230",
   },
 };
 
@@ -121,7 +121,7 @@ export const themeSettings = {
     },
     h4: {
       fontFamily: ["Manrope", "sans-serif"].join(","),
-      fontSize: 14,
+      fontSize: 20,
       fontWeight: 600,
       color: tokens.grey[300],
     },

@@ -82,6 +82,7 @@ const Movies = () => {
       <Box component="div">
         {/* Search & Filter  */}
         <Box
+          width="100%"
           display={{ xs: "block", lg: "flex" }}
           marginTop={"1rem"}
           marginBottom={"0.25rem"}
@@ -120,7 +121,7 @@ const Movies = () => {
           </FlexBox>
         </Box>
         {/* Movies and pagination */}
-        <Box pt="1rem">
+        <Box pt="1rem" width="100%">
           {/* Movies grid */}
           {isLoading || isFetching ? (
             <Loading minHeight="50svh" />
@@ -139,6 +140,7 @@ const Movies = () => {
               rowGap="1rem"
               columnGap="10px"
               sx={{
+                listStyleType: "none",
                 paddingInlineStart: 0,
                 paddingInline: "10px",
                 marginBlockEnd: 0,

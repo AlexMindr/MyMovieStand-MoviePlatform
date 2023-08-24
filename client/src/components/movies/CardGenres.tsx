@@ -15,16 +15,23 @@ const MovieCardGenres = ({ Genres }: Props) => {
 
   return (
     <FlexBoxCenter
-      component="div"
+      component="ul"
       flexWrap="wrap"
       columnGap="4px"
       rowGap="2px"
-      // width="100%"
       minHeight="3rem"
       bgcolor={theme.palette.secondary[100]}
+      sx={{
+        paddingInlineStart: 0,
+        paddingInline: "10px",
+        marginBlockEnd: 0,
+        marginBlockStart: 0,
+        listStyleType: "none",
+      }}
     >
       {Genres.slice(0, genresMaxLen).map((genre) => (
         <Box
+          component="li"
           key={genre.genreid}
           bgcolor={theme.palette.tertiary[700]}
           p="2px 6px"
@@ -44,6 +51,7 @@ const MovieCardGenres = ({ Genres }: Props) => {
       ))}
       {Genres.length > genresMaxLen ? (
         <Box
+          component="li"
           bgcolor={theme.palette.tertiary[700]}
           p="2px 6px"
           minWidth="12px"

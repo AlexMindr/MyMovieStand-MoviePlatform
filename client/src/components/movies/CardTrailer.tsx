@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
+import { useState } from "react";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material";
+import TrailerModal from "../global/TrailerModal";
 
 type Props = {
   trailer: string;
@@ -35,31 +34,12 @@ const MovieCardTrailer = ({ trailer, title }: Props) => {
         >
           PV
         </Button>
-        <Modal
-          open={openTrailer}
-          onClose={() => setOpenTrailer(false)}
-          aria-labelledby={title}
-          aria-describedby="trailer"
-        >
-          <Box
-            position="absolute"
-            top="50%"
-            left="50%"
-            bgcolor={theme.palette.grey[800]}
-            border="5px solid black"
-            boxShadow={24}
-            p="5px"
-            sx={{ transform: "translate(-50%,-50%)" }}
-          >
-            <Box
-              width="80dvw"
-              height="80dvh"
-              component="iframe"
-              src={`https://www.youtube-nocookie.com/embed/${trailer}?autoplay=1&mute=1`}
-              referrerPolicy="no-referrer"
-            />
-          </Box>
-        </Modal>
+        <TrailerModal
+          openTrailer={openTrailer}
+          setOpenTrailer={setOpenTrailer}
+          labelTitle={title}
+          trailer={trailer}
+        />
       </>
     );
   return (
