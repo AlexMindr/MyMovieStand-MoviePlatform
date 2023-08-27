@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Container, CssBaseline } from "@mui/material";
 import { themeSettings } from "@/theme";
@@ -7,6 +7,7 @@ import Scrollbtn from "@/components/global/Scrollbtn";
 import Footer from "@/scenes/global/Footer";
 import Navbar from "@/scenes/global/Navbar";
 import Header from "@/scenes/global/Header";
+import Loading from "@/components/global/Loading";
 
 export default function Layout() {
   const theme = useMemo(() => createTheme(themeSettings), []);
@@ -30,7 +31,10 @@ export default function Layout() {
             bgcolor: themeSettings.palette.background.light,
           }}
         >
-          <Outlet />
+          {/* Suspense for lazy loading pages */}
+          <Suspense fallback={<Loading minHeight="70svh" />}>
+            <Outlet />
+          </Suspense>
         </Container>
         <Scrollbtn />
         <Footer />

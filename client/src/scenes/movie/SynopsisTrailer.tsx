@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import { useTheme } from "@mui/material";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import { useState } from "react";
-import TrailerModal from "../global/TrailerModal";
+import TrailerModal from "@/components/global/TrailerModal";
 
 type Props = {
   trailer: string;

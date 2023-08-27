@@ -2,6 +2,8 @@ import { Router } from "express";
 import {
   getMovies,
   getMovie,
+  getMovieImages,
+  getMovieCredits,
   getMoviesFiltered,
   getMoviesSimpleFilter,
   getHomeMovies,
@@ -10,7 +12,7 @@ import {
   updatePopularityAndRating,
   updateMovie,
   //deleteMovie,
-  pop
+  pop,
 } from "../controllers/movies.js";
 import authAdmin from "../middleware/authAdmin.js";
 
@@ -20,9 +22,11 @@ router.get("/page=:page/filter", getMoviesFiltered);
 router.get("/page=:page/search", getMoviesSimpleFilter);
 router.get("/page=:page", getMovies);
 router.get("/movie=:id", getMovie);
+router.get("/movie=:tmdb_id/images", getMovieImages);
+router.get("/movie=:tmdb_id/credits", getMovieCredits);
 router.get("/get/home", getHomeMovies);
 
-router.post("/pop",  pop);
+router.post("/pop", pop);
 
 router.post("/populate", authAdmin, populateMovies);
 router.post("/create", authAdmin, createMovie);

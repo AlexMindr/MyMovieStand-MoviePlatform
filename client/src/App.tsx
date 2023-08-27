@@ -1,10 +1,17 @@
 import { RouterProvider } from "react-router-dom";
-import Home from "@/scenes/home";
-import ErrorPage from "@/scenes/errorpage";
 import { createBrowserRouter } from "react-router-dom";
+import { lazy } from "react";
 import Layout from "@/scenes/global/Layout";
-import Movies from "@/scenes/movies";
-import Movie from "@/scenes/movie";
+//import Movies from "@/scenes/movies";
+//import Movie from "@/scenes/movie";
+//import Home from "@/scenes/home";
+//import ErrorPage from "@/scenes/errorpage";
+
+//Lazy loading components
+const Home = lazy(() => import("@/scenes/home"));
+const Movies = lazy(() => import("@/scenes/movies"));
+const Movie = lazy(() => import("@/scenes/movie"));
+const ErrorPage = lazy(() => import("@/scenes/errorpage"));
 
 const router = createBrowserRouter([
   {

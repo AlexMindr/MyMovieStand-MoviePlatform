@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material";
-import TrailerModal from "../global/TrailerModal";
+import TrailerModal from "@/components/global/TrailerModal";
 
 type Props = {
   trailer: string;

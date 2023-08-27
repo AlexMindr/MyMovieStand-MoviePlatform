@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const api = axios.create({ baseURL: import.meta.env.VITE_BASE_URL });
-//const tmdb = axios.create({ baseURL: "https://api.themoviedb.org/3/movie" });
 const profile = localStorage.getItem("profile");
 api.interceptors.request.use((req) => {
   if (profile) {
@@ -18,6 +17,10 @@ export const getMoviesFiltered = (page = 1, query: string) =>
 
 //Movie
 export const getMovie = (id: string) => api.get(`/movies/movie=${id}`);
+export const getMovieCredits = (tmdb_id: string) =>
+  api.get(`/movies/movie=${tmdb_id}/credits`);
+export const getMovieImages = (tmdb_id: string) =>
+  api.get(`/movies/movie=${tmdb_id}/images`);
 
 //NavSearch
 export const getMoviesSearch = (page = 1, query: string) =>

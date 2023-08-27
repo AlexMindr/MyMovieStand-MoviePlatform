@@ -127,13 +127,14 @@ export const themeSettings = {
     },
     h5: {
       fontFamily: ["Manrope", "sans-serif"].join(","),
-      fontSize: 12,
-      fontWeight: 400,
-      color: tokens.grey[500],
+      fontSize: 25,
+      fontWeight: 600,
+      color: tokens.grey[700],
     },
     h6: {
       fontFamily: ["Manrope", "sans-serif"].join(","),
-      fontSize: 10,
+      fontSize: 18,
+      fontWeight: 600,
       color: tokens.grey[700],
     },
   },

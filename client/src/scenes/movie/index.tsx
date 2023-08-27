@@ -1,7 +1,5 @@
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
@@ -13,32 +11,47 @@ import FlexBox from "@/shared/FlexBox";
 import FlexBoxCenter from "@/shared/FlexBoxCenter";
 import colorRGBA from "@/shared/functions/colorRGBA";
 import useSetTitle from "@/shared/hooks/setTitle";
-import numberFormat from "@/shared/functions/numberFormat";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import imageUnknown from "@/assets/unknown.jpg";
-import LangStatusRating from "@/components/movie/LangStatusRating";
-import GenresBox from "@/components/movie/GenresBox";
-import AiringDetails from "@/components/movie/AiringDetails";
-import RatingBox from "@/components/movie/RatingBox";
-import SynopsisTrailer from "@/components/movie/SynopsisTrailer";
-import WatchListBox from "@/components/movie/WatchListBox";
+import LangStatusRating from "@/scenes/movie/LangStatusRating";
+import GenresBox from "@/scenes/movie/GenresBox";
+import AiringDetails from "@/scenes/movie/AiringDetails";
+import RatingBox from "@/scenes/movie/RatingBox";
+import SynopsisTrailer from "@/scenes/movie/SynopsisTrailer";
+import WatchListBox from "@/scenes/movie/WatchListBox";
+import GalleryBudgetKw from "@/scenes/movie/GalleryFinancialKw";
 
 const Movie = () => {
   const { id } = useParams();
   const { palette } = useTheme();
-  const { isLoading, isError, error, data, isFetching } = useQuery({
+  const {
+    isLoading,
+    isError,
+    status: queryStatus,
+    data,
+    isFetching,
+  } = useQuery({
     queryKey: ["movie", id],
     queryFn: async () => {
       const { data } = await getMovie(id ?? "");
       return data as MovieType;
     },
+    retry: 2,
     refetchOnWindowFocus: false,
     staleTime: 500,
   });
-  useSetTitle(data?.title ?? "");
+  useSetTitle(data?.title ?? "Not Found");
 
   if (isLoading || isFetching) return <Loading minHeight="50svh" />;
-  if (isError) return <GeneralError />;
+  if (isError)
+    return (
+      <GeneralError
+        message={
+          queryStatus === "error"
+            ? "Movie does not exist!"
+            : "Something went wrong"
+        }
+      />
+    );
   const {
     movieid,
     adult,
@@ -82,7 +95,7 @@ const Movie = () => {
           zIndex: "-1",
           width: "100%",
           height: "100%",
-          opacity: 0.4,
+          opacity: 0.35,
         },
       }}
     >
@@ -158,7 +171,14 @@ const Movie = () => {
         </FlexBoxCenter>
       </Box>
       {/* Gallery with other images & other info */}
-      <Box display={{ xs: "block", md: "flex" }}></Box>
+      {/* TODO fixes for very small screens */}
+      <GalleryBudgetKw
+        title={title}
+        tmdb_id={tmdb_id}
+        budget={budget}
+        revenue={revenue}
+        keywords={keywords}
+      />
     </Box>
   );
 };

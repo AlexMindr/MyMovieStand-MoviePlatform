@@ -41,3 +41,19 @@ export interface QueryFilterType {
   sort?: string;
   genres?: string;
 }
+
+export interface MovieImageObjType {
+  posters: MovieImageObjPropsType[];
+  logos: MovieImageObjPropsType[];
+  backdrops: MovieImageObjPropsType[];
+}
+
+export interface MovieImageObjPropsType {
+  aspect_ratio?: number;
+  file_path: string;
+  height?: number;
+  iso_639_1?: string | null;
+  vote_average?: number | null;
+  vote_count?: number | null;
+  width?: number;
+}
