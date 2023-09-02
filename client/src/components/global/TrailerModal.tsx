@@ -40,6 +40,11 @@ const TrailerModal = ({
           component="iframe"
           src={`https://www.youtube-nocookie.com/embed/${trailer}?autoplay=1&mute=1`}
           referrerPolicy="no-referrer"
+          sx={{
+            frameborder: "0",
+            allow:
+              "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
+          }}
         />
       </Box>
     </Modal>

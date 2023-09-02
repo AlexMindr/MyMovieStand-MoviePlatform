@@ -8,6 +8,7 @@ import { Suspense, lazy } from "react";
 import Loading from "@/components/global/Loading";
 import GeneralError from "@/components/error/GeneralError";
 import FlexBoxCenter from "@/shared/FlexBoxCenter";
+import Keywords from "@/components/movie/Keywords";
 
 const HorizMovieImages = lazy(
   () => import("@/components/movie/HorizMovieImages")
@@ -79,58 +80,25 @@ const GalleryFinancialKw = ({
         <Typography variant="h6">Budget</Typography>
         <Typography component="span">
           {budget && budget > 0
-            ? new Intl.NumberFormat("en-US", {
+            ? new Intl.NumberFormat(undefined, {
                 style: "currency",
                 currency: "USD",
+                notation: "compact",
               }).format(budget)
             : "N/A"}
         </Typography>
         <Typography variant="h6">Revenue</Typography>
         <Typography component="span">
           {revenue && revenue > 0
-            ? new Intl.NumberFormat("en-US", {
+            ? new Intl.NumberFormat(undefined, {
                 style: "currency",
                 currency: "USD",
+                notation: "compact",
               }).format(revenue)
             : "N/A"}
         </Typography>
         <Typography variant="h6">Keywords</Typography>
-        <Box
-          maxWidth={"100%"}
-          component="ul"
-          overflow={"hidden"}
-          display={"grid"}
-          gridTemplateColumns={"repeat(auto-fill,minmax(100px,1fr))"}
-          mx="10px"
-          columnGap={"8px"}
-          rowGap={"8px"}
-          sx={{
-            placeItems: "center",
-            listStyleType: "none",
-            marginBlockStart: "0",
-            marginBlockEnd: "0",
-            paddingInlineStart: "0",
-            "&>li": {
-              maxWidth: { xs: "100px", md: "98px", lg: "100px" },
-              fontSize: "0.85rem",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            },
-          }}
-        >
-          {keywords
-            .split(",")
-            .slice(0, 18)
-            .map((keyword) => (
-              <li
-                key={keyword}
-                // style={keyword.length > 18 ? { gridColumn: "span 2" } : {}}
-              >
-                {keyword}
-              </li>
-            ))}
-        </Box>
+        <Keywords keywords={keywords} />
       </FlexBoxCenter>
     </Box>
   );

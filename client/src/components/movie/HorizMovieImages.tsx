@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import { SyntheticEvent, useState, useTransition, lazy, Suspense } from "react";
-import { useTheme } from "@mui/material";
+import { useMediaQuery, useTheme } from "@mui/material";
 import Loading from "../global/Loading";
 
 const HorizTab = lazy(() => import("./HorizTab"));
@@ -23,7 +23,8 @@ function a11yProps(index: number) {
 const HorizMovieImages = ({ images, title }: Props) => {
   const { posters, logos, backdrops } = images;
   const [value, setValue] = useState(0);
-  const { palette } = useTheme();
+  const { palette, breakpoints } = useTheme();
+  const isMdScreen = useMediaQuery(breakpoints.up("md"));
   const [isPending, startTransition] = useTransition();
 
   const tabSx = {
@@ -52,6 +53,7 @@ const HorizMovieImages = ({ images, title }: Props) => {
         }}
       >
         <Tabs
+          variant={isMdScreen ? "standard" : "fullWidth"}
           indicatorColor="secondary"
           value={value}
           onChange={handleChange}

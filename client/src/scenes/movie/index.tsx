@@ -11,7 +11,6 @@ import FlexBox from "@/shared/FlexBox";
 import FlexBoxCenter from "@/shared/FlexBoxCenter";
 import colorRGBA from "@/shared/functions/colorRGBA";
 import useSetTitle from "@/shared/hooks/setTitle";
-import imageUnknown from "@/assets/unknown.jpg";
 import LangStatusRating from "@/scenes/movie/LangStatusRating";
 import GenresBox from "@/scenes/movie/GenresBox";
 import AiringDetails from "@/scenes/movie/AiringDetails";
@@ -19,6 +18,9 @@ import RatingBox from "@/scenes/movie/RatingBox";
 import SynopsisTrailer from "@/scenes/movie/SynopsisTrailer";
 import WatchListBox from "@/scenes/movie/WatchListBox";
 import GalleryBudgetKw from "@/scenes/movie/GalleryFinancialKw";
+import GalleryProduction from "./GalleryProduction";
+
+/* TODO fixes for very small screens */
 
 const Movie = () => {
   const { id } = useParams();
@@ -53,7 +55,6 @@ const Movie = () => {
       />
     );
   const {
-    movieid,
     adult,
     backdrop_path,
     budget,
@@ -87,10 +88,10 @@ const Movie = () => {
           content: "''",
           backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
-          backgroundSize: "100% auto",
+          backgroundSize: "auto 100%",
           backgroundPosition: "center center",
           backgroundBlendMode: "screen",
-          backgroundImage: `url(https://image.tmdb.org/t/p/original/${poster_path})`,
+          backgroundImage: `url(https://image.tmdb.org/t/p/original/${backdrop_path})`,
           position: "absolute",
           zIndex: "-1",
           width: "100%",
@@ -171,7 +172,6 @@ const Movie = () => {
         </FlexBoxCenter>
       </Box>
       {/* Gallery with other images & other info */}
-      {/* TODO fixes for very small screens */}
       <GalleryBudgetKw
         title={title}
         tmdb_id={tmdb_id}
@@ -179,6 +179,11 @@ const Movie = () => {
         revenue={revenue}
         keywords={keywords}
       />
+      {/* Gallery with production team (cast and crew) */}
+      <GalleryProduction tmdb_id={tmdb_id} title={title} />
+      {/* Reviews */}
+      {/* Posts */}
+      {/* Ai Recommendations */}
     </Box>
   );
 };

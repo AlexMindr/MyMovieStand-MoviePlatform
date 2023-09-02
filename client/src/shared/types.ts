@@ -57,3 +57,29 @@ export interface MovieImageObjPropsType {
   vote_count?: number | null;
   width?: number;
 }
+
+export interface MovieCreditsObjType {
+  cast: MovieCastPropsType[];
+  crew: MovieCrewPropsType[];
+}
+
+interface MovieCreditsPeopleImageProps {
+  adult: boolean;
+  credit_id: string;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string;
+}
+export interface MovieCastPropsType extends MovieCreditsPeopleImageProps {
+  cast_id: number;
+  character: string;
+  order: number;
+}
+export interface MovieCrewPropsType extends MovieCreditsPeopleImageProps {
+  department: string;
+  job: string;
+}
