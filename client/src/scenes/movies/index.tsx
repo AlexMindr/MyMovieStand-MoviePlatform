@@ -3,15 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { MovieType } from "@/shared/types";
 import { useSearchParams } from "react-router-dom";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Pagination from "@mui/material/Pagination";
-import { useTheme } from "@mui/material";
 import ContainerTitle from "@/shared/ContainerTitle";
 import useSetTitle from "@/shared/hooks/setTitle";
-import FlexBoxCenter from "@/shared/FlexBoxCenter";
 import FlexBox from "@/shared/FlexBox";
-import MovieCard from "@/components/movies/MovieCard";
 import SelectGenres from "@/scenes/movies/SelectGenres";
 import SearchBox from "@/scenes/movies/SearchBox";
 import SelectSort from "@/scenes/movies/SelectSort";
@@ -19,11 +14,11 @@ import SelectOrder from "@/scenes/movies/SelectOrder";
 import Loading from "@/components/global/Loading";
 import GeneralError from "@/components/error/GeneralError";
 import buildQuery, { getParamsObject } from "@/shared/functions/buildQuery";
+import MoviesGrid from "./MoviesGrid";
 
 const PageTitle = "Browse Movies";
 
 const Movies = () => {
-  const theme = useTheme();
   useSetTitle(PageTitle);
   const [pageParams, setPageParams] = useSearchParams({
     page: "1",
@@ -55,6 +50,7 @@ const Movies = () => {
     selectGenres,
     page
   );
+
   //data fetching
   const { isLoading, isError, error, data, isFetching } = useQuery({
     queryKey: [
@@ -70,10 +66,6 @@ const Movies = () => {
     refetchOnWindowFocus: false,
     staleTime: 500,
   });
-
-  const pageChange = (_e: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
-  };
 
   return (
     <>
@@ -120,71 +112,14 @@ const Movies = () => {
             />
           </FlexBox>
         </Box>
-        {/* Movies and pagination */}
-        <Box pt="1rem" width="100%">
-          {/* Movies grid */}
-          {isLoading || isFetching ? (
-            <Loading minHeight="50svh" />
-          ) : isError ? (
-            <GeneralError />
-          ) : data.movies.length > 1 ? (
-            <Box
-              component="ul"
-              display="grid"
-              gridTemplateColumns={{
-                xs: "repeat(1,1fr)",
-                md: "repeat(2,1fr)",
-                lg: "repeat(3,1fr)",
-                xl: "repeat(4,1fr)",
-              }}
-              rowGap="1rem"
-              columnGap="10px"
-              sx={{
-                listStyleType: "none",
-                paddingInlineStart: 0,
-                paddingInline: "10px",
-                marginBlockEnd: 0,
-                marginBlockStart: 0,
-                placeItems: "center",
-              }}
-            >
-              {data.movies.map((movie) => (
-                <MovieCard key={movie.movieid} movie={movie} />
-              ))}
-            </Box>
-          ) : (
-            <FlexBoxCenter minHeight="25dvh">
-              <Typography
-                variant="h3"
-                fontStyle="oblique"
-                color={theme.palette.grey[200]}
-              >
-                There are no movies matching your search criteria!
-              </Typography>
-            </FlexBoxCenter>
-          )}
-          {/* Movies pagination */}
-          {!isLoading &&
-          !isFetching &&
-          !isError &&
-          data.movies != null &&
-          data.movies.length >= 1 ? (
-            <FlexBoxCenter p="3rem" minWidth="100%">
-              <Pagination
-                color="primary"
-                count={data.totalPages}
-                page={page ? page : 1}
-                variant="outlined"
-                shape="rounded"
-                showFirstButton
-                showLastButton
-                onChange={pageChange}
-              />
-            </FlexBoxCenter>
-          ) : (
-            <></>
-          )}
-        </Box>
+        {/* Movies grid with pagination */}
+        {isLoading || isFetching ? (
+          <Loading minHeight="50svh" />
+        ) : isError ? (
+          <GeneralError />
+        ) : (
+          <MoviesGrid data={data} page={page} setPage={setPage} />
+        )}
       </Box>
     </>
   );

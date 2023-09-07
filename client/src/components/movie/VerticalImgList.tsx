@@ -15,7 +15,6 @@ type Props<T> = {
   images: T[];
   ImageListStyle?: CSSProperties;
   ImageListItemSx?: SxProps;
-  title: string;
 };
 
 const IMAGES_OFFSET = 10;
@@ -35,7 +34,6 @@ const VerticalImgList = ({
   images,
   ImageListItemSx,
   ImageListStyle,
-  title,
 }: Props<MovieCrewPropsType | MovieCastPropsType>) => {
   const { palette } = useTheme();
   const [imagesLength, setImagesLength] = useState(
@@ -72,35 +70,6 @@ const VerticalImgList = ({
     justifySelf: "right",
     paddingLeft: "1rem",
     marginRight: "0.5rem",
-    // position: "relative",
-    // isolation: "isolate",
-    // "&::before": {
-    //   content: '" - "',
-    //   gridColumn: "3/4",
-    //   alignSelf: "center",
-    //   justifySelf: "right",
-    //   position: "absolute",
-    //   zIndex: "-1",
-    //   fontSize: { xs: "4rem", sm: "5rem", md: "4.5rem", xl: "5.5rem" },
-    //   fontFamily: "serif",
-    //   fontWeight: "900",
-    //   // bottom: "0%",
-    //   // left: "-15%",
-    //   // rotate: "90deg",
-    //   color: palette.primary[600],
-    // },
-    // // "&::after": {
-    // //   content: "no-close-quote",
-    // //   // position: "absolute",
-    // //   // zIndex: "-1",
-    // //   // fontSize: "4.5rem",
-    // //   // fontFamily: "serif",
-    // //   // fontWeight: "900",
-    // //   // top: "25%",
-    // //   // right: "-25%",
-    // //   // rotate: "90deg",
-    // //   // color: palette.primary[600],
-    // // },
   };
   return (
     <ImageList style={{ ...ImageListStyle }}>

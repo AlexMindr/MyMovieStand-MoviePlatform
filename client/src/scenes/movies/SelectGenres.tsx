@@ -11,7 +11,7 @@ import { GenreType } from "@/shared/types";
 import { getGenres } from "@/api";
 import Loading from "@/components/global/Loading";
 import GeneralError from "@/components/error/GeneralError";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo } from "react";
 
 type Props = {
   selectGenres: string[];
@@ -43,6 +43,15 @@ const SelectGenres = ({ selectGenres, setSelectGenres, setPage }: Props) => {
     staleTime: 60000,
     refetchOnWindowFocus: false,
   });
+
+  const genresSelectMenu = useMemo(() => {
+    return data?.map(({ name }) => (
+      <MenuItem key={name} value={name}>
+        <Checkbox checked={selectGenres.indexOf(name) > -1} />
+        <ListItemText primary={name} />
+      </MenuItem>
+    ));
+  }, [data, selectGenres]);
 
   useEffect(() => {
     if (!isFetching && !isLoading && !isError) {
@@ -93,16 +102,7 @@ const SelectGenres = ({ selectGenres, setSelectGenres, setPage }: Props) => {
             renderValue={(selected) => selected.join(", ")}
             MenuProps={MenuProps}
           >
-            {isFetching || isLoading ? (
-              <Loading />
-            ) : (
-              data.map(({ name }) => (
-                <MenuItem key={name} value={name}>
-                  <Checkbox checked={selectGenres.indexOf(name) > -1} />
-                  <ListItemText primary={name} />
-                </MenuItem>
-              ))
-            )}
+            {isFetching || isLoading ? <Loading /> : genresSelectMenu}
           </Select>
         </FormControl>
       </Box>

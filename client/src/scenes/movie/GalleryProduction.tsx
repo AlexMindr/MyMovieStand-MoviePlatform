@@ -6,7 +6,6 @@ import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
-// import VerticalImgList from "@/components/movie/VerticalImgList";
 import { lazy, Suspense } from "react";
 const VerticalImgList = lazy(
   () => import("@/components/movie/VerticalImgList")
@@ -71,7 +70,6 @@ const GalleryProduction = ({ tmdb_id, title }: Props) => {
         <Suspense fallback={<Loading minHeight="30svh" />}>
           <VerticalImgList
             images={cast}
-            title={title}
             ImageListStyle={{
               ...ImageListStyle,
             }}
@@ -93,7 +91,6 @@ const GalleryProduction = ({ tmdb_id, title }: Props) => {
         <Suspense fallback={<Loading minHeight="30svh" />}>
           <VerticalImgList
             images={crew}
-            title={title}
             ImageListStyle={{
               ...ImageListStyle,
             }}
