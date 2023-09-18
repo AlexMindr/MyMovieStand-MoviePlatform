@@ -21,6 +21,8 @@ export const getMovieCredits = (tmdb_id: string) =>
   api.get(`/movies/movie=${tmdb_id}/credits`);
 export const getMovieImages = (tmdb_id: string) =>
   api.get(`/movies/movie=${tmdb_id}/images`);
+export const getMovieReviews = (movieid: number, page: number, count: number) =>
+  api.get(`/reviews/get/movie/${movieid}/page=${page}/count=${count}`);
 
 //NavSearch
 export const getMoviesSearch = (page = 1, query: string) =>
@@ -28,3 +30,9 @@ export const getMoviesSearch = (page = 1, query: string) =>
 
 //Home
 export const getHomeMovies = () => api.get(`/movies/get/home`);
+
+//User auth
+export const login = (formValues: FormData) =>
+  api.post("/user/login", formValues);
+export const signup = (formValues: FormData) =>
+  api.post("/user/signup", formValues);

@@ -1,3 +1,5 @@
+import { RawDraftContentState } from "react-draft-wysiwyg";
+
 export interface GenreType {
   name: string;
   genreid: number;
@@ -82,4 +84,20 @@ export interface MovieCastPropsType extends MovieCreditsPeopleImageProps {
 export interface MovieCrewPropsType extends MovieCreditsPeopleImageProps {
   department: string;
   job: string;
+}
+
+export interface UserType {
+  fullname: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+}
+export interface ReviewType {
+  User: UserType;
+  content: RawDraftContentState;
+  createdAt: Date;
+  likeCount: number;
+  movieid: number;
+  reviewid: number;
+  updatedAt: Date;
 }

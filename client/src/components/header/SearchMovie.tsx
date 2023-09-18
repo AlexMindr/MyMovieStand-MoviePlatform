@@ -1,6 +1,5 @@
 import FlexBox from "@/shared/FlexBox";
 import Typography from "@mui/material/Typography";
-import React from "react";
 
 type Props = {
   poster_path: string;

@@ -2,6 +2,8 @@ import { RouterProvider } from "react-router-dom";
 import { createBrowserRouter } from "react-router-dom";
 import { lazy } from "react";
 import Layout from "@/scenes/global/Layout";
+import PageRedirect from "./shared/routeChecks/PageRedirect";
+import Login from "./scenes/login";
 
 //Lazy loading components
 const Home = lazy(() => import("@/scenes/home"));
@@ -25,6 +27,14 @@ const router = createBrowserRouter([
           { index: true, element: <Movies /> },
           { path: "/movies/:id", element: <Movie /> },
         ],
+      },
+      {
+        path: "/login",
+        element: (
+          <PageRedirect>
+            <Login />
+          </PageRedirect>
+        ),
       },
       { path: "*", element: <ErrorPage /> },
     ],

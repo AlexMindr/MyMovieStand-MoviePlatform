@@ -9,22 +9,13 @@ import { Dispatch, SetStateAction } from "react";
 type Props = {
   inputSearch: string;
   setInputSearch: Dispatch<SetStateAction<string>>;
-  setSearchDebounced: Dispatch<SetStateAction<string>>;
   setPage: Dispatch<SetStateAction<number>>;
 };
 
-const SearchBox = ({
-  inputSearch,
-  setInputSearch,
-  setSearchDebounced,
-  setPage,
-}: Props) => {
+const SearchBox = ({ inputSearch, setInputSearch, setPage }: Props) => {
   const theme = useTheme();
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputSearch(e.target.value);
-    setTimeout(() => {
-      setSearchDebounced(e.target.value);
-    }, 1500);
     setPage(1);
   };
   return (
@@ -68,6 +59,7 @@ const SearchBox = ({
           value={inputSearch}
           onChange={handleChangeInput}
           autoComplete="off"
+          spellCheck="false"
         />
         <IconButton
           sx={{
@@ -76,7 +68,6 @@ const SearchBox = ({
           }}
           onClick={() => {
             setInputSearch(() => "");
-            setSearchDebounced(() => "");
           }}
         >
           <ClearIcon />

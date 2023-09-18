@@ -2,7 +2,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { MovieType } from "@/shared/types";
 import { getMovie } from "@/api";
 import Loading from "@/components/global/Loading";
@@ -11,6 +11,7 @@ import useSetTitle from "@/shared/hooks/setTitle";
 import GalleryBudgetKw from "@/scenes/movie/GalleryFinancialKw";
 import GalleryProduction from "./GalleryProduction";
 import MovieInfoPoster from "./MovieInfoPoster";
+import MovieReviews from "./MovieReviews";
 
 /* TODO fixes for very small screens */
 
@@ -46,7 +47,7 @@ const Movie = () => {
         }
       />
     );
-  const { backdrop_path, original_title, title } = data;
+  const { backdrop_path, original_title, title, movieid } = data;
   return (
     // Movie Container with bgimage
     <Box
@@ -92,6 +93,7 @@ const Movie = () => {
       {/* Gallery with production team (cast and crew) */}
       <GalleryProduction {...data} />
       {/* Reviews */}
+      <MovieReviews movieid={movieid} />
       {/* Posts */}
       {/* Ai Recommendations */}
     </Box>

@@ -7,8 +7,8 @@ import { Link, useLocation } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import Grow from "@mui/material/Grow";
 import { useRef, useState } from "react";
-import Nav from "@/components/global/Nav";
-import SearchBar from "@/components/global/SearchBar";
+import Nav from "@/components/header/Nav";
+import SearchBar from "@/components/header/SearchBar";
 import useClickOutside from "@/shared/hooks/clickOutside";
 
 const Navbar = () => {

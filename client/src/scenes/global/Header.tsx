@@ -8,8 +8,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import HeaderNotifications from "@/components/global/HeaderNotifications";
-import HeaderProfile from "@/components/global/HeaderProfile";
+import HeaderNotifications from "@/components/header/HeaderNotifications";
+import HeaderProfile from "@/components/header/HeaderProfile";
 
 const Header = () => {
   const theme = useTheme();
