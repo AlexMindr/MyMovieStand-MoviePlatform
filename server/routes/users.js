@@ -1,29 +1,23 @@
 import { Router } from "express";
 import {
-  signup,
-  login,
   update,
   resetPass,
   changePass,
-  deleteAdm,
   getProfile,
   getSimpleProfile,
-  verifyToken,
 } from "../controllers/users.js";
 import auth from "../middleware/auth.js";
-import authAdmin from "../middleware/authAdmin.js";
 
 const router = Router();
 
-router.get("/verify", verifyToken);
-router.get("/profile/:username", getProfile);
-router.get("/myprofile", auth, getSimpleProfile);
-router.post("/signup", signup);
-router.post("/login", login);
-router.put("/update", auth, update);
-router.put("/reset", resetPass);
-router.put("/change", changePass);
+router
+  .get("/profile/:username", getProfile)
+  .put("/reset", resetPass)
+  .put("/change", changePass);
 
-router.delete("/delete/:username", authAdmin, deleteAdm);
+router.use(auth);
+router
+  .get("/myprofile", getSimpleProfile) //
+  .put("/update", update);
 
 export default router;

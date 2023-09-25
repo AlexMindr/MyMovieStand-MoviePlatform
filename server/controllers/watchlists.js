@@ -1,5 +1,7 @@
 import db from "../models/index.cjs";
 import { Op } from "@sequelize/core";
+import dotenv from "dotenv";
+dotenv.config();
 const { Watchlist, User, Movie } = db;
 
 const getWatchlistInit = async (req, res) => {
@@ -30,35 +32,37 @@ const getWatchlistInit = async (req, res) => {
 const getWatchlist = async (req, res) => {
   const { username } = req.params;
   try {
-    const user  = await User.findOne({
+    const user = await User.findOne({
       attributes: ["userid"],
       where: { username },
     });
-    if (user){
-      const {userid}=user;
-    const watchlist = await Watchlist.findAll({
-      attributes: ["status", "rating", "movieid"],
+    if (user) {
+      const { userid } = user;
+      const watchlist = await Watchlist.findAll({
+        attributes: ["status", "rating", "movieid"],
 
-      where: {
-        userid,
-      },
-      include: {
-        model: Movie,
-        attributes: ["title", "release_date", "poster_path", "uscertification"],
-      },
-      order: [
-        [Movie, "title", "ASC"],
-        ["rating", "DESC"],
-      ],
-    });
+        where: {
+          userid,
+        },
+        include: {
+          model: Movie,
+          attributes: [
+            "title",
+            "release_date",
+            "poster_path",
+            "uscertification",
+          ],
+        },
+        order: [
+          [Movie, "title", "ASC"],
+          ["rating", "DESC"],
+        ],
+      });
 
-    res.status(200).json({ watchlist });
-    }
-    else
-      res.status(200).json({message:"User doesn't exist"}) 
+      res.status(200).json({ watchlist });
+    } else res.status(200).json({ message: "User doesn't exist" });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
-    
   }
 };
 

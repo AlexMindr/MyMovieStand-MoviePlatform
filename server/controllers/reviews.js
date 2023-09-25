@@ -1,27 +1,10 @@
 import db from "../models/index.cjs";
-import { Op, QueryTypes } from "@sequelize/core";
+import { Op } from "@sequelize/core";
+import dotenv from "dotenv";
+import { getPagination, getPagingDataGroup } from "../utils/getPagination.js";
+
+dotenv.config();
 const { Movie, Review, UserLike, User, sequelize, Sequelize } = db;
-
-function getPagination(page, size) {
-  const limit = size ? +size : 10;
-  const offset = page ? page * limit : 0;
-  return { limit, offset };
-}
-
-function getPagingData(data, page, limit) {
-  const { count: totalItems, rows: reviews } = data;
-  //const currentPage = page ? +page : 0;
-  const totalPages = Math.ceil(totalItems / limit);
-  return { reviews, totalPages };
-}
-
-function getPagingDataGroup(data, page, limit) {
-  const { rows: reviews } = data;
-  const totalItems = data.count.length;
-  //const currentPage = page ? +page : 0;
-  const totalPages = Math.ceil(totalItems / limit);
-  return { reviews, totalPages };
-}
 
 const getHomeReviews = async (req, res) => {
   try {
@@ -40,7 +23,7 @@ const getHomeReviews = async (req, res) => {
       include: [
         {
           model: User,
-          attributes: ["username", "fullname",'firstName','lastName'],
+          attributes: ["username", "fullname", "firstName", "lastName"],
         },
         {
           model: UserLike,
@@ -62,7 +45,6 @@ const getHomeReviews = async (req, res) => {
     res.status(200).json(reviews);
   } catch (error) {
     res.status(404).json({ message: error.message });
-    
   }
 };
 
@@ -87,7 +69,7 @@ const getMovieReviews = async (req, res) => {
     include: [
       {
         model: User,
-        attributes: ["username", "fullname",'firstName','lastName'],
+        attributes: ["username", "fullname", "firstName", "lastName"],
       },
       {
         model: UserLike,
@@ -103,7 +85,11 @@ const getMovieReviews = async (req, res) => {
     order: [[sequelize.literal("likeCount"), "DESC"]],
   })
     .then((data) => {
-      const { reviews, totalPages } = getPagingDataGroup(data, page, limit);
+      const { rows: reviews, totalPages } = getPagingDataGroup(
+        data,
+        page,
+        limit
+      );
 
       res.status(200).json({ reviews, totalPages });
     })
@@ -214,7 +200,7 @@ const getUserReviews = async (req, res) => {
     include: [
       {
         model: User,
-        attributes: ["username", "fullname",'firstName','lastName'],
+        attributes: ["username", "fullname", "firstName", "lastName"],
       },
       {
         model: UserLike,
@@ -234,7 +220,11 @@ const getUserReviews = async (req, res) => {
     order: [[sequelize.literal("likeCount"), "DESC"]],
   })
     .then((data) => {
-      const { reviews, totalPages } = getPagingDataGroup(data, page, limit);
+      const { rows: reviews, totalPages } = getPagingDataGroup(
+        data,
+        page,
+        limit
+      );
 
       res.status(200).json({ reviews, totalPages });
     })
@@ -269,7 +259,7 @@ const addReview = async (req, res) => {
   }
 };
 
-const deleteReviewUser = async (req, res) => {
+const deleteReview = async (req, res) => {
   try {
     const { movieid } = req.params;
     const uuid = req.userId;
@@ -397,108 +387,10 @@ const dislikeReview = async (req, res) => {
   }
 };
 
-const deleteReview = async (req, res) => {
-  try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
-      const { reviewid } = req.params;
-
-      const success = await Review.destroy({
-        where: {
-          reviewid,
-        },
-      });
-
-      if (success === 0) {
-        res.status(403).json({ message: "Review doesn't exist" });
-      } else {
-        res.status(201).json({ message: "Success" });
-      }
-    } else {
-      res.status(404).json({ message: "Something went wrong" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-  }
-};
-
-const restrictReview = async (req, res) => {
-  const restrictAdmin = {
-    blocks: [
-      {
-        key: "9m832",
-        text: "  Review removed by admin",
-        type: "blockquote",
-        depth: 0,
-        inlineStyleRanges: [
-          {
-            offset: 0,
-            length: 25,
-            style: "color-rgb(226,80,65)",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "bgcolor-rgb(239,239,239)",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "ITALIC",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "fontsize-18",
-          },
-        ],
-        entityRanges: [],
-        data: {},
-      },
-    ],
-    entityMap: {},
-  };
-
-  try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
-      const { reviewid } = req.body;
-
-      const success = await Review.update(
-        {
-          content: restrictAdmin,
-          updatedAt: new Date(),
-        },
-        {
-          where: {
-            reviewid,
-          },
-        }
-      );
-
-      if (success === 0) {
-        res.status(403).json({ message: "Review doesn't exist" });
-      } else {
-        res.status(201).json({ message: "Success" });
-      }
-    } else {
-      res.status(404).json({ message: "Something went wrong" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-    console.log(error);
-  }
-};
-
 export {
   getHomeReviews,
   getMovieReviews,
   getUserReviews,
-  deleteReview,
   addReview,
   updateReview,
   getUserReviewsAndLikes,
@@ -506,6 +398,5 @@ export {
   likeReview,
   dislikeReview,
   getLikesForReview,
-  deleteReviewUser,
-  restrictReview,
+  deleteReview,
 };

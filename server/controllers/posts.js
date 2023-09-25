@@ -1,27 +1,14 @@
 import db from "../models/index.cjs";
 import { Op, QueryTypes } from "@sequelize/core";
+import dotenv from "dotenv";
+import {
+  getPagination,
+  getPagingDataGroup,
+  getPagingData,
+} from "../utils/getPagination.js";
+
+dotenv.config();
 const { Movie, Post, UserComment, User, sequelize, Sequelize } = db;
-
-function getPagination(page, size) {
-  const limit = size ? +size : 10;
-  const offset = page ? page * limit : 0;
-  return { limit, offset };
-}
-
-function getPagingData(data, page, limit) {
-  const { count: totalItems, rows: posts } = data;
-  //const currentPage = page ? +page : 0;
-  const totalPages = Math.ceil(totalItems / limit);
-  return { posts, totalPages };
-}
-
-function getPagingDataGroup(data, page, limit) {
-  const { rows: posts } = data;
-  const totalItems = data.count.length;
-  //const currentPage = page ? +page : 0;
-  const totalPages = Math.ceil(totalItems / limit);
-  return { posts, totalPages };
-}
 
 const getHomeNews = async (req, res) => {
   try {
@@ -50,7 +37,7 @@ const getHomeNews = async (req, res) => {
           attributes: [],
         },
       ],
-      where:{post_type:'news'},
+      where: { post_type: "news" },
       group: ["postid"],
       order: [["createdAt", "DESC"]],
     });
@@ -80,7 +67,7 @@ const getHomePosts = async (req, res) => {
       include: [
         {
           model: User,
-          attributes: ["username", "fullname",'firstName','lastName'],
+          attributes: ["username", "fullname", "firstName", "lastName"],
         },
         {
           model: UserComment,
@@ -88,7 +75,7 @@ const getHomePosts = async (req, res) => {
           attributes: [],
         },
       ],
-      where:{post_type:'post'},
+      where: { post_type: "post" },
       group: ["postid"],
       order: [["createdAt", "DESC"]],
     });
@@ -99,9 +86,8 @@ const getHomePosts = async (req, res) => {
   }
 };
 
-
 const getNews = async (req, res) => {
-  const { page} = req.params;
+  const { page } = req.params;
   const { limit, offset } = getPagination(page - 1, 15);
 
   //const { movieid } = req.params;
@@ -132,12 +118,12 @@ const getNews = async (req, res) => {
       },
     ],
 
-    where: {post_type:'news' },
+    where: { post_type: "news" },
     group: ["postid"],
     order: [["createdAt", "DESC"]],
   })
     .then((data) => {
-      const { posts, totalPages } = getPagingDataGroup(data, page, limit);
+      const { rows: posts, totalPages } = getPagingDataGroup(data, page, limit);
 
       res.status(200).json({ posts, totalPages });
     })
@@ -147,7 +133,6 @@ const getNews = async (req, res) => {
       //console.log(error)
     });
 };
-
 
 const getMoviePosts = async (req, res) => {
   const { page, count } = req.params;
@@ -172,7 +157,7 @@ const getMoviePosts = async (req, res) => {
     include: [
       {
         model: User,
-        attributes: ["username", "fullname",'firstName','lastName'],
+        attributes: ["username", "fullname", "firstName", "lastName"],
       },
       {
         model: UserComment,
@@ -181,12 +166,12 @@ const getMoviePosts = async (req, res) => {
       },
     ],
 
-    where: { movieid,post_type:'post' },
+    where: { movieid, post_type: "post" },
     group: ["postid"],
     order: [["createdAt", "DESC"]],
   })
     .then((data) => {
-      const { posts, totalPages } = getPagingDataGroup(data, page, limit);
+      const { rows: posts, totalPages } = getPagingDataGroup(data, page, limit);
 
       res.status(200).json({ posts, totalPages });
     })
@@ -205,7 +190,7 @@ const getPostContent = async (req, res) => {
       include: [
         {
           model: User,
-          attributes: ["username", "fullname",'firstName','lastName'],
+          attributes: ["username", "fullname", "firstName", "lastName"],
         },
       ],
       where: { postid },
@@ -230,14 +215,14 @@ const getPostComments = async (req, res) => {
     include: [
       {
         model: User,
-        attributes: ["username", "fullname",'firstName','lastName'],
+        attributes: ["username", "fullname", "firstName", "lastName"],
       },
     ],
     where: { postid },
     order: [["createdAt", "ASC"]],
   })
     .then((data) => {
-      const { posts: comments, totalPages } = getPagingData(data, page, limit);
+      const { rows: comments, totalPages } = getPagingData(data, page, limit);
       res.status(200).json({ comments, totalPages });
     })
 
@@ -273,7 +258,7 @@ const getUserPosts = async (req, res) => {
     include: [
       {
         model: User,
-        attributes: ["username", "fullname",'firstName','lastName'],
+        attributes: ["username", "fullname", "firstName", "lastName"],
       },
       {
         model: UserComment,
@@ -286,12 +271,12 @@ const getUserPosts = async (req, res) => {
       },
     ],
 
-    where: { userid,post_type:'post' },
+    where: { userid, post_type: "post" },
     group: ["postid"],
     order: [["createdAt", "DESC"]],
   })
     .then((data) => {
-      const { posts, totalPages } = getPagingDataGroup(data, page, limit);
+      const { rows: posts, totalPages } = getPagingDataGroup(data, page, limit);
 
       res.status(200).json({ posts, totalPages });
     })
@@ -310,7 +295,6 @@ const getUserComments = async (req, res) => {
     where: { username },
   });
 
-  
   await UserComment.findAndCountAll({
     subQuery: false,
     attributes: ["comment_content", "ucid", "createdAt"],
@@ -320,40 +304,30 @@ const getUserComments = async (req, res) => {
     include: [
       {
         model: User,
-        attributes: ["username", "fullname",'firstName','lastName'],
+        attributes: ["username", "fullname", "firstName", "lastName"],
       },
       {
         model: Post,
         required: true,
-        attributes: [
-          "movieid",
-          "createdAt",
-          "title",
-          "postid",
-        ],
-       
+        attributes: ["movieid", "createdAt", "title", "postid"],
+
         include: [
           {
             model: User,
-            attributes: ["username", "fullname",'firstName','lastName'],
+            attributes: ["username", "fullname", "firstName", "lastName"],
           },
           {
             model: Movie,
             attributes: ["title"],
           },
-         
         ],
       },
-      
-
     ],
-      where: { userid },
-      order: [["createdAt", "DESC"]],
+    where: { userid },
+    order: [["createdAt", "DESC"]],
   })
     .then((data) => {
-      // data.rows.filter(post=>post.UserComments.length>0)
-      // data.count=data.rows.length
-      const { posts, totalPages } = getPagingData(data, page, limit);
+      const { rows: posts, totalPages } = getPagingData(data, page, limit);
       res.status(200).json({ posts, totalPages });
     })
 
@@ -407,230 +381,7 @@ const addComment = async (req, res) => {
   }
 };
 
-const deletePostUser = async (req, res) => {
-  const restrictAdmin = {
-    blocks: [
-      {
-        key: "9m832",
-        text: "  Post removed by user",
-        type: "blockquote",
-        depth: 0,
-        inlineStyleRanges: [
-          {
-            offset: 0,
-            length: 25,
-            style: "color-rgb(226,80,65)",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "bgcolor-rgb(239,239,239)",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "ITALIC",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "fontsize-18",
-          },
-        ],
-        entityRanges: [],
-        data: {},
-      },
-    ],
-    entityMap: {},
-  };
-  try {
-    const { postid } = req.body;
-    const uuid = req.userId;
-    const { userid } = await User.findOne({
-      attributes: ["userid"],
-      where: { useruuid: uuid },
-    });
-
-    const success = await Post.update(
-      {
-        content: restrictAdmin,
-        updatedAt: new Date(),
-      },
-      {
-        where: {
-          postid,
-          userid,
-        },
-      }
-    );
-
-    if (success === 0) {
-      res.status(403).json({ message: "Post doesn't exist" });
-    } else {
-      res.status(201).json({ message: "Success" });
-    }
-  } catch (error) {
-    res.status(404).json({ message: "Something went wrong" });
-  }
-};
-
-const addNews = async (req, res) => {
-  try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
-      const { title, content, movieid } = req.body;
-
-    const newPost = await Post.create({
-      userid:user.userid,
-      movieid,
-      content,
-      title,
-      post_type:'news',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-    const postid = newPost.postid;
-    res.status(201).json(postid);
-  }else
-  res.status(403).json({ message: error.message });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-const updateNews = async (req, res) => {
-  try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
-      const { title, content, postid } = req.body;
-
-      const success = await Post.update(
-        {
-          title,
-          content,
-          updatedAt: new Date(),
-        },
-        {
-          where: {
-            postid,
-          },
-        }
-      );
-
-      if (success === 0) {
-        res.status(403).json({ message: "Post doesn't exist" });
-      } else {
-        res.status(201).json({ message: "Success" });
-      }
-    } else {
-      res.status(404).json({ message: "Something went wrong" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-  }
-};
-
-const deletePost = async (req, res) => {
-  try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
-      const { postid } = req.params;
-
-      const success = await Post.destroy({
-        where: {
-          postid,
-        },
-      });
-
-      if (success === 0) {
-        res.status(403).json({ message: "Post doesn't exist" });
-      } else {
-        res.status(201).json({ message: "Success" });
-      }
-    } else {
-      res.status(404).json({ message: "Something went wrong" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-  }
-};
-
-const restrictPost = async (req, res) => {
-  const restrictAdmin = {
-    blocks: [
-      {
-        key: "9m832",
-        text: "  Post removed by admin",
-        type: "blockquote",
-        depth: 0,
-        inlineStyleRanges: [
-          {
-            offset: 0,
-            length: 25,
-            style: "color-rgb(226,80,65)",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "bgcolor-rgb(239,239,239)",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "ITALIC",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "fontsize-18",
-          },
-        ],
-        entityRanges: [],
-        data: {},
-      },
-    ],
-    entityMap: {},
-  };
-
-  try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
-      const { postid } = req.body;
-
-      const success = await Post.update(
-        {
-          content: restrictAdmin,
-          updatedAt: new Date(),
-        },
-        {
-          where: {
-            postid,
-          },
-        }
-      );
-
-      if (success === 0) {
-        res.status(403).json({ message: "Post doesn't exist" });
-      } else {
-        res.status(201).json({ message: "Success" });
-      }
-    } else {
-      res.status(404).json({ message: "Something went wrong" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-  }
-};
-
-const deleteCommUser = async (req, res) => {
+const deleteComm = async (req, res) => {
   const restrictAdmin = {
     blocks: [
       {
@@ -697,39 +448,12 @@ const deleteCommUser = async (req, res) => {
   }
 };
 
-const deleteComm = async (req, res) => {
-  try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
-      const { ucid } = req.params;
-
-      const success = await UserComment.destroy({
-        where: {
-          ucid,
-        },
-      });
-
-      if (success === 0) {
-        res.status(403).json({ message: "Comment doesn't exist" });
-      } else {
-        res.status(201).json({ message: "Success" });
-      }
-    } else {
-      res.status(404).json({ message: "Something went wrong" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-  }
-};
-
-const restrictComm = async (req, res) => {
+const deletePost = async (req, res) => {
   const restrictAdmin = {
     blocks: [
       {
         key: "9m832",
-        text: "  Comment removed by admin",
+        text: "  Post removed by user",
         type: "blockquote",
         depth: 0,
         inlineStyleRanges: [
@@ -760,36 +484,34 @@ const restrictComm = async (req, res) => {
     ],
     entityMap: {},
   };
-
   try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
-      const { ucid } = req.body;
+    const { postid } = req.body;
+    const uuid = req.userId;
+    const { userid } = await User.findOne({
+      attributes: ["userid"],
+      where: { useruuid: uuid },
+    });
 
-      const success = await UserComment.update(
-        {
-          comment_content: restrictAdmin,
-          updatedAt: new Date(),
+    const success = await Post.update(
+      {
+        content: restrictAdmin,
+        updatedAt: new Date(),
+      },
+      {
+        where: {
+          postid,
+          userid,
         },
-        {
-          where: {
-            ucid,
-          },
-        }
-      );
-
-      if (success === 0) {
-        res.status(403).json({ message: "Comment doesn't exist" });
-      } else {
-        res.status(201).json({ message: "Success" });
       }
+    );
+
+    if (success === 0) {
+      res.status(403).json({ message: "Post doesn't exist" });
     } else {
-      res.status(404).json({ message: "Something went wrong" });
+      res.status(201).json({ message: "Success" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    res.status(404).json({ message: "Something went wrong" });
   }
 };
 
@@ -798,18 +520,12 @@ export {
   getMoviePosts,
   getUserPosts,
   getUserComments,
-  deletePost,
   addPost,
   getPostContent,
   getPostComments,
   addComment,
-  deletePostUser,
-  restrictPost,
-  restrictComm,
+  deletePost,
   deleteComm,
-  deleteCommUser,
-  addNews,
   getHomeNews,
   getNews,
-  updateNews
 };

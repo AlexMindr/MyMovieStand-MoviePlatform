@@ -4,3 +4,4 @@
 /config/config.json
 .env
 schelet migration.js
+/config/config.cjs

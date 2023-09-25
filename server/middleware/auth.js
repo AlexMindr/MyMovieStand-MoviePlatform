@@ -1,23 +1,22 @@
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const auth = async (req, res, next) => {
-  const jwtSecret = process.env.JWT_SECRET;
-  try {
-    if (req.headers.authorization) {
-      const token = req.headers.authorization.split(" ")[1];
+  const authHeader = req.headers.authorization || req.headers.Authorization;
+  if (!authHeader?.startsWith("Bearer "))
+    res.status(401).json({ message: "Login in order to continue" });
 
-      let decodedData;
-      if (token) {
-        decodedData = jwt.verify(token, jwtSecret);
+  const token = authHeader.split(" ")[1];
 
-        req.userId = decodedData?.useruuid;
-      }
-    }
-
-    next();
-  } catch (error) {
-    console.log(error);
-  }
+  if (token) {
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+      if (err) return res.status(403).json({ message: "Invalid Token" }); //invalid token
+      req.userId = decoded?.useruuid;
+      next();
+    });
+  } else res.status(403).json({ message: "Invalid token" });
 };
 
 export default auth;

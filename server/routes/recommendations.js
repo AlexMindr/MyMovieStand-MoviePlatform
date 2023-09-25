@@ -7,7 +7,9 @@ import auth from "../middleware/auth.js";
 
 const router = Router();
 
-router.post("/user", auth, getUserRecommendations);
-router.post("/movie/:movieid", auth, getMovieRecommendations);
+router.use(auth);
+router
+  .post("/user", getUserRecommendations)
+  .post("/movie/:movieid", getMovieRecommendations);
 
 export default router;

@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 const authAdmin = async (req, res, next) => {
   const jwtSecret = process.env.JWT_SECRET;
@@ -11,7 +13,6 @@ const authAdmin = async (req, res, next) => {
         decodedData = jwt.verify(token, jwtSecret);
         req.userId = decodedData?.useruuid;
         req.userRole = decodedData?.role;
-        
       }
     }
 

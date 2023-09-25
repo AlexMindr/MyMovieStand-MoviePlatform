@@ -7,14 +7,7 @@ import {
   getMoviesFiltered,
   getMoviesSimpleFilter,
   getHomeMovies,
-  populateMovies,
-  createMovie,
-  updatePopularityAndRating,
-  updateMovie,
-  //deleteMovie,
-  pop,
 } from "../controllers/movies.js";
-import authAdmin from "../middleware/authAdmin.js";
 
 const router = Router();
 
@@ -25,13 +18,5 @@ router.get("/movie=:id", getMovie);
 router.get("/movie=:tmdb_id/images", getMovieImages);
 router.get("/movie=:tmdb_id/credits", getMovieCredits);
 router.get("/get/home", getHomeMovies);
-
-router.post("/pop", pop);
-
-router.post("/populate", authAdmin, populateMovies);
-router.post("/create", authAdmin, createMovie);
-router.put("/update", authAdmin, updateMovie);
-router.put("/update/popularity/all", authAdmin, updatePopularityAndRating);
-//router.delete("/delete/:id", deleteMovie);
 
 export default router;

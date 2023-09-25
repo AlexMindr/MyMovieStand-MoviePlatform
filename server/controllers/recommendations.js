@@ -1,6 +1,8 @@
 import db from "../models/index.cjs";
 import { Op } from "@sequelize/core";
 import axios from "axios";
+import dotenv from "dotenv";
+dotenv.config();
 const { Watchlist, Movie, User, sequelize, Sequelize } = db;
 
 const getUserRecommendations = async (req, res) => {

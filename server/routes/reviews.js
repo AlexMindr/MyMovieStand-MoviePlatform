@@ -10,28 +10,26 @@ import {
   updateReview,
   likeReview,
   dislikeReview,
-  restrictReview,
-  deleteReviewUser,
   deleteReview,
 } from "../controllers/reviews.js";
 import auth from "../middleware/auth.js";
-import authAdmin from "../middleware/authAdmin.js";
 
 const router = Router();
 
-router.post("/add", auth, addReview);
-router.get("/get/home", getHomeReviews);
-router.get("/get/likes/:reviewid", auth, getLikesForReview);
-router.get("/get/moviereview/:movieid", auth, getReview);
-router.get("/get/movie/:movieid/page=:page/count=:count", getMovieReviews);
-router.get("/get/user/:username/page=:page/count=:count", auth, getUserReviews);
-router.get("/get/userinit", auth, getUserReviewsAndLikes);
-router.delete("/delete/:movieid", auth, deleteReviewUser);
-router.put("/update", auth, updateReview);
-router.put("/dislike", auth, dislikeReview);
-router.put("/like", auth, likeReview);
+router
+  .get("/get/home", getHomeReviews)
+  .get("/get/movie/:movieid/page=:page/count=:count", getMovieReviews);
 
-router.put("/admin/restrict", authAdmin, restrictReview);
-router.delete("/admin/delete/:reviewid", authAdmin, deleteReview);
+router.use(auth);
+router
+  .get("/get/likes/:reviewid", getLikesForReview)
+  .get("/get/moviereview/:movieid", getReview)
+  .get("/get/user/:username/page=:page/count=:count", getUserReviews)
+  .get("/get/userinit", getUserReviewsAndLikes)
+  .post("/add", addReview)
+  .put("/update", updateReview)
+  .put("/dislike", dislikeReview)
+  .put("/like", likeReview)
+  .delete("/delete/:movieid", deleteReview);
 
 export default router;
