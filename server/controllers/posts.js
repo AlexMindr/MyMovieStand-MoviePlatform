@@ -1,14 +1,18 @@
 import db from "../models/index.cjs";
-import { Op, QueryTypes } from "@sequelize/core";
 import dotenv from "dotenv";
 import {
   getPagination,
   getPagingDataGroup,
   getPagingData,
 } from "../utils/getPagination.js";
+import { getUserIdFromUsername } from "../utils/getUserIdFromUsername.js";
+import {
+  RestrictUserCommentMessage,
+  RestrictUserPostMessage,
+} from "../utils/messagesRestrictDelete.js";
 
 dotenv.config();
-const { Movie, Post, UserComment, User, sequelize, Sequelize } = db;
+const { Movie, Post, UserComment, User, Sequelize } = db;
 
 const getHomeNews = async (req, res) => {
   try {
@@ -42,9 +46,9 @@ const getHomeNews = async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
 
-    res.status(200).json(posts);
+    res.status(200).json({ posts });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(404).json({ message: "Not found" });
   }
 };
 
@@ -80,9 +84,9 @@ const getHomePosts = async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
 
-    res.status(200).json(posts);
+    res.status(200).json({ posts });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(404).json({ message: "Not found" });
   }
 };
 
@@ -90,7 +94,6 @@ const getNews = async (req, res) => {
   const { page } = req.params;
   const { limit, offset } = getPagination(page - 1, 15);
 
-  //const { movieid } = req.params;
   await Post.findAndCountAll({
     subQuery: false,
     attributes: [
@@ -117,7 +120,6 @@ const getNews = async (req, res) => {
         attributes: [],
       },
     ],
-
     where: { post_type: "news" },
     group: ["postid"],
     order: [["createdAt", "DESC"]],
@@ -127,10 +129,8 @@ const getNews = async (req, res) => {
 
       res.status(200).json({ posts, totalPages });
     })
-
     .catch((error) => {
-      res.status(404).json({ message: error.message });
-      //console.log(error)
+      res.status(404).json({ message: "Not found" });
     });
 };
 
@@ -172,13 +172,10 @@ const getMoviePosts = async (req, res) => {
   })
     .then((data) => {
       const { rows: posts, totalPages } = getPagingDataGroup(data, page, limit);
-
       res.status(200).json({ posts, totalPages });
     })
-
     .catch((error) => {
-      res.status(404).json({ message: error.message });
-      //console.log(error)
+      res.status(404).json({ message: "Not found" });
     });
 };
 
@@ -196,16 +193,15 @@ const getPostContent = async (req, res) => {
       where: { postid },
     });
 
-    res.status(200).json(post);
+    res.status(200).json({ post });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(404).json({ message: "Not found" });
   }
 };
 
 const getPostComments = async (req, res) => {
   const { page, count } = req.params;
   const { limit, offset } = getPagination(page - 1, count);
-
   const { postid } = req.params;
   await UserComment.findAndCountAll({
     attributes: ["comment_content", "ucid", "createdAt"],
@@ -227,18 +223,16 @@ const getPostComments = async (req, res) => {
     })
 
     .catch((error) => {
-      res.status(404).json({ message: error.message });
-      //console.log(error)
+      res.status(404).json({ message: "Not found" });
     });
 };
 
 const getUserPosts = async (req, res) => {
   const { username, page, count } = req.params;
   const { limit, offset } = getPagination(page - 1, count);
-  const { userid } = await User.findOne({
-    attributes: ["userid"],
-    where: { username },
-  });
+
+  const userid = await getUserIdFromUsername(username);
+  if (!userid) res.status(404).json({ message: "Not found" });
 
   await Post.findAndCountAll({
     subQuery: false,
@@ -282,18 +276,16 @@ const getUserPosts = async (req, res) => {
     })
 
     .catch((error) => {
-      res.status(404).json({ message: error.message });
-      //console.log(error)
+      res.status(404).json({ message: "Not found" });
     });
 };
 
 const getUserComments = async (req, res) => {
   const { username, page, count } = req.params;
   const { limit, offset } = getPagination(page - 1, count);
-  const { userid } = await User.findOne({
-    attributes: ["userid"],
-    where: { username },
-  });
+
+  const userid = await getUserIdFromUsername(username);
+  if (!userid) res.status(404).json({ message: "Not found" });
 
   await UserComment.findAndCountAll({
     subQuery: false,
@@ -330,21 +322,15 @@ const getUserComments = async (req, res) => {
       const { rows: posts, totalPages } = getPagingData(data, page, limit);
       res.status(200).json({ posts, totalPages });
     })
-
     .catch((error) => {
-      res.status(404).json({ message: error.message });
-      //console.log(error)
+      res.status(404).json({ message: "Not found" });
     });
 };
 
 const addPost = async (req, res) => {
   try {
     const { content, movieid, title } = req.body;
-    const uuid = req.userId;
-    const { userid } = await User.findOne({
-      attributes: ["userid"],
-      where: { useruuid: uuid },
-    });
+    const userid = req.userId;
     const newPost = await Post.create({
       userid,
       movieid,
@@ -354,80 +340,37 @@ const addPost = async (req, res) => {
       updatedAt: new Date(),
     });
     const postid = newPost.postid;
-    res.status(201).json(postid);
+    res.status(201).json({ postid });
   } catch (error) {
-    res.status(403).json({ message: error.message });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 const addComment = async (req, res) => {
   try {
     const { comment_content, postid } = req.body;
-    const uuid = req.userId;
-    const { userid } = await User.findOne({
-      attributes: ["userid"],
-      where: { useruuid: uuid },
-    });
-    const newComm = await UserComment.create({
+    const userid = req.userId;
+    await UserComment.create({
       userid,
       postid,
       comment_content,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
-    res.status(201).json("Success");
+    res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(403).json({ message: error.message });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 const deleteComm = async (req, res) => {
-  const restrictAdmin = {
-    blocks: [
-      {
-        key: "9m832",
-        text: "  Comment removed by user",
-        type: "blockquote",
-        depth: 0,
-        inlineStyleRanges: [
-          {
-            offset: 0,
-            length: 25,
-            style: "color-rgb(226,80,65)",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "bgcolor-rgb(239,239,239)",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "ITALIC",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "fontsize-18",
-          },
-        ],
-        entityRanges: [],
-        data: {},
-      },
-    ],
-    entityMap: {},
-  };
   try {
     const { ucid } = req.body;
-    const uuid = req.userId;
-    const { userid } = await User.findOne({
-      attributes: ["userid"],
-      where: { useruuid: uuid },
-    });
+    const userid = req.userId;
 
     const success = await UserComment.update(
       {
-        comment_content: restrictAdmin,
+        comment_content: RestrictUserCommentMessage,
         updatedAt: new Date(),
       },
       {
@@ -439,62 +382,23 @@ const deleteComm = async (req, res) => {
     );
 
     if (success === 0) {
-      res.status(403).json({ message: "Comment doesn't exist" });
+      res.status(404).json({ message: "Comment doesn't exist" });
     } else {
       res.status(201).json({ message: "Success" });
     }
   } catch (error) {
-    res.status(404).json({ message: "Something went wrong" });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 const deletePost = async (req, res) => {
-  const restrictAdmin = {
-    blocks: [
-      {
-        key: "9m832",
-        text: "  Post removed by user",
-        type: "blockquote",
-        depth: 0,
-        inlineStyleRanges: [
-          {
-            offset: 0,
-            length: 25,
-            style: "color-rgb(226,80,65)",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "bgcolor-rgb(239,239,239)",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "ITALIC",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "fontsize-18",
-          },
-        ],
-        entityRanges: [],
-        data: {},
-      },
-    ],
-    entityMap: {},
-  };
   try {
     const { postid } = req.body;
-    const uuid = req.userId;
-    const { userid } = await User.findOne({
-      attributes: ["userid"],
-      where: { useruuid: uuid },
-    });
+    const userid = req.userId;
 
     const success = await Post.update(
       {
-        content: restrictAdmin,
+        content: RestrictUserPostMessage,
         updatedAt: new Date(),
       },
       {
@@ -506,12 +410,12 @@ const deletePost = async (req, res) => {
     );
 
     if (success === 0) {
-      res.status(403).json({ message: "Post doesn't exist" });
+      res.status(404).json({ message: "Post doesn't exist" });
     } else {
       res.status(201).json({ message: "Success" });
     }
   } catch (error) {
-    res.status(404).json({ message: "Something went wrong" });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 

@@ -17,23 +17,21 @@ import auth from "../middleware/auth.js";
 
 const router = Router();
 
-router.get("/get/home", getHomePosts);
-router.get("/get/movie/:movieid/page=:page/count=:count", getMoviePosts);
-router.get("/get/post/:postid/", getPostContent);
-router.get("/get/news/home", getHomeNews);
-router.get("/get/news/all/page=:page", getNews);
-router.get(
-  "/get/post/:postid/comments/page=:page/count=:count",
-  getPostComments
-);
+router
+  .get("/get/home", getHomePosts)
+  .get("/get/movie=:movieid/page=:page/count=:count", getMoviePosts)
+  .get("/get/post=:postid", getPostContent)
+  .get("/get/news/home", getHomeNews)
+  .get("/get/news/all/page=:page", getNews)
+  .get("/get/comments/post=:postid/page=:page/count=:count", getPostComments)
+  .get("/get/user=:username/page=:page/count=:count", getUserPosts)
+  .get("/get/comments/user=:username/page=:page/count=:count", getUserComments);
 
 router.use(auth);
 router
-  .get("/get/posts/user=:username/page=:page/count=:count", getUserPosts)
-  .get("/get/comments/user=:username/page=:page/count=:count", getUserComments)
-  .post("/add/post", addPost)
+  .post("/add", addPost)
   .post("/add/comment", addComment)
-  .put("/user/post/delete", deletePost)
-  .put("/user/comm/delete", deleteComm);
+  .put("/delete/user", deletePost)
+  .put("/delete/user/comment", deleteComm);
 
 export default router;

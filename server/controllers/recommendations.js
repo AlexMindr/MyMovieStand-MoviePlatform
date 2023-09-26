@@ -7,8 +7,7 @@ const { Watchlist, Movie, User, sequelize, Sequelize } = db;
 
 const getUserRecommendations = async (req, res) => {
   try {
-    const useruuid = req.userId;
-    const { userid } = await User.findOne({ where: { useruuid } });
+    const userid = req.userId;
 
     const watchlist = await Watchlist.findAll({
       attributes: [
@@ -25,28 +24,27 @@ const getUserRecommendations = async (req, res) => {
         rating: { [Op.gte]: 6 },
       },
     });
-    let moviesPredicted = [];
+    const moviesPredicted = [];
     if (watchlist.length > 0) {
-      let recommendations = [];
-      for (let i = 1; i <= 5; i++) {
-        let randomElement =
+      const recommendations = [];
+      for (let i = 0; i <= 4; i++) {
+        const randomElement =
           watchlist[Math.floor(Math.random() * watchlist.length)];
+
         const res = await axios.post(
           `http://127.0.0.1:5002/predict-soup?Title=${encodeURIComponent(
             randomElement.Movie.title
           )}`
         );
-        let predictions = res.data;
-
-        predictions = predictions.filter(
+        const predictions = res.data.filter(
           (item) => watchlist.some((wl) => wl.Movie.title === item) === false
         );
-        // console.log(predictions)
-        let randomRes =
+        const randomRes =
           predictions[Math.floor(Math.random() * predictions.length)];
 
         recommendations.push(randomRes);
       }
+
       for (let i = 0; i <= 4; i++) {
         const movie = await Movie.findOne({
           attributes: ["movieid", "title", "poster_path"],
@@ -57,9 +55,9 @@ const getUserRecommendations = async (req, res) => {
         moviesPredicted.push(movie);
       }
     }
-    res.status(200).json(moviesPredicted);
+    res.status(200).json({ moviesPredicted });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -73,16 +71,16 @@ const getMovieRecommendations = async (req, res) => {
       },
     });
 
-    let moviesPredicted = [];
+    const moviesPredicted = [];
     if (title) {
-      let recommendations = [];
+      const recommendations = [];
       const res = await axios.post(
         `http://127.0.0.1:5002/predict-overview?Title=${encodeURIComponent(
           title
         )}`
       );
-      let predictions = res.data;
-      for (let i = 1; i <= 5; i++) {
+      const predictions = res.data;
+      for (let i = 0; i <= 4; i++) {
         let randomRes =
           predictions[Math.floor(Math.random() * predictions.length)];
         if (recommendations.find((el) => el === randomRes)) {
@@ -103,7 +101,7 @@ const getMovieRecommendations = async (req, res) => {
     }
     res.status(200).json(moviesPredicted);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 

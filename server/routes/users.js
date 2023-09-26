@@ -10,14 +10,13 @@ import auth from "../middleware/auth.js";
 
 const router = Router();
 
-router
-  .get("/profile/:username", getProfile)
-  .put("/reset", resetPass)
-  .put("/change", changePass);
+router.get("/get/profile/user=:username", getProfile);
+// .put("/reset/password", resetPass)
+// .put("/change/password", changePass);
 
 router.use(auth);
 router
-  .get("/myprofile", getSimpleProfile) //
-  .put("/update", update);
+  .get("/get/init/profile", getSimpleProfile) //
+  .put("/update/profile", update);
 
 export default router;

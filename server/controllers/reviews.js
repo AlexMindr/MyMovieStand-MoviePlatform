@@ -2,6 +2,7 @@ import db from "../models/index.cjs";
 import { Op } from "@sequelize/core";
 import dotenv from "dotenv";
 import { getPagination, getPagingDataGroup } from "../utils/getPagination.js";
+import { getUserIdFromUsername } from "../utils/getUserIdFromUsername.js";
 
 dotenv.config();
 const { Movie, Review, UserLike, User, sequelize, Sequelize } = db;
@@ -42,71 +43,68 @@ const getHomeReviews = async (req, res) => {
       group: ["reviewid"],
       order: [[sequelize.literal("likeCount"), "DESC"]],
     });
-    res.status(200).json(reviews);
+    res.status(200).json({ reviews });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 const getMovieReviews = async (req, res) => {
-  const { page, count } = req.params;
-  const { limit, offset } = getPagination(page - 1, count);
+  try {
+    const { page, count } = req.params;
+    const { limit, offset } = getPagination(page - 1, count);
+    const { movieid } = req.params;
 
-  const { movieid } = req.params;
-  await Review.findAndCountAll({
-    subQuery: false,
-    attributes: [
-      "movieid",
-      "content",
-      "createdAt",
-      "updatedAt",
-      "reviewid",
-      [Sequelize.fn("COUNT", Sequelize.col("userlikes.liked")), "likeCount"],
-    ],
-    limit,
-    offset,
-    distinct: true,
-    include: [
-      {
-        model: User,
-        attributes: ["username", "fullname", "firstName", "lastName"],
-      },
-      {
-        model: UserLike,
-        required: false,
-        attributes: [],
-        where: {
-          liked: { [Op.eq]: true },
+    await Review.findAndCountAll({
+      subQuery: false,
+      attributes: [
+        "movieid",
+        "content",
+        "createdAt",
+        "updatedAt",
+        "reviewid",
+        [Sequelize.fn("COUNT", Sequelize.col("userlikes.liked")), "likeCount"],
+      ],
+      limit,
+      offset,
+      distinct: true,
+      include: [
+        {
+          model: User,
+          attributes: ["username", "fullname", "firstName", "lastName"],
         },
-      },
-    ],
-    where: { movieid },
-    group: ["reviewid"],
-    order: [[sequelize.literal("likeCount"), "DESC"]],
-  })
-    .then((data) => {
-      const { rows: reviews, totalPages } = getPagingDataGroup(
-        data,
-        page,
-        limit
-      );
-
-      res.status(200).json({ reviews, totalPages });
+        {
+          model: UserLike,
+          required: false,
+          attributes: [],
+          where: {
+            liked: { [Op.eq]: true },
+          },
+        },
+      ],
+      where: { movieid },
+      group: ["reviewid"],
+      order: [[sequelize.literal("likeCount"), "DESC"]],
     })
-
-    .catch((error) => {
-      res.status(404).json({ message: error.message });
-      //console.log(error)
-    });
+      .then((data) => {
+        const { rows: reviews, totalPages } = getPagingDataGroup(
+          data,
+          page,
+          limit
+        );
+        res.status(200).json({ reviews, totalPages });
+      })
+      .catch((error) => {
+        res.status(404).json({ message: "Not found" });
+      });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
 };
 
 const getUserReviewsAndLikes = async (req, res) => {
   try {
-    const uuid = req.userId;
-    const { userid } = await User.findOne({
-      attributes: ["userid"],
-      where: { useruuid: uuid },
-    });
+    const userid = req.userId;
     const reviews = await Review.findAll({
       attributes: ["movieid"],
       where: { userid },
@@ -117,134 +115,112 @@ const getUserReviewsAndLikes = async (req, res) => {
     });
     res.status(200).json({ reviews, likes });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 const getReview = async (req, res) => {
   try {
-    const uuid = req.userId;
+    const userid = req.userId;
     const { movieid } = req.params;
-    const { userid } = await User.findOne({
-      attributes: ["userid"],
-      where: { useruuid: uuid },
-    });
     const review = await Review.findOne({
       attributes: ["movieid", "content"],
       where: { userid, movieid },
     });
-    res.status(200).json(review);
+    res.status(200).json({ review });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 const getLikesForReview = async (req, res) => {
   try {
-    const uuid = req.userId;
     const { reviewid } = req.params;
-    const { userid } = await User.findOne({
-      attributes: ["userid"],
-      where: { useruuid: uuid },
+    const likes = await UserLike.count({
+      attributes: ["liked"],
+      where: {
+        reviewid,
+        liked: true,
+      },
     });
-    if (userid) {
-      const likes = await UserLike.count({
-        attributes: ["liked"],
-        where: {
-          //userid,
-          reviewid,
-          liked: true,
-        },
-      });
-      const dislikes = await UserLike.count({
-        attributes: ["liked"],
-        where: {
-          //userid,
-          reviewid,
-          liked: false,
-        },
-      });
-
-      res.status(200).json({ likes, dislikes });
-    } else {
-      res.status(403).json({ message: error.message });
-    }
+    const dislikes = await UserLike.count({
+      attributes: ["liked"],
+      where: {
+        reviewid,
+        liked: false,
+      },
+    });
+    res.status(200).json({ likes, dislikes });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 const getUserReviews = async (req, res) => {
-  //const uuid=req.userId
-  //const {userid}= await User.findOne({attributes:['userid'],where:{useruuid:uuid}});
-  const { username, page, count } = req.params;
-  const { limit, offset } = getPagination(page - 1, count);
-  const { userid } = await User.findOne({
-    attributes: ["userid"],
-    where: { username },
-  });
+  try {
+    const { username, page, count } = req.params;
+    const { limit, offset } = getPagination(page - 1, count);
 
-  await Review.findAndCountAll({
-    subQuery: false,
-    attributes: [
-      "movieid",
-      "content",
-      "createdAt",
-      "updatedAt",
-      "reviewid",
-      [Sequelize.fn("COUNT", Sequelize.col("userlikes.liked")), "likeCount"],
-    ],
-    limit,
-    offset,
-    distinct: true,
-    include: [
-      {
-        model: User,
-        attributes: ["username", "fullname", "firstName", "lastName"],
-      },
-      {
-        model: UserLike,
-        required: false,
-        attributes: [],
-        where: {
-          liked: { [Op.eq]: true },
+    const userid = await getUserIdFromUsername(username);
+    if (!userid) res.status(404).json({ message: "User doesn't exist" });
+
+    await Review.findAndCountAll({
+      subQuery: false,
+      attributes: [
+        "movieid",
+        "content",
+        "createdAt",
+        "updatedAt",
+        "reviewid",
+        [Sequelize.fn("COUNT", Sequelize.col("userlikes.liked")), "likeCount"],
+      ],
+      limit,
+      offset,
+      distinct: true,
+      include: [
+        {
+          model: User,
+          attributes: ["username", "fullname", "firstName", "lastName"],
         },
-      },
-      {
-        model: Movie,
-        attributes: ["title"],
-      },
-    ],
-    where: { userid },
-    group: ["reviewid"],
-    order: [[sequelize.literal("likeCount"), "DESC"]],
-  })
-    .then((data) => {
-      const { rows: reviews, totalPages } = getPagingDataGroup(
-        data,
-        page,
-        limit
-      );
-
-      res.status(200).json({ reviews, totalPages });
+        {
+          model: UserLike,
+          required: false,
+          attributes: [],
+          where: {
+            liked: { [Op.eq]: true },
+          },
+        },
+        {
+          model: Movie,
+          attributes: ["title"],
+        },
+      ],
+      where: { userid },
+      group: ["reviewid"],
+      order: [[sequelize.literal("likeCount"), "DESC"]],
     })
+      .then((data) => {
+        const { rows: reviews, totalPages } = getPagingDataGroup(
+          data,
+          page,
+          limit
+        );
 
-    .catch((error) => {
-      res.status(404).json({ message: error.message });
-      //console.log(error)
-    });
+        res.status(200).json({ reviews, totalPages });
+      })
+      .catch((error) => {
+        res.status(404).json({ message: "Not Found" });
+      });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
 };
 
 const addReview = async (req, res) => {
   try {
     const { content, movieid } = req.body;
-    const uuid = req.userId;
-    const { userid } = await User.findOne({
-      attributes: ["userid"],
-      where: { useruuid: uuid },
-    });
-
-    const newReview = await Review.create({
+    const userid = req.userId;
+    await Review.create({
       userid,
       movieid,
       content,
@@ -253,20 +229,16 @@ const addReview = async (req, res) => {
       updatedAt: new Date(),
     });
 
-    res.status(201).json("Success");
+    res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(403).json({ message: error.message });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 const deleteReview = async (req, res) => {
   try {
     const { movieid } = req.params;
-    const uuid = req.userId;
-    const { userid } = await User.findOne({
-      attributes: ["userid"],
-      where: { useruuid: uuid },
-    });
+    const userid = req.userId;
 
     await Review.destroy({
       where: {
@@ -275,22 +247,16 @@ const deleteReview = async (req, res) => {
       },
     });
 
-    res.status(201).json("Success");
+    res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(403).json({ message: error.message });
-    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 const updateReview = async (req, res) => {
   try {
     const { movieid, content } = req.body;
-    const uuid = req.userId;
-    const { userid } = await User.findOne({
-      attributes: ["userid"],
-      where: { useruuid: uuid },
-    });
-
+    const userid = req.userId;
     await Review.update(
       {
         content,
@@ -305,20 +271,16 @@ const updateReview = async (req, res) => {
       }
     );
 
-    res.status(201).json("Success");
+    res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(403).json({ message: error.message });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 const likeReview = async (req, res) => {
   try {
     const { reviewid } = req.body;
-    const uuid = req.userId;
-    const { userid } = await User.findOne({
-      attributes: ["userid"],
-      where: { useruuid: uuid },
-    });
+    const userid = req.userId;
     const current = await UserLike.findOne({ where: { userid, reviewid } });
     if (current) {
       await UserLike.update(
@@ -333,7 +295,6 @@ const likeReview = async (req, res) => {
           },
         }
       );
-      res.status(201).json("Success");
     } else {
       await UserLike.create({
         liked: true,
@@ -342,8 +303,8 @@ const likeReview = async (req, res) => {
         createdAt: new Date(),
         updatedAt: new Date(),
       });
-      res.status(200).json("Success");
     }
+    res.status(200).json({ message: "Success" });
   } catch (error) {
     res.status(403).json({ message: error.message });
   }
@@ -352,11 +313,7 @@ const likeReview = async (req, res) => {
 const dislikeReview = async (req, res) => {
   try {
     const { reviewid } = req.body;
-    const uuid = req.userId;
-    const { userid } = await User.findOne({
-      attributes: ["userid"],
-      where: { useruuid: uuid },
-    });
+    const userid = req.userId;
     const current = await UserLike.findOne({ where: { userid, reviewid } });
     if (current) {
       await UserLike.update(
@@ -371,7 +328,6 @@ const dislikeReview = async (req, res) => {
           },
         }
       );
-      res.status(201).json("Success");
     } else {
       await UserLike.create({
         liked: false,
@@ -380,10 +336,10 @@ const dislikeReview = async (req, res) => {
         createdAt: new Date(),
         updatedAt: new Date(),
       });
-      res.status(200).json("Success");
     }
+    res.status(200).json({ message: "Success" });
   } catch (error) {
-    res.status(403).json({ message: error.message });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 

@@ -131,7 +131,6 @@ const signup = async (req, res) => {
             expiresIn: "7d",
           }
         );
-
         const user = {
           username,
           fullname,

@@ -1,25 +1,34 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import db from "../models/index.cjs";
+
+const { User } = db;
 dotenv.config();
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const authAdmin = async (req, res, next) => {
-  const jwtSecret = process.env.JWT_SECRET;
   try {
-    if (req.headers.authorization) {
-      const token = req.headers.authorization.split(" ")[1];
+    const authHeader = req.headers.authorization || req.headers.Authorization;
+    if (!authHeader?.startsWith("Bearer "))
+      res.status(401).json({ message: "Unauthorized" });
 
-      let decodedData;
-      if (token) {
-        decodedData = jwt.verify(token, jwtSecret);
-        req.userId = decodedData?.useruuid;
-        req.userRole = decodedData?.role;
+    const token = authHeader.split(" ")[1];
+
+    jwt.verify(token, JWT_SECRET, async (err, decoded) => {
+      if (err) return res.status(403).json({ message: "Invalid Token" }); //invalid token
+      const userId = decoded?.useruuid;
+      const user = await User.findOne({
+        where: { useruuid: userId, role: "admin" },
+      });
+      if (user) {
+        req.userId = userId;
+        next();
+      } else {
+        res.status(401).json({ message: "Unauthorized" });
       }
-    }
-
-    next();
-  } catch (error) {
-    console.log(error);
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
-
 export default authAdmin;

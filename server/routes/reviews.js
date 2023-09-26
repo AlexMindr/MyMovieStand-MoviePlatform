@@ -18,14 +18,14 @@ const router = Router();
 
 router
   .get("/get/home", getHomeReviews)
-  .get("/get/movie/:movieid/page=:page/count=:count", getMovieReviews);
+  .get("/get/movie=:movieid/page=:page/count=:count", getMovieReviews)
+  .get("/get/likes/review=:reviewid", getLikesForReview)
+  .get("/get/user=:username/profile/page=:page/count=:count", getUserReviews);
 
 router.use(auth);
 router
-  .get("/get/likes/:reviewid", getLikesForReview)
-  .get("/get/moviereview/:movieid", getReview)
-  .get("/get/user/:username/page=:page/count=:count", getUserReviews)
-  .get("/get/userinit", getUserReviewsAndLikes)
+  .get("/get/user/movie=:movieid", getReview)
+  .get("/get/user/init", getUserReviewsAndLikes)
   .post("/add", addReview)
   .put("/update", updateReview)
   .put("/dislike", dislikeReview)

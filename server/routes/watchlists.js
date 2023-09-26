@@ -16,14 +16,14 @@ const router = Router();
 router.use(auth);
 
 router
-  .get("/", getWatchlistInit)
-  .get("/:username", getWatchlist)
-  .get("/fav/myfavourites", getFavourites)
-  .get("/fav/u/:username", getFavouritesProfile)
-  .post("/", createWatchlistEntry)
-  .put("/", updateWatchlistEntry)
-  .put("/addfav", addFavourite)
-  .put("/remfav", removeFavourite)
-  .delete("/delete/:movieid", deleteWatchlistEntry);
+  .get("/get/init", getWatchlistInit)
+  .get("/get/user=:username", getWatchlist)
+  .get("/get/favourites", getFavourites)
+  .get("/get/favourites/user=:username", getFavouritesProfile)
+  .post("/post", createWatchlistEntry)
+  .put("/update", updateWatchlistEntry)
+  .put("/add/favourite", addFavourite)
+  .put("/remove/favourite", removeFavourite)
+  .delete("/delete/movie=:movieid", deleteWatchlistEntry);
 
 export default router;

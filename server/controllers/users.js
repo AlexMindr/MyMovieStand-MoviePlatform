@@ -4,23 +4,22 @@ import crypto from "crypto";
 import { Op } from "@sequelize/core";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
-dotenv.config();
 
+dotenv.config();
 const { User, Watchlist } = db;
 const saltHash = parseInt(process.env.SALT);
 const emailUser = process.env.EMAIL_USER;
 const emailPass = process.env.EMAIL_PASS;
 
-async function watchListStatus(wlName, id) {
-  let wl = await Watchlist.count({
+async function watchListStatus(wlStatus, id) {
+  let wlItemsCount = await Watchlist.count({
     attributes: ["status"],
     where: {
       userid: id,
-      status: wlName ? { [Op.eq]: wlName } : { [Op.not]: null },
-      //status:{[Op.eq]:wlName}
+      status: wlStatus ? { [Op.eq]: wlStatus } : { [Op.not]: null },
     },
   });
-  return wl;
+  return wlItemsCount;
 }
 
 const getProfile = async (req, res) => {
@@ -45,16 +44,13 @@ const getProfile = async (req, res) => {
     });
 
     if (profileUser) {
-      const watching = await watchListStatus("Watching", profileUser.userid);
-      const completed = await watchListStatus("Completed", profileUser.userid);
-      const dropped = await watchListStatus("Dropped", profileUser.userid);
-      const plantowatch = await watchListStatus(
-        "Plan to watch",
-        profileUser.userid
-      );
-      const onhold = await watchListStatus("On-hold", profileUser.userid);
-      const totalStatus = await watchListStatus("", profileUser.userid);
-      const joined = profileUser.createdAt;
+      const { userid, createdAt: joined } = profileUser;
+      const watching = await watchListStatus("Watching", userid);
+      const completed = await watchListStatus("Completed", userid);
+      const dropped = await watchListStatus("Dropped", userid);
+      const plantowatch = await watchListStatus("Plan to watch", userid);
+      const onhold = await watchListStatus("On-hold", userid);
+      const totalStatus = await watchListStatus("", userid);
       res.status(200).json({
         profileUser,
         watching,
@@ -92,10 +88,10 @@ const getSimpleProfile = async (req, res) => {
     if (profileUser) {
       res.status(200).json({ profileUser });
     } else {
-      res.status(400).json({ message: "Profile does not exist" });
+      res.status(404).json({ message: "Profile does not exist" });
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Something went wrong" });
   }
 };
 
@@ -113,44 +109,39 @@ const update = async (req, res) => {
       newPass,
     } = req.body;
 
-    const checkPass = await User.findOne({
+    const checkUser = await User.findOne({
       where: { useruuid },
     });
 
-    const isCorrectPass = await bcrypt.compare(oldPass, checkPass.password);
-
+    const isCorrectPass = await bcrypt.compare(oldPass, checkUser.password);
     if (!isCorrectPass)
-      return res.status(400).json({ message: "Password was incorrect." });
-    var updatePass = null;
+      return res.status(401).json({ message: "Password was incorrect." });
 
-    if (newPass) {
-      updatePass = await bcrypt.hash(newPass, saltHash);
-    }
-
+    const updatePass = newPass ? await bcrypt.hash(newPass, saltHash) : null;
     await User.update(
       {
-        firstName: firstName ? firstName : checkPass.firstName,
-        lastName: lastName ? lastName : checkPass.lastName,
-        dateofbirth: dateofbirth ? dateofbirth : checkPass.dateofbirth,
-        location: location ? location : checkPass.location,
-        bio: bio ? bio : checkPass.bio,
-        gender: gender ? gender : checkPass.bio,
-        password: updatePass ? updatePass : checkPass.password,
+        firstName: firstName ? firstName : checkUser.firstName,
+        lastName: lastName ? lastName : checkUser.lastName,
+        dateofbirth: dateofbirth ? dateofbirth : checkUser.dateofbirth,
+        location: location ? location : checkUser.location,
+        bio: bio ? bio : checkUser.bio,
+        gender: gender ? gender : checkUser.bio,
+        password: updatePass ? updatePass : checkUser.password,
         updatedAt: new Date(),
       },
       {
         where: {
-          userid: checkPass.userid,
+          userid: checkUser.userid,
         },
       }
     );
 
     const user = {
-      fullname: checkPass.fullname,
-      email: checkPass.email,
+      fullname: checkUser.fullname,
+      email: checkUser.email,
       dateofbirth: dateofbirth ? dateofbirth : null,
       location: location ? location : null,
-      username: checkPass.username,
+      username: checkUser.username,
     };
 
     res.status(201).json({ user });
@@ -159,6 +150,7 @@ const update = async (req, res) => {
   }
 };
 
+//TODO
 async function myFunc(userid) {
   await User.update(
     {

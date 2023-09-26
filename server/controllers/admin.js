@@ -1,17 +1,17 @@
 import db from "../models/index.cjs";
 import { Op } from "@sequelize/core";
 import dotenv from "dotenv";
+import { RestrictAdminReviewMessage } from "../utils/messagesRestrictDelete.js";
+
 dotenv.config();
-const { Genre, Review, User, sequelize, Sequelize, Notification } = db;
+const { Genre, Review, User, Notification } = db;
 const apiKey = process.env.APIKEY;
 
 //user Admin--------------------------------
 const deleteUser = async (req, res) => {
   try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
+    const userid = req.userId;
+    if (userid) {
       const { username } = req.params;
 
       const success = await User.destroy({
@@ -27,24 +27,22 @@ const deleteUser = async (req, res) => {
         res.status(201).json({ message: "Success" });
       }
     } else {
-      res.status(404).json({ message: "Something went wrong" });
+      res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    res.status(500).json({ message: error.message });
   }
 };
 
 //genres Admin-------------------------------
 const createGenres = async (req, res) => {
   try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
-      const resp = await axios.get(
+    const userid = req.userId;
+    if (userid) {
+      const response = await axios.get(
         `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`
       );
-      let genres = resp.data.genres;
+      const genres = response.data.genres;
       genres.map(async (genre) => {
         await Genre.bulkCreate([
           {
@@ -55,27 +53,23 @@ const createGenres = async (req, res) => {
           },
         ]);
       });
-      res.status(201).json("Success");
+      res.status(201).json({ message: "Success" });
     } else {
-      res.status(404).json({ message: error.message });
+      res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    res.status(500).json({ message: error.message });
   }
 };
 
 const updateGenres = async (req, res) => {
   try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
-      const resp = await axios.get(
+    const userid = req.userId;
+    if (userid) {
+      const response = await axios.get(
         `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`
       );
-
-      let genres = resp.data.genres;
-
+      const genres = response.data.genres;
       genres.map(async (genre) => {
         await Genre.update(
           {
@@ -89,29 +83,27 @@ const updateGenres = async (req, res) => {
           }
         );
       });
-      res.status(201).json("Success");
+      res.status(201).json({ message: "Success" });
     } else {
-      res.status(404).json({ message: error.message });
+      res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong!" });
+    res.status(500).json({ message: error.message });
   }
 };
 
 //notifications Admin
 const addNotif = async (req, res) => {
   try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
+    const userid = req.userId;
+    if (userid) {
       const { content, username } = req.body;
 
       const { userid } = await User.findOne({
         attributes: ["userid"],
         where: { username },
       });
-      const newNotif = await Notification.create({
+      await Notification.create({
         userid,
         content,
         read: false,
@@ -121,9 +113,7 @@ const addNotif = async (req, res) => {
 
       res.status(201).json({ message: "Success" });
     } else {
-      res
-        .status(404)
-        .json({ message: "Something went wrong/User doesn't exist!" });
+      res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -132,12 +122,9 @@ const addNotif = async (req, res) => {
 
 const addGlobalNotif = async (req, res) => {
   try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
+    const userid = req.userId;
+    if (userid) {
       const { content } = req.body;
-
       const userids = await User.findAll({ attributes: ["userid"] });
       userids.map(async (user) => {
         await Notification.create({
@@ -151,20 +138,18 @@ const addGlobalNotif = async (req, res) => {
 
       res.status(201).json({ message: "Success" });
     } else {
-      res.status(404).json({ message: "Something went wrong" });
+      res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(403).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
 //reviews Admin
 const deleteReview = async (req, res) => {
   try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
+    const userid = req.userId;
+    if (userid) {
       const { reviewid } = req.params;
 
       const success = await Review.destroy({
@@ -174,7 +159,7 @@ const deleteReview = async (req, res) => {
       });
 
       if (success === 0) {
-        res.status(403).json({ message: "Review doesn't exist" });
+        res.status(404).json({ message: "Review doesn't exist" });
       } else {
         res.status(201).json({ message: "Success" });
       }
@@ -182,57 +167,19 @@ const deleteReview = async (req, res) => {
       res.status(404).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    res.status(500).json({ message: error.message });
   }
 };
 
 const restrictReview = async (req, res) => {
-  const restrictAdmin = {
-    blocks: [
-      {
-        key: "9m832",
-        text: "  Review removed by admin",
-        type: "blockquote",
-        depth: 0,
-        inlineStyleRanges: [
-          {
-            offset: 0,
-            length: 25,
-            style: "color-rgb(226,80,65)",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "bgcolor-rgb(239,239,239)",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "ITALIC",
-          },
-          {
-            offset: 0,
-            length: 25,
-            style: "fontsize-18",
-          },
-        ],
-        entityRanges: [],
-        data: {},
-      },
-    ],
-    entityMap: {},
-  };
-
   try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
+    const userid = req.userId;
+    if (userid) {
       const { reviewid } = req.body;
 
       const success = await Review.update(
         {
-          content: restrictAdmin,
+          content: RestrictAdminReviewMessage,
           updatedAt: new Date(),
         },
         {
@@ -243,16 +190,15 @@ const restrictReview = async (req, res) => {
       );
 
       if (success === 0) {
-        res.status(403).json({ message: "Review doesn't exist" });
+        res.status(404).json({ message: "Review doesn't exist" });
       } else {
         res.status(201).json({ message: "Success" });
       }
     } else {
-      res.status(404).json({ message: "Something went wrong" });
+      res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-    console.log(error);
+    res.status(500).json({ message: error.message });
   }
 };
 

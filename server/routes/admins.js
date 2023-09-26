@@ -28,22 +28,22 @@ const router = Router();
 
 router.use(authAdmin);
 router
-  .post("/admin/news/add", addNews)
-  .post("/add/single", addNotif)
-  .post("/add/global", addGlobalNotif)
-  .post("/populate", populateMovies)
-  .post("/create", createMovie)
-  .post("/populate", createGenres)
-  .put("/update", updateMovie)
-  .put("/update/popularity/all", updatePopularityAndRating)
-  .put("/update", updateGenres)
-  .put("/admin/post/restrict", restrictPost)
-  .put("/admin/comm/restrict", restrictComm)
-  .put("/admin/news/edit", updateNews)
-  .put("/admin/restrict", restrictReview)
-  .delete("/admin/post/delete/:postid", deletePost)
-  .delete("/admin/comm/delete/:ucid", deleteComm)
-  .delete("/admin/delete/:reviewid", deleteReview)
-  .delete("/delete/:username", deleteUser);
+  .post("/news/add", addNews)
+  .post("/notifications/add/single", addNotif)
+  .post("/notifications/add/global", addGlobalNotif)
+  .post("/movies/populate", populateMovies)
+  .post("/movies/create", createMovie)
+  .post("/genres/populate", createGenres)
+  .put("/movies/update/movie", updateMovie)
+  .put("/movies/update/popularity", updatePopularityAndRating)
+  .put("/genres/update", updateGenres)
+  .put("/posts/restrict", restrictPost)
+  .put("/comments/restrict", restrictComm)
+  .put("/news/edit", updateNews)
+  .put("/reviews/restrict", restrictReview)
+  .delete("/posts/delete/:postid", deletePost)
+  .delete("/comments/delete/:ucid", deleteComm)
+  .delete("/reviews/delete/:reviewid", deleteReview)
+  .delete("/users/delete/:username", deleteUser);
 
 export default router;

@@ -10,6 +10,6 @@ const router = Router();
 router.use(auth);
 router
   .post("/user", getUserRecommendations)
-  .post("/movie/:movieid", getMovieRecommendations);
+  .post("/movie=:movieid", getMovieRecommendations);
 
 export default router;

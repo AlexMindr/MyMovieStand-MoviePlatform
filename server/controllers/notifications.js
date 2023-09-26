@@ -1,5 +1,4 @@
 import db from "../models/index.cjs";
-//import { Op } from '@sequelize/core';
 import dotenv from "dotenv";
 import { getPagination, getPagingData } from "../utils/getPagination.js";
 
@@ -9,11 +8,8 @@ const { Notification, User } = db;
 const getNotifPag = async (req, res) => {
   const { page } = req.params;
   const { limit, offset } = getPagination(page - 1);
-  const uuid = req.userId;
-  const { userid } = await User.findOne({
-    attributes: ["userid"],
-    where: { useruuid: uuid },
-  });
+  const userid = req.userId;
+
   await Notification.findAndCountAll({
     limit,
     offset,
@@ -29,51 +25,37 @@ const getNotifPag = async (req, res) => {
 
       res.status(200).json({ notifications, totalPages });
     })
-
     .catch((error) => {
-      res.status(404).json({ message: error.message });
-      //console.log(error)
+      res.status(500).json({ message: "Something went wrong" });
     });
 };
 
 const getNotif = async (req, res) => {
   try {
-    const uuid = req.userId;
-    const { userid } = await User.findOne({
-      attributes: ["userid"],
-      where: { useruuid: uuid },
-    });
+    const userid = req.userId;
     const notifications = await Notification.findAll({
       where: { userid },
       order: [["createdAt", "DESC"]],
     });
-    //console.log(notifications)
-    res.status(200).json(notifications);
+    res.status(200).json({ notifications });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 const addNotif = async (req, res) => {
   try {
-    const useruuid = req.userId;
-    //const role=req.userRole
-    const { userid } = await User.findOne({ where: { useruuid } });
-    if (userid) {
-      const { content } = req.body;
+    const userid = req.userId;
+    const { content } = req.body;
 
-      const newNotif = await Notification.create({
-        userid,
-        content,
-        read: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-
-      res.status(201).json(newNotif);
-    } else {
-      res.status(404).json({ message: "Something went wrong" });
-    }
+    const newNotif = await Notification.create({
+      userid,
+      content,
+      read: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    res.status(201).json({ newNotif });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }
@@ -82,11 +64,7 @@ const addNotif = async (req, res) => {
 const deleteNotif = async (req, res) => {
   try {
     const { notificationid } = req.params;
-    const uuid = req.userId;
-    const { userid } = await User.findOne({
-      attributes: ["userid"],
-      where: { useruuid: uuid },
-    });
+    const userid = req.userId;
 
     await Notification.destroy({
       where: {
@@ -94,25 +72,18 @@ const deleteNotif = async (req, res) => {
         userid,
       },
     });
-
     //const updatedNotifications = await Notification.findAll({where:userid});
-
     //res.status(201).json(updatedNotifications);
-    res.status(201).json("Success");
+    res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(403).json({ message: error.message });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 
 const updateNotif = async (req, res) => {
   try {
     const { notificationid } = req.body;
-    //console.log(notificationid)
-    const uuid = req.userId;
-    const { userid } = await User.findOne({
-      attributes: ["userid"],
-      where: { useruuid: uuid },
-    });
+    const userid = req.userId;
 
     await Notification.update(
       {
@@ -126,13 +97,11 @@ const updateNotif = async (req, res) => {
         },
       }
     );
-
     //const updatedNotifications = await Notification.findAll({where:userid});
-
     //res.status(201).json(updatedNotifications);
     res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(403).json({ message: error.message });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 

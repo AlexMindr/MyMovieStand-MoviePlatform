@@ -38,8 +38,7 @@ const getHomeMovies = async (req, res) => {
 
     res.status(200).json({ bestRated, mostPopular });
   } catch (error) {
-    res.status(404).json({ message: error.message });
-    console.log(error);
+    res.status(404).json({ message: "Not found" });
   }
 };
 
@@ -76,12 +75,10 @@ const getMoviesSimpleFilter = async (req, res) => {
   })
     .then((data) => {
       const { rows: movies, totalPages } = getPagingData(data, page, limit);
-
       res.status(200).json({ movies, totalPages });
     })
-
     .catch((error) => {
-      res.status(404).json({ message: error.message });
+      res.status(404).json({ message: "Not found" });
     });
 };
 
@@ -89,8 +86,8 @@ const getMoviesFiltered = async (req, res) => {
   const { page } = req.params;
   const { limit, offset } = getPagination(page - 1);
   const { order, sorter, checked, search } = req.query;
-  let checkedGenres = checked ? checked.split(",") : null;
-  let moviefiltergenres = [];
+  const checkedGenres = checked ? checked.split(",") : null;
+  const moviefiltergenres = [];
   if (checkedGenres !== null) {
     const movieids = await sequelize.query(
       "SELECT movies.movieid FROM (movies INNER JOIN moviegenres using(movieid) INNER JOIN genres using(genreid)) WHERE lower(genres.name) in (?) GROUP BY movieid HAVING COUNT(genres.name) >= ?",
@@ -174,19 +171,15 @@ const getMoviesFiltered = async (req, res) => {
   })
     .then((data) => {
       const { rows: movies, totalPages } = getPagingData(data, page, limit);
-
       res.status(200).json({ movies, totalPages });
     })
-
     .catch((error) => {
-      res.status(404).json({ message: error.message });
-      //console.log(error)
+      res.status(404).json({ message: "Not found" });
     });
 };
 
 const getMovies = async (req, res) => {
   const { page } = req.params;
-  //var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
   const { limit, offset } = getPagination(page - 1);
 
   await Movie.findAndCountAll({
@@ -221,9 +214,8 @@ const getMovies = async (req, res) => {
 
       res.status(200).json({ movies, totalPages });
     })
-
     .catch((error) => {
-      res.status(404).json({ message: error.message });
+      res.status(404).json({ message: "Not found" });
     });
 };
 
@@ -240,10 +232,10 @@ const getMovie = async (req, res) => {
       },
       where: { movieid: id },
     });
-    if (movie !== null) res.status(200).json(movie);
-    if (movie === null) res.status(404).json({ message: error.message });
+    if (movie) res.status(200).json({ movie });
+    else res.status(404).json({ message: "Not found" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 const getMovieImages = async (req, res) => {
@@ -262,7 +254,7 @@ const getMovieImages = async (req, res) => {
     const { backdrops, logos, posters } = images.data;
     res.status(200).json({ backdrops, logos, posters });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(404).json({ message: "Not found" });
   }
 };
 const getMovieCredits = async (req, res) => {
@@ -278,7 +270,7 @@ const getMovieCredits = async (req, res) => {
     const { crew, cast } = credits.data;
     res.status(200).json({ crew, cast });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(404).json({ message: "Not found" });
   }
 };
 

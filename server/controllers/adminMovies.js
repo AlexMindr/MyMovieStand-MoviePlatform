@@ -158,14 +158,13 @@ const pop = async (req, res) => {
     .on("error", (err) => console.error(err))
     .on("finish", () => console.log("Done writing."));
 
-  res.status(201).json("Success");
+  res.status(201).json({ message: "Success" });
 };
+
 const populateMovies = async (req, res) => {
   try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
+    const userid = req.userId;
+    if (userid) {
       var movies = [];
       var movies2 = [];
       const data = fs.readFileSync("./data/bypopularity.txt", "utf8", (err) => {
@@ -314,14 +313,62 @@ const populateMovies = async (req, res) => {
         .on("error", (err) => console.error(err))
         .on("finish", () => console.log("Done writing."));
 
-      res.status(201).json("Success");
+      res.status(201).json({ message: "Success" });
     } else {
-      res.status(404).json({ message: "You do not have access" });
+      res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
+const updatePopularityAndRating = async (req, res) => {
+  try {
+    const userid = req.userId;
+    if (userid) {
+      const movies = await Movie.findAll({ attributes: ["movieid"] });
+      movies.map(async (movie) => {
+        const countPopularity = await Watchlist.count({
+          where: { movieid: movie.movieid },
+        });
+        const countRating =
+          countPopularity > 0
+            ? await Watchlist.count({
+                where: { movieid: movie.movieid, rating: { [Op.not]: null } },
+              })
+            : null;
+        const sumRating =
+          countRating > 0
+            ? await Watchlist.sum("rating", {
+                where: { movieid: movie.movieid },
+              })
+            : null;
+        const calcRating = countRating > 0 ? sumRating / countRating : null;
+
+        await Movie.update(
+          {
+            popularity: countPopularity,
+            rating: calcRating != 0 ? calcRating : null,
+            updatedAt: new Date(),
+          },
+          {
+            where: {
+              movieid: movie.movieid,
+            },
+          }
+        );
+      });
+
+      res.status(201).json({ message: "Success" });
+    } else {
+      res.status(403).json({ message: "Something went wrong" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//TODDO
 const createMovie = async (req, res) => {
   //TODO ADMIN
   // const useruuid=req.userId
@@ -511,53 +558,7 @@ const updateMovie = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
-const updatePopularityAndRating = async (req, res) => {
-  try {
-    const useruuid = req.userId;
-    const role = req.userRole;
-    const user = await User.findOne({ where: { useruuid, role } });
-    if (user) {
-      const movies = await Movie.findAll({ attributes: ["movieid"] });
-      movies.map(async (movie) => {
-        const countPopularity = await Watchlist.count({
-          where: { movieid: movie.movieid },
-        });
-        const countRating =
-          countPopularity > 0
-            ? await Watchlist.count({
-                where: { movieid: movie.movieid, rating: { [Op.not]: null } },
-              })
-            : null;
-        const sumRating =
-          countRating > 0
-            ? await Watchlist.sum("rating", {
-                where: { movieid: movie.movieid },
-              })
-            : null;
-        const calcRating = countRating > 0 ? sumRating / countRating : null;
 
-        await Movie.update(
-          {
-            popularity: countPopularity,
-            rating: calcRating != 0 ? calcRating : null,
-            updatedAt: new Date(),
-          },
-          {
-            where: {
-              movieid: movie.movieid,
-            },
-          }
-        );
-      });
-
-      res.status(201).json("Success");
-    } else {
-      res.status(404).json({ message: "You do not have access" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
 const deleteMovie = async (req, res) => {
   //TODO ADMIN
   // const useruuid=req.userId

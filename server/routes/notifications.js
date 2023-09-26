@@ -12,10 +12,10 @@ const router = Router();
 
 router.use(auth);
 router
-  .get("/get", getNotif)
+  .get("/get/init", getNotif)
   .get("/get/page=:page", getNotifPag)
   .post("/add", addNotif)
   .put("/update", updateNotif)
-  .delete("/delete/:notificationid", deleteNotif);
+  .delete("/delete/notification=:notificationid", deleteNotif);
 
 export default router;
