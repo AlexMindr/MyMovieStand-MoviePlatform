@@ -46,9 +46,9 @@ const getHomeNews = async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
 
-    res.status(200).json({ posts });
+    return res.status(200).json({ posts });
   } catch (error) {
-    res.status(404).json({ message: "Not found" });
+    return res.status(404).json({ message: "Not found" });
   }
 };
 
@@ -84,9 +84,9 @@ const getHomePosts = async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
 
-    res.status(200).json({ posts });
+    return res.status(200).json({ posts });
   } catch (error) {
-    res.status(404).json({ message: "Not found" });
+    return res.status(404).json({ message: "Not found" });
   }
 };
 
@@ -127,10 +127,10 @@ const getNews = async (req, res) => {
     .then((data) => {
       const { rows: posts, totalPages } = getPagingDataGroup(data, page, limit);
 
-      res.status(200).json({ posts, totalPages });
+      return res.status(200).json({ posts, totalPages });
     })
     .catch((error) => {
-      res.status(404).json({ message: "Not found" });
+      return res.status(404).json({ message: "Not found" });
     });
 };
 
@@ -172,10 +172,10 @@ const getMoviePosts = async (req, res) => {
   })
     .then((data) => {
       const { rows: posts, totalPages } = getPagingDataGroup(data, page, limit);
-      res.status(200).json({ posts, totalPages });
+      return res.status(200).json({ posts, totalPages });
     })
     .catch((error) => {
-      res.status(404).json({ message: "Not found" });
+      return res.status(404).json({ message: "Not found" });
     });
 };
 
@@ -193,9 +193,9 @@ const getPostContent = async (req, res) => {
       where: { postid },
     });
 
-    res.status(200).json({ post });
+    return res.status(200).json({ post });
   } catch (error) {
-    res.status(404).json({ message: "Not found" });
+    return res.status(404).json({ message: "Not found" });
   }
 };
 
@@ -219,11 +219,11 @@ const getPostComments = async (req, res) => {
   })
     .then((data) => {
       const { rows: comments, totalPages } = getPagingData(data, page, limit);
-      res.status(200).json({ comments, totalPages });
+      return res.status(200).json({ comments, totalPages });
     })
 
     .catch((error) => {
-      res.status(404).json({ message: "Not found" });
+      return res.status(404).json({ message: "Not found" });
     });
 };
 
@@ -232,7 +232,7 @@ const getUserPosts = async (req, res) => {
   const { limit, offset } = getPagination(page - 1, count);
 
   const userid = await getUserIdFromUsername(username);
-  if (!userid) res.status(404).json({ message: "Not found" });
+  if (!userid) return res.status(404).json({ message: "Not found" });
 
   await Post.findAndCountAll({
     subQuery: false,
@@ -272,11 +272,11 @@ const getUserPosts = async (req, res) => {
     .then((data) => {
       const { rows: posts, totalPages } = getPagingDataGroup(data, page, limit);
 
-      res.status(200).json({ posts, totalPages });
+      return res.status(200).json({ posts, totalPages });
     })
 
     .catch((error) => {
-      res.status(404).json({ message: "Not found" });
+      return res.status(404).json({ message: "Not found" });
     });
 };
 
@@ -285,7 +285,7 @@ const getUserComments = async (req, res) => {
   const { limit, offset } = getPagination(page - 1, count);
 
   const userid = await getUserIdFromUsername(username);
-  if (!userid) res.status(404).json({ message: "Not found" });
+  if (!userid) return res.status(404).json({ message: "Not found" });
 
   await UserComment.findAndCountAll({
     subQuery: false,
@@ -320,10 +320,10 @@ const getUserComments = async (req, res) => {
   })
     .then((data) => {
       const { rows: posts, totalPages } = getPagingData(data, page, limit);
-      res.status(200).json({ posts, totalPages });
+      return res.status(200).json({ posts, totalPages });
     })
     .catch((error) => {
-      res.status(404).json({ message: "Not found" });
+      return res.status(404).json({ message: "Not found" });
     });
 };
 
@@ -340,9 +340,9 @@ const addPost = async (req, res) => {
       updatedAt: new Date(),
     });
     const postid = newPost.postid;
-    res.status(201).json({ postid });
+    return res.status(201).json({ postid });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -357,9 +357,9 @@ const addComment = async (req, res) => {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
-    res.status(201).json({ message: "Success" });
+    return res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -382,12 +382,12 @@ const deleteComm = async (req, res) => {
     );
 
     if (success === 0) {
-      res.status(404).json({ message: "Comment doesn't exist" });
+      return res.status(404).json({ message: "Comment doesn't exist" });
     } else {
-      res.status(201).json({ message: "Success" });
+      return res.status(201).json({ message: "Success" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -410,12 +410,12 @@ const deletePost = async (req, res) => {
     );
 
     if (success === 0) {
-      res.status(404).json({ message: "Post doesn't exist" });
+      return res.status(404).json({ message: "Post doesn't exist" });
     } else {
-      res.status(201).json({ message: "Success" });
+      return res.status(201).json({ message: "Success" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 

@@ -10,7 +10,7 @@ const authAdmin = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization || req.headers.Authorization;
     if (!authHeader?.startsWith("Bearer "))
-      res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ message: "Unauthorized" });
 
     const token = authHeader.split(" ")[1];
 
@@ -24,11 +24,11 @@ const authAdmin = async (req, res, next) => {
         req.userId = userId;
         next();
       } else {
-        res.status(401).json({ message: "Unauthorized" });
+        return res.status(401).json({ message: "Unauthorized" });
       }
     });
   } catch (err) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 export default authAdmin;

@@ -43,9 +43,9 @@ const getHomeReviews = async (req, res) => {
       group: ["reviewid"],
       order: [[sequelize.literal("likeCount"), "DESC"]],
     });
-    res.status(200).json({ reviews });
+    return res.status(200).json({ reviews });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -92,13 +92,13 @@ const getMovieReviews = async (req, res) => {
           page,
           limit
         );
-        res.status(200).json({ reviews, totalPages });
+        return res.status(200).json({ reviews, totalPages });
       })
       .catch((error) => {
-        res.status(404).json({ message: "Not found" });
+        return res.status(404).json({ message: "Not found" });
       });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -113,9 +113,9 @@ const getUserReviewsAndLikes = async (req, res) => {
       attributes: ["reviewid", "liked"],
       where: { userid },
     });
-    res.status(200).json({ reviews, likes });
+    return res.status(200).json({ reviews, likes });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -127,9 +127,9 @@ const getReview = async (req, res) => {
       attributes: ["movieid", "content"],
       where: { userid, movieid },
     });
-    res.status(200).json({ review });
+    return res.status(200).json({ review });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -150,9 +150,9 @@ const getLikesForReview = async (req, res) => {
         liked: false,
       },
     });
-    res.status(200).json({ likes, dislikes });
+    return res.status(200).json({ likes, dislikes });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -162,7 +162,7 @@ const getUserReviews = async (req, res) => {
     const { limit, offset } = getPagination(page - 1, count);
 
     const userid = await getUserIdFromUsername(username);
-    if (!userid) res.status(404).json({ message: "User doesn't exist" });
+    if (!userid) return res.status(404).json({ message: "User doesn't exist" });
 
     await Review.findAndCountAll({
       subQuery: false,
@@ -206,13 +206,13 @@ const getUserReviews = async (req, res) => {
           limit
         );
 
-        res.status(200).json({ reviews, totalPages });
+        return res.status(200).json({ reviews, totalPages });
       })
       .catch((error) => {
-        res.status(404).json({ message: "Not Found" });
+        return res.status(404).json({ message: "Not Found" });
       });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -229,9 +229,9 @@ const addReview = async (req, res) => {
       updatedAt: new Date(),
     });
 
-    res.status(201).json({ message: "Success" });
+    return res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -247,9 +247,9 @@ const deleteReview = async (req, res) => {
       },
     });
 
-    res.status(201).json({ message: "Success" });
+    return res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -271,9 +271,9 @@ const updateReview = async (req, res) => {
       }
     );
 
-    res.status(201).json({ message: "Success" });
+    return res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -304,9 +304,9 @@ const likeReview = async (req, res) => {
         updatedAt: new Date(),
       });
     }
-    res.status(200).json({ message: "Success" });
+    return res.status(200).json({ message: "Success" });
   } catch (error) {
-    res.status(403).json({ message: error.message });
+    return res.status(403).json({ message: error.message });
   }
 };
 
@@ -337,9 +337,9 @@ const dislikeReview = async (req, res) => {
         updatedAt: new Date(),
       });
     }
-    res.status(200).json({ message: "Success" });
+    return res.status(200).json({ message: "Success" });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 

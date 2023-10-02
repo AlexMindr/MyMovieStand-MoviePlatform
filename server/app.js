@@ -50,7 +50,6 @@ app.use(cookieParser());
 //app route routers
 app.use("/movies", movieRoutes);
 app.use("/user", userRoutes);
-app.use("/admin", adminRoutes);
 app.use("/auth", authRoutes);
 app.use("/genres", genreRoutes);
 app.use("/notifications", notificationRoutes);
@@ -58,6 +57,7 @@ app.use("/watchlist", watchlistRoutes);
 app.use("/reviews", reviewsRoutes);
 app.use("/posts", postsRoutes);
 app.use("/recommendations", recommendationsRoutes);
+app.use("/admin", adminRoutes);
 
 app.all("*", (req, res, next) => {
   return res.status(404).json({ success: false, message: "Invalid route" });

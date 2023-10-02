@@ -22,15 +22,17 @@ const deleteUser = async (req, res) => {
       });
 
       if (success === 0) {
-        res.status(403).json({ message: "User doesn't exist or is an admin" });
+        return res
+          .status(403)
+          .json({ message: "User doesn't exist or is an admin" });
       } else {
-        res.status(201).json({ message: "Success" });
+        return res.status(201).json({ message: "Success" });
       }
     } else {
-      res.status(403).json({ message: "Something went wrong" });
+      return res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -53,12 +55,12 @@ const createGenres = async (req, res) => {
           },
         ]);
       });
-      res.status(201).json({ message: "Success" });
+      return res.status(201).json({ message: "Success" });
     } else {
-      res.status(403).json({ message: "Something went wrong" });
+      return res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -83,12 +85,12 @@ const updateGenres = async (req, res) => {
           }
         );
       });
-      res.status(201).json({ message: "Success" });
+      return res.status(201).json({ message: "Success" });
     } else {
-      res.status(403).json({ message: "Something went wrong" });
+      return res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -111,12 +113,12 @@ const addNotif = async (req, res) => {
         updatedAt: new Date(),
       });
 
-      res.status(201).json({ message: "Success" });
+      return res.status(201).json({ message: "Success" });
     } else {
-      res.status(403).json({ message: "Something went wrong" });
+      return res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -136,12 +138,12 @@ const addGlobalNotif = async (req, res) => {
         });
       });
 
-      res.status(201).json({ message: "Success" });
+      return res.status(201).json({ message: "Success" });
     } else {
-      res.status(403).json({ message: "Something went wrong" });
+      return res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -159,15 +161,15 @@ const deleteReview = async (req, res) => {
       });
 
       if (success === 0) {
-        res.status(404).json({ message: "Review doesn't exist" });
+        return res.status(404).json({ message: "Review doesn't exist" });
       } else {
-        res.status(201).json({ message: "Success" });
+        return res.status(201).json({ message: "Success" });
       }
     } else {
-      res.status(404).json({ message: "Something went wrong" });
+      return res.status(404).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -190,15 +192,15 @@ const restrictReview = async (req, res) => {
       );
 
       if (success === 0) {
-        res.status(404).json({ message: "Review doesn't exist" });
+        return res.status(404).json({ message: "Review doesn't exist" });
       } else {
-        res.status(201).json({ message: "Success" });
+        return res.status(201).json({ message: "Success" });
       }
     } else {
-      res.status(403).json({ message: "Something went wrong" });
+      return res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 

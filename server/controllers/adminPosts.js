@@ -25,10 +25,10 @@ const addNews = async (req, res) => {
         updatedAt: new Date(),
       });
       const postid = newPost.postid;
-      res.status(201).json({ postid });
-    } else res.status(403).json({ message: "Something went wrong" });
+      return res.status(201).json({ postid });
+    } else return res.status(403).json({ message: "Something went wrong" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -52,15 +52,15 @@ const updateNews = async (req, res) => {
       );
 
       if (success === 0) {
-        res.status(404).json({ message: "Post doesn't exist" });
+        return res.status(404).json({ message: "Post doesn't exist" });
       } else {
-        res.status(201).json({ message: "Success" });
+        return res.status(201).json({ message: "Success" });
       }
     } else {
-      res.status(403).json({ message: "Something went wrong" });
+      return res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -77,15 +77,15 @@ const deletePost = async (req, res) => {
       });
 
       if (success === 0) {
-        res.status(404).json({ message: "Post doesn't exist" });
+        return res.status(404).json({ message: "Post doesn't exist" });
       } else {
-        res.status(201).json({ message: "Success" });
+        return res.status(201).json({ message: "Success" });
       }
     } else {
-      res.status(403).json({ message: "Something went wrong" });
+      return res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -108,15 +108,15 @@ const restrictPost = async (req, res) => {
       );
 
       if (success === 0) {
-        res.status(404).json({ message: "Post doesn't exist" });
+        return res.status(404).json({ message: "Post doesn't exist" });
       } else {
-        res.status(201).json({ message: "Success" });
+        return res.status(201).json({ message: "Success" });
       }
     } else {
-      res.status(403).json({ message: "Something went wrong" });
+      return res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -133,15 +133,15 @@ const deleteComm = async (req, res) => {
       });
 
       if (success === 0) {
-        res.status(404).json({ message: "Comment doesn't exist" });
+        return res.status(404).json({ message: "Comment doesn't exist" });
       } else {
-        res.status(201).json({ message: "Success" });
+        return res.status(201).json({ message: "Success" });
       }
     } else {
-      res.status(403).json({ message: "Something went wrong" });
+      return res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -164,15 +164,15 @@ const restrictComm = async (req, res) => {
       );
 
       if (success === 0) {
-        res.status(404).json({ message: "Comment doesn't exist" });
+        return res.status(404).json({ message: "Comment doesn't exist" });
       } else {
-        res.status(201).json({ message: "Success" });
+        return res.status(201).json({ message: "Success" });
       }
     } else {
-      res.status(403).json({ message: "Something went wrong" });
+      return res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 

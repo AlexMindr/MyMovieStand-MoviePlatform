@@ -36,61 +36,67 @@ const getHomeMovies = async (req, res) => {
       ],
     });
 
-    res.status(200).json({ bestRated, mostPopular });
+    return res.status(200).json({ bestRated, mostPopular });
   } catch (error) {
-    res.status(404).json({ message: "Not found" });
+    return res.status(404).json({ message: "Not found" });
   }
 };
 
 const getMoviesSimpleFilter = async (req, res) => {
-  const { page } = req.params;
+  const page = 1;
   const { limit, offset } = getPagination(page - 1, 5);
-  const { search } = req.query;
+  const { title } = req.query;
   await Movie.findAndCountAll({
     attributes: ["movieid", "title", "poster_path", "keywords"],
     limit,
     offset,
     distinct: true,
     where: {
-      [Op.or]: [
-        {
-          title: {
-            [Op.like]: search ? `%${search}%` : `%`,
-          },
-        },
-        search && search.length >= 3
-          ? {
-              keywords: {
-                [Op.like]: search ? `%${search}%` : `%`,
-              },
-            }
-          : {
-              title: {
-                [Op.like]: search ? `%${search}%` : `%`,
-              },
-            },
-      ],
+      title: {
+        [Op.like]: title ? `%${title}%` : `%`,
+      },
     },
     order: [["title", "ASC"]],
   })
     .then((data) => {
       const { rows: movies, totalPages } = getPagingData(data, page, limit);
-      res.status(200).json({ movies, totalPages });
+      return res.status(200).json({ movies, totalPages });
     })
     .catch((error) => {
-      res.status(404).json({ message: "Not found" });
+      return res.status(404).json({ message: "Not found" });
     });
 };
 
 const getMoviesFiltered = async (req, res) => {
-  const { page } = req.params;
-  const { limit, offset } = getPagination(page - 1);
-  const { order, sorter, checked, search } = req.query;
-  const checkedGenres = checked ? checked.split(",") : null;
+  const { page, order, sort, genres, search, keywords } = req.query;
+  const { amount } = req.params;
+  const pageDecoded = page ? decodeURIComponent(page) : page;
+  const amountDecoded = amount ? decodeURIComponent(amount) : amount;
+  const orderDecoded = order ? decodeURIComponent(order) : order;
+  const sortDecoded = sort ? decodeURIComponent(sort) : sort;
+  const genresDecoded = genres ? decodeURIComponent(genres) : genres;
+  const searchDecoded = search ? decodeURIComponent(search) : search;
+  const keywordsDecoded = keywords ? decodeURIComponent(keywords) : keywords;
+  console.log({
+    pageDecoded,
+    searchDecoded,
+    amountDecoded,
+    orderDecoded,
+    genresDecoded,
+    searchDecoded,
+    keywordsDecoded,
+  });
+  const pageNumber = parseInt(pageDecoded) > 0 ? parseInt(pageDecoded) : 1;
+  const { limit, offset } = getPagination(
+    pageNumber - 1,
+    parseInt(amountDecoded)
+  );
+  const checkedGenres = genresDecoded ? genresDecoded.split(",") : null;
   const moviefiltergenres = [];
-  if (checkedGenres !== null) {
+  if (checkedGenres != null) {
     const movieids = await sequelize.query(
-      "SELECT movies.movieid FROM (movies INNER JOIN moviegenres using(movieid) INNER JOIN genres using(genreid)) WHERE lower(genres.name) in (?) GROUP BY movieid HAVING COUNT(genres.name) >= ?",
+      "SELECT movies.movieid FROM (movies INNER JOIN moviegenres using(movieid) INNER JOIN genres using(genreid)) WHERE lower(genres.name) \
+      in (?) GROUP BY movieid HAVING COUNT(genres.name) >= ?",
       {
         replacements: [
           checkedGenres.flatMap((x) => x.toLocaleLowerCase()),
@@ -128,53 +134,69 @@ const getMoviesFiltered = async (req, res) => {
         attributes: [],
       },
     },
-    where: {
-      [Op.or]: [
-        {
-          title: {
-            [Op.like]: search ? `%${search}%` : `%`,
-          },
-        },
-        search && search.length >= 3
-          ? {
-              keywords: {
-                [Op.like]: search ? `%${search}%` : `%`,
-              },
-            }
-          : {
+    where: keywordsDecoded
+      ? {
+          [Op.or]: [
+            {
               title: {
-                [Op.like]: search ? `%${search}%` : `%`,
+                [Op.like]: searchDecoded ? `%${searchDecoded}%` : `%`,
               },
             },
-      ],
-      movieid: checkedGenres ? { [Op.in]: moviefiltergenres } : { [Op.ne]: 0 },
-    },
+            searchDecoded && searchDecoded.length >= 3
+              ? {
+                  keywords: {
+                    [Op.like]: searchDecoded ? `%${searchDecoded}%` : `%`,
+                  },
+                }
+              : {
+                  title: {
+                    [Op.like]: searchDecoded ? `%${searchDecoded}%` : `%`,
+                  },
+                },
+          ],
+          movieid: checkedGenres
+            ? { [Op.in]: moviefiltergenres }
+            : { [Op.ne]: 0 },
+        }
+      : {
+          title: {
+            [Op.like]: searchDecoded ? `%${searchDecoded}%` : `%`,
+          },
+          movieid: checkedGenres
+            ? { [Op.in]: moviefiltergenres }
+            : { [Op.ne]: 0 },
+        },
+
     order: [
-      sorter === "release_date"
+      sortDecoded === "release_date"
         ? [
             sequelize.fn("isnull", sequelize.col("release_date")),
-            order ? order : "ASC",
+            orderDecoded ? orderDecoded : "ASC",
           ]
         : [
             sequelize.fn("isnull", sequelize.col("release_date")),
-            order ? (order === "ASC" ? "DESC" : "ASC") : "ASC",
+            orderDecoded ? (orderDecoded === "ASC" ? "DESC" : "ASC") : "ASC",
           ],
-      sorter
+      sortDecoded
         ? [
-            sorter === "duration"
+            sortDecoded === "duration"
               ? sequelize.cast(sequelize.col("duration"), "integer")
-              : sorter,
-            order ? order : "ASC",
+              : sortDecoded,
+            orderDecoded ? orderDecoded : "ASC",
           ]
-        : ["title", order ? order : "ASC"],
+        : ["title", orderDecoded ? orderDecoded : "ASC"],
     ],
   })
     .then((data) => {
-      const { rows: movies, totalPages } = getPagingData(data, page, limit);
-      res.status(200).json({ movies, totalPages });
+      const { rows: movies, totalPages } = getPagingData(
+        data,
+        pageDecoded,
+        limit
+      );
+      return res.status(200).json({ movies, totalPages });
     })
     .catch((error) => {
-      res.status(404).json({ message: "Not found" });
+      return res.status(404).json({ message: "Not found" });
     });
 };
 
@@ -212,10 +234,10 @@ const getMovies = async (req, res) => {
     .then((data) => {
       const { rows: movies, totalPages } = getPagingData(data, page, limit);
 
-      res.status(200).json({ movies, totalPages });
+      return res.status(200).json({ movies, totalPages });
     })
     .catch((error) => {
-      res.status(404).json({ message: "Not found" });
+      return res.status(404).json({ message: "Not found" });
     });
 };
 
@@ -232,10 +254,10 @@ const getMovie = async (req, res) => {
       },
       where: { movieid: id },
     });
-    if (movie) res.status(200).json({ movie });
-    else res.status(404).json({ message: "Not found" });
+    if (movie) return res.status(200).json({ movie });
+    else return res.status(404).json({ message: "Not found" });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 const getMovieImages = async (req, res) => {
@@ -252,9 +274,9 @@ const getMovieImages = async (req, res) => {
     );
 
     const { backdrops, logos, posters } = images.data;
-    res.status(200).json({ backdrops, logos, posters });
+    return res.status(200).json({ backdrops, logos, posters });
   } catch (error) {
-    res.status(404).json({ message: "Not found" });
+    return res.status(404).json({ message: "Not found" });
   }
 };
 const getMovieCredits = async (req, res) => {
@@ -268,9 +290,9 @@ const getMovieCredits = async (req, res) => {
       },
     });
     const { crew, cast } = credits.data;
-    res.status(200).json({ crew, cast });
+    return res.status(200).json({ crew, cast });
   } catch (error) {
-    res.status(404).json({ message: "Not found" });
+    return res.status(404).json({ message: "Not found" });
   }
 };
 

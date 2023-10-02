@@ -55,9 +55,9 @@ const getUserRecommendations = async (req, res) => {
         moviesPredicted.push(movie);
       }
     }
-    res.status(200).json({ moviesPredicted });
+    return res.status(200).json({ moviesPredicted });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -99,9 +99,9 @@ const getMovieRecommendations = async (req, res) => {
         moviesPredicted.push(movie);
       }
     }
-    res.status(200).json(moviesPredicted);
+    return res.status(200).json(moviesPredicted);
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 

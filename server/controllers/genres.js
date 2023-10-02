@@ -6,9 +6,9 @@ const { Genre } = db;
 const getGenres = async (req, res) => {
   try {
     const genres = await Genre.findAll({});
-    res.status(200).json({ genres });
+    return res.status(200).json({ genres });
   } catch (error) {
-    res.status(404).json({ message: "Not found" });
+    return res.status(404).json({ message: "Not found" });
   }
 };
 

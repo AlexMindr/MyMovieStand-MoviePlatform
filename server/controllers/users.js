@@ -51,7 +51,7 @@ const getProfile = async (req, res) => {
       const plantowatch = await watchListStatus("Plan to watch", userid);
       const onhold = await watchListStatus("On-hold", userid);
       const totalStatus = await watchListStatus("", userid);
-      res.status(200).json({
+      return res.status(200).json({
         profileUser,
         watching,
         completed,
@@ -62,10 +62,10 @@ const getProfile = async (req, res) => {
         joined,
       });
     } else {
-      res.status(404).json({ message: "Profile does not exist" });
+      return res.status(404).json({ message: "Profile does not exist" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -86,12 +86,12 @@ const getSimpleProfile = async (req, res) => {
     });
 
     if (profileUser) {
-      res.status(200).json({ profileUser });
+      return res.status(200).json({ profileUser });
     } else {
-      res.status(404).json({ message: "Profile does not exist" });
+      return res.status(404).json({ message: "Profile does not exist" });
     }
   } catch (error) {
-    res.status(500).json({ error: "Something went wrong" });
+    return res.status(500).json({ error: "Something went wrong" });
   }
 };
 
@@ -144,9 +144,9 @@ const update = async (req, res) => {
       username: checkUser.username,
     };
 
-    res.status(201).json({ user });
+    return res.status(201).json({ user });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -218,17 +218,16 @@ const resetPass = async (req, res) => {
 
     transporter.sendMail(mailOptions, function (err, info) {
       if (err) {
-        res.status(500).json({ message: "Something went wrong" });
+        return res.status(500).json({ message: "Something went wrong" });
         console.log(err.message);
       } else {
         setTimeout(myFunc, 15 * 60000, selectUser.userid);
         console.log(newCode);
-        res.status(201).json({ message: "Success" });
+        return res.status(201).json({ message: "Success" });
       }
     });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-    console.log(error.message);
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -275,9 +274,9 @@ const changePass = async (req, res) => {
       }
     );
 
-    res.status(201).json({ message: "Success" });
+    return res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 

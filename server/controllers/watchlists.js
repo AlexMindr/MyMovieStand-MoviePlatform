@@ -17,9 +17,9 @@ const getWatchlistInit = async (req, res) => {
       },
     });
 
-    res.status(200).json({ watchlist });
+    return res.status(200).json({ watchlist });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -28,7 +28,7 @@ const getWatchlist = async (req, res) => {
     const { username } = req.params;
 
     const userid = await getUserIdFromUsername(username);
-    if (!userid) res.status(404).json({ message: "User doesn't exist" });
+    if (!userid) return res.status(404).json({ message: "User doesn't exist" });
 
     const watchlist = await Watchlist.findAll({
       attributes: ["status", "rating", "movieid"],
@@ -45,9 +45,9 @@ const getWatchlist = async (req, res) => {
       ],
     });
 
-    res.status(200).json({ watchlist });
+    return res.status(200).json({ watchlist });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -65,9 +65,9 @@ const createWatchlistEntry = async (req, res) => {
       updatedAt: new Date(),
     });
 
-    res.status(201).json({ message: "Success" });
+    return res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -90,9 +90,9 @@ const updateWatchlistEntry = async (req, res) => {
       }
     );
 
-    res.status(201).json({ message: "Success" });
+    return res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -108,9 +108,9 @@ const deleteWatchlistEntry = async (req, res) => {
       },
     });
 
-    res.status(200).json({ message: "Success" });
+    return res.status(200).json({ message: "Success" });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -144,9 +144,9 @@ const addFavourite = async (req, res) => {
       }
     );
 
-    res.status(201).json({ message: "Success" });
+    return res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -168,9 +168,9 @@ const removeFavourite = async (req, res) => {
       }
     );
 
-    res.status(201).json({ message: "Success" });
+    return res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -179,7 +179,7 @@ const getFavouritesProfile = async (req, res) => {
     const { username } = req.params;
 
     const userid = await getUserIdFromUsername(username);
-    if (!userid) res.status(404).json({ message: "User doesn't exist" });
+    if (!userid) return res.status(404).json({ message: "User doesn't exist" });
 
     const favourites = await Watchlist.findAll({
       attributes: ["status", "rating", "movieid", "favourite"],
@@ -197,9 +197,9 @@ const getFavouritesProfile = async (req, res) => {
       ],
     });
 
-    res.status(200).json({ favourites });
+    return res.status(200).json({ favourites });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -241,9 +241,9 @@ const getFavourites = async (req, res) => {
       ],
     });
 
-    res.status(200).json({ favourites, watchlist });
+    return res.status(200).json({ favourites, watchlist });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 

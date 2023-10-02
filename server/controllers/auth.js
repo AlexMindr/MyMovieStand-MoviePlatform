@@ -14,10 +14,10 @@ const verifyToken = async (req, res) => {
 
     if (token) {
       const decodedData = jwt.verify(token, jwtSecret);
-      res.status(200).json({ token });
-    } else res.status(404).json({ message: "Not logged in" });
+      return res.status(200).json({ token });
+    } else return res.status(404).json({ message: "Not logged in" });
   } catch (error) {
-    res.status(500).json({ error });
+    return res.status(500).json({ error });
   }
 };
 
@@ -72,9 +72,9 @@ const login = async (req, res) => {
       role: role === "admin" ? role : undefined,
     };
 
-    res.status(200).json({ user, token });
+    return res.status(200).json({ user, token });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -141,11 +141,11 @@ const signup = async (req, res) => {
           role: role === "admin" ? role : undefined,
         };
 
-        res.status(201).json({ user, token });
+        return res.status(201).json({ user, token });
       }
     })
     .catch((error) => {
-      res.status(500).json({ message: `Something went wrong` });
+      return res.status(500).json({ message: `Something went wrong` });
     });
 };
 

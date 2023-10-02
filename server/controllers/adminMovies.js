@@ -158,7 +158,7 @@ const pop = async (req, res) => {
     .on("error", (err) => console.error(err))
     .on("finish", () => console.log("Done writing."));
 
-  res.status(201).json({ message: "Success" });
+  return res.status(201).json({ message: "Success" });
 };
 
 const populateMovies = async (req, res) => {
@@ -313,12 +313,12 @@ const populateMovies = async (req, res) => {
         .on("error", (err) => console.error(err))
         .on("finish", () => console.log("Done writing."));
 
-      res.status(201).json({ message: "Success" });
+      return res.status(201).json({ message: "Success" });
     } else {
-      res.status(403).json({ message: "Something went wrong" });
+      return res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -359,12 +359,12 @@ const updatePopularityAndRating = async (req, res) => {
         );
       });
 
-      res.status(201).json({ message: "Success" });
+      return res.status(201).json({ message: "Success" });
     } else {
-      res.status(403).json({ message: "Something went wrong" });
+      return res.status(403).json({ message: "Something went wrong" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -455,9 +455,9 @@ const createMovie = async (req, res) => {
       }
     );
 
-    res.status(201).json("Success");
+    return res.status(201).json("Success");
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    return res.status(404).json({ message: error.message });
   }
 };
 const updateMovie = async (req, res) => {
@@ -553,9 +553,9 @@ const updateMovie = async (req, res) => {
       });
     });
 
-    res.status(201).json("Success");
+    return res.status(201).json("Success");
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    return res.status(404).json({ message: error.message });
   }
 };
 
@@ -572,9 +572,9 @@ const deleteMovie = async (req, res) => {
         movieid: id,
       },
     });
-    res.status(200).json("Success");
+    return res.status(200).json("Success");
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    return res.status(404).json({ message: error.message });
   }
 };
 

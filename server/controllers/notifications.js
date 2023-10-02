@@ -23,10 +23,10 @@ const getNotifPag = async (req, res) => {
         limit
       );
 
-      res.status(200).json({ notifications, totalPages });
+      return res.status(200).json({ notifications, totalPages });
     })
     .catch((error) => {
-      res.status(500).json({ message: "Something went wrong" });
+      return res.status(500).json({ message: "Something went wrong" });
     });
 };
 
@@ -37,9 +37,9 @@ const getNotif = async (req, res) => {
       where: { userid },
       order: [["createdAt", "DESC"]],
     });
-    res.status(200).json({ notifications });
+    return res.status(200).json({ notifications });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -55,9 +55,9 @@ const addNotif = async (req, res) => {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
-    res.status(201).json({ newNotif });
+    return res.status(201).json({ newNotif });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -73,10 +73,10 @@ const deleteNotif = async (req, res) => {
       },
     });
     //const updatedNotifications = await Notification.findAll({where:userid});
-    //res.status(201).json(updatedNotifications);
-    res.status(201).json({ message: "Success" });
+    //return res.status(201).json(updatedNotifications);
+    return res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
@@ -98,10 +98,10 @@ const updateNotif = async (req, res) => {
       }
     );
     //const updatedNotifications = await Notification.findAll({where:userid});
-    //res.status(201).json(updatedNotifications);
-    res.status(201).json({ message: "Success" });
+    //return res.status(201).json(updatedNotifications);
+    return res.status(201).json({ message: "Success" });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };
 
