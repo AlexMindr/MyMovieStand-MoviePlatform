@@ -12,6 +12,7 @@ import MovieCardGenres from "./CardGenres";
 import MovieCardBottom from "./CardBottom";
 import MovieCardDetails from "./CardDetails";
 import colorRGBA from "@/shared/functions/colorRGBA";
+import imageUnavailable from "@/assets/ImageNotAvailable.png";
 
 type Props = {
   movie: MovieType;
@@ -103,8 +104,12 @@ const MovieCard = ({ movie }: Props) => {
         <CardMedia
           component="img"
           loading="lazy"
-          image={`https://image.tmdb.org/t/p/original${poster_path}`}
-          // placeholder={`https://image.tmdb.org/t/p/w200/${poster_path}`}
+          image={
+            poster_path
+              ? `https://image.tmdb.org/t/p/original${poster_path}`
+              : imageUnavailable
+          }
+          placeholder={imageUnavailable}
           title={title}
           sx={{
             height: "12rem",

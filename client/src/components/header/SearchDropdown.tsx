@@ -3,10 +3,10 @@ import { Dispatch, SetStateAction } from "react";
 import { useTheme } from "@mui/material";
 import SearchMovie from "@/components/header/SearchMovie";
 import { useQuery } from "@tanstack/react-query";
-import { getMoviesSearch } from "@/api";
 import { SearchMovieType } from "@/shared/types";
 import { Link } from "react-router-dom";
 import Loading from "@/components/global/Loading";
+import { apiGetMoviesNavSearch } from "@/api/movieApi";
 
 type Props = {
   searchToggle: boolean;
@@ -26,14 +26,41 @@ const SearchDropdown = ({
   const { isLoading, isError, data, isFetching } = useQuery({
     queryKey: ["movies-dropdown", debouncedSearch],
     queryFn: async () => {
-      const { data } = await getMoviesSearch(1, `search=${debouncedSearch}`);
-      return data as { movies: SearchMovieType[]; totalPages: number };
+      const data = await apiGetMoviesNavSearch(`title=${debouncedSearch}`);
+      return data as { movies: SearchMovieType[] };
     },
     enabled: debouncedSearch.length > 3 && searchToggle,
     refetchOnWindowFocus: false,
   });
 
   const isVisible = searchToggle && debouncedSearch.length > 3;
+
+  const moviesResultDisplay = () => {
+    if (!isError && !isFetching && !isLoading && data.movies.length > 0) {
+      return data.movies.map((movie: SearchMovieType) => (
+        <li className="li-result">
+          <Link
+            onClick={() => {
+              setSearchToggle((prev) => !prev);
+              setInputSearch("");
+            }}
+            key={movie.movieid}
+            to={`/movies/${movie.movieid}`}
+          >
+            <SearchMovie poster_path={movie.poster_path} title={movie.title} />
+          </Link>
+        </li>
+      ));
+    } else if (isLoading || isFetching) {
+      return (
+        <li className="li-no_result">
+          <Loading minHeight="30svh" />
+        </li>
+      );
+    } else {
+      return <li className="li-no_result">Nothing matched your search</li>;
+    }
+  };
 
   return (
     <Box
@@ -91,31 +118,7 @@ const SearchDropdown = ({
           },
         }}
       >
-        {!isError && !isFetching && !isLoading && data.movies.length > 0 ? (
-          data.movies.map((movie: SearchMovieType) => (
-            <li className="li-result">
-              <Link
-                onClick={() => {
-                  setSearchToggle((prev) => !prev);
-                  setInputSearch("");
-                }}
-                key={movie.movieid}
-                to={`/movies/${movie.movieid}`}
-              >
-                <SearchMovie
-                  poster_path={movie.poster_path}
-                  title={movie.title}
-                />
-              </Link>
-            </li>
-          ))
-        ) : isLoading || isFetching ? (
-          <li className="li-no_result">
-            <Loading minHeight="30svh" />
-          </li>
-        ) : (
-          <li className="li-no_result">Nothing matched your search</li>
-        )}
+        {moviesResultDisplay()}
       </Box>
     </Box>
   );

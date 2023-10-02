@@ -3,18 +3,26 @@ import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
-import { Dispatch, SetStateAction } from "react";
+import { SetURLSearchParams } from "react-router-dom";
 
 type Props = {
   selectOrder: string;
-  setSelectOrder: Dispatch<SetStateAction<string>>;
-  setPage: Dispatch<SetStateAction<number>>;
+  setPageParams: SetURLSearchParams;
 };
 
-const SelectOrder = ({ selectOrder, setSelectOrder, setPage }: Props) => {
+const SelectOrder = ({ selectOrder, setPageParams }: Props) => {
   const handleChangeOrder = (event: SelectChangeEvent) => {
-    setSelectOrder(event.target.value);
-    setPage(1);
+    setPageParams(
+      (prev) => {
+        if (event.target.value === "") prev.delete("order");
+        if (event.target.value !== "")
+          prev.set("order", encodeURIComponent(event.target.value));
+        prev.delete("page");
+        prev.set("page", encodeURIComponent("1"));
+        return prev;
+      },
+      { replace: true }
+    );
   };
 
   return (

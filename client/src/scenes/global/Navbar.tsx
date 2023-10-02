@@ -21,17 +21,13 @@ const Navbar = () => {
   //close menu when clicking outside
   useClickOutside<boolean>(menuBox, setMenuBars, false);
 
-  const user = { username: "adrianus", fullname: "gabi andr", role: "admin" };
-  const isLoggedIn = true;
+  const user = undefined;
 
   return (
     <Box
       display="flex"
       width="100%"
       height={isAboveMd ? "3rem" : "2.5rem"}
-      // position="sticky"
-      //top="3rem"
-      //className={`app__header-navbar ${show ? "" : "navbar--hidden"}`}
       sx={{
         backgroundImage: `linear-gradient(to right,${theme.palette.secondary[500]},
             ${theme.palette.primary[300]})`,

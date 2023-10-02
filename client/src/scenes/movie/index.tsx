@@ -4,7 +4,6 @@ import { useTheme } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { MovieType } from "@/shared/types";
-import { getMovie } from "@/api";
 import Loading from "@/components/global/Loading";
 import GeneralError from "@/components/error/GeneralError";
 import useSetTitle from "@/shared/hooks/setTitle";
@@ -12,6 +11,7 @@ import GalleryBudgetKw from "@/scenes/movie/GalleryFinancialKw";
 import GalleryProduction from "./GalleryProduction";
 import MovieInfoPoster from "./MovieInfoPoster";
 import MovieReviews from "./MovieReviews";
+import { apiGetMovie } from "@/api/movieApi";
 
 /* TODO fixes for very small screens */
 
@@ -27,8 +27,8 @@ const Movie = () => {
   } = useQuery({
     queryKey: ["movie", id],
     queryFn: async () => {
-      const { data } = await getMovie(id ?? "");
-      return data as MovieType;
+      const { movie } = await apiGetMovie(id ?? "");
+      return movie as MovieType;
     },
     retry: 2,
     refetchOnWindowFocus: false,

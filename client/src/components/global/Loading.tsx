@@ -5,7 +5,7 @@ type Props = {
   minHeight?: string;
 };
 
-const Loading = ({ minHeight = "100dvh" }: Props) => {
+const Loading = ({ minHeight = "60dvh" }: Props) => {
   return (
     <FlexBoxCenter minHeight={minHeight} overflow="hidden">
       <CircularProgress color="primary" />

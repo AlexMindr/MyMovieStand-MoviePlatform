@@ -3,12 +3,12 @@ import { createBrowserRouter } from "react-router-dom";
 import { lazy } from "react";
 import Layout from "@/scenes/global/Layout";
 import PageRedirect from "./shared/routeChecks/PageRedirect";
-import Login from "./scenes/login";
 
 //Lazy loading components
 const Home = lazy(() => import("@/scenes/home"));
 const Movies = lazy(() => import("@/scenes/movies"));
 const Movie = lazy(() => import("@/scenes/movie"));
+const Login = lazy(() => import("@/scenes/login"));
 const ErrorPage = lazy(() => import("@/scenes/errorpage"));
 
 const router = createBrowserRouter([

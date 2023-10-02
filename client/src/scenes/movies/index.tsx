@@ -1,34 +1,34 @@
-import { getMovies } from "@/api";
+import { apiGetMoviesFiltered } from "@/api/movieApi";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState, useDeferredValue, memo } from "react";
+import { useMemo, useDeferredValue, memo } from "react";
 import { MovieType } from "@/shared/types";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import ContainerTitle from "@/shared/ContainerTitle";
 import useSetTitle from "@/shared/hooks/setTitle";
 import FlexBox from "@/shared/FlexBox";
+import { getParamsObject } from "@/shared/functions/buildQuery";
 import SelectGenres from "@/scenes/movies/SelectGenres";
 import SearchBox from "@/scenes/movies/SearchBox";
 import SelectSort from "@/scenes/movies/SelectSort";
 import SelectOrder from "@/scenes/movies/SelectOrder";
+import MoviesGrid from "@/scenes/movies/MoviesGrid";
 import Loading from "@/components/global/Loading";
 import GeneralError from "@/components/error/GeneralError";
-import buildQuery, { getParamsObject } from "@/shared/functions/buildQuery";
-import MoviesGrid from "./MoviesGrid";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { Theme } from "@mui/material";
 
 const PageTitle = "Browse Movies";
 
 const MemoizedMoviesGrid = memo(MoviesGrid);
 
 const Movies = () => {
+  const isAboveMd = useMediaQuery((theme: Theme) => theme.breakpoints.up("lg"));
+  const amount = encodeURIComponent(isAboveMd ? 12 : 10);
+
   useSetTitle(PageTitle);
-  const [pageParams, setPageParams] = useSearchParams({
-    page: "1",
-    title: "",
-    sort: "",
-    order: "",
-    genres: "",
-  });
+  const location = useLocation();
+  const [pageParams, setPageParams] = useSearchParams();
 
   //get params from url after checks/processing
   const pageParamsObject = useMemo(
@@ -36,30 +36,31 @@ const Movies = () => {
     [pageParams]
   );
 
-  const [inputSearch, setInputSearch] = useState(pageParamsObject.title);
-  const searchDebounced = useDeferredValue(inputSearch);
-  const [selectSort, setSelectSort] = useState(pageParamsObject.sort);
-  const [selectOrder, setSelectOrder] = useState(pageParamsObject.order);
-  const [selectGenres, setSelectGenres] = useState<string[]>(
-    pageParamsObject.genres
-  );
-  const [page, setPage] = useState(pageParamsObject.page);
+  const inputSearch = pageParamsObject.search;
 
-  //build the filter query
-  const query = useMemo(
-    () => buildQuery(inputSearch, selectSort, selectOrder, selectGenres, page),
-    [inputSearch, page, selectGenres, selectOrder, selectSort]
-  );
+  const keywords = pageParamsObject.keywords;
+  const searchDebounced = useDeferredValue(inputSearch);
+  const selectSort = pageParamsObject.sort;
+  const selectOrder = pageParamsObject.order;
+  const selectGenres = pageParamsObject.genres;
+  const page = pageParamsObject.page;
 
   //data fetching
   const { isLoading, isError, data, isFetching } = useQuery({
     queryKey: [
       "movies",
-      { page, searchDebounced, selectGenres, selectOrder, selectSort },
+      {
+        amount,
+        page,
+        searchDebounced,
+        selectGenres,
+        selectOrder,
+        selectSort,
+        keywords,
+      },
     ],
     queryFn: async () => {
-      const { data } = await getMovies(page);
-      setPageParams({ ...query });
+      const data = await apiGetMoviesFiltered(location.search, amount);
       return data as { movies: MovieType[]; totalPages: number };
     },
     keepPreviousData: true,
@@ -76,14 +77,13 @@ const Movies = () => {
         <Box
           width="100%"
           display={{ xs: "block", lg: "flex" }}
-          marginTop={"1rem"}
           marginBottom={"0.25rem"}
         >
           {/* Search box for filtering*/}
           <SearchBox
             inputSearch={inputSearch}
-            setInputSearch={setInputSearch}
-            setPage={setPage}
+            keywords={keywords}
+            setPageParams={setPageParams}
           />
           {/* Filter by genre/order/sort */}
           <FlexBox
@@ -92,22 +92,16 @@ const Movies = () => {
             marginLeft="auto"
           >
             {/* Sort */}
-            <SelectSort
-              selectSort={selectSort}
-              setSelectSort={setSelectSort}
-              setPage={setPage}
-            />
+            <SelectSort selectSort={selectSort} setPageParams={setPageParams} />
             {/* Order */}
             <SelectOrder
               selectOrder={selectOrder}
-              setSelectOrder={setSelectOrder}
-              setPage={setPage}
+              setPageParams={setPageParams}
             />
             {/* Genres Select for filtering*/}
             <SelectGenres
               selectGenres={selectGenres}
-              setSelectGenres={setSelectGenres}
-              setPage={setPage}
+              setPageParams={setPageParams}
             />
           </FlexBox>
         </Box>
@@ -117,7 +111,11 @@ const Movies = () => {
         ) : isError ? (
           <GeneralError />
         ) : (
-          <MemoizedMoviesGrid data={data} page={page} setPage={setPage} />
+          <MemoizedMoviesGrid
+            data={data}
+            page={page}
+            setPageParams={setPageParams}
+          />
         )}
       </Box>
     </>

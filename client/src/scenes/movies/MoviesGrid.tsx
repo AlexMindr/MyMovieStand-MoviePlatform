@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction, memo, useMemo } from "react";
+import { ChangeEvent, memo, useMemo } from "react";
 import { MovieType } from "@/shared/types";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -6,20 +6,24 @@ import Pagination from "@mui/material/Pagination";
 import { useTheme } from "@mui/material";
 import FlexBoxCenter from "@/shared/FlexBoxCenter";
 import MovieCard from "@/components/movies/MovieCard";
+import { SetURLSearchParams } from "react-router-dom";
 
 const MemoizedMovieCard = memo(MovieCard);
 
 type Props = {
   data: { movies: MovieType[]; totalPages: number };
   page: number;
-  setPage: Dispatch<SetStateAction<number>>;
+  setPageParams: SetURLSearchParams;
 };
 
-const MoviesGrid = ({ data, page, setPage }: Props) => {
+const MoviesGrid = ({ data, page, setPageParams }: Props) => {
   const { palette } = useTheme();
 
   const pageChange = (_e: ChangeEvent<unknown>, value: number) => {
-    setPage(value);
+    setPageParams((prev) => {
+      prev.set("page", value.toString());
+      return prev;
+    });
   };
 
   const memoizedMovies = useMemo(() => {
@@ -31,7 +35,7 @@ const MoviesGrid = ({ data, page, setPage }: Props) => {
   return (
     <Box pt="1rem" width="100%">
       {/* Movies grid */}
-      {data.movies.length > 1 ? (
+      {data.movies.length >= 1 ? (
         <Box
           component="ul"
           display="grid"

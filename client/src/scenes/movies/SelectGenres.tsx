@@ -8,15 +8,14 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import { useQuery } from "@tanstack/react-query";
 import { GenreType } from "@/shared/types";
-import { getGenres } from "@/api";
 import Loading from "@/components/global/Loading";
-import GeneralError from "@/components/error/GeneralError";
-import { Dispatch, SetStateAction, useEffect, useMemo } from "react";
+import { useLayoutEffect, useMemo } from "react";
+import { apiGetGenres } from "@/api/movieApi";
+import { SetURLSearchParams } from "react-router-dom";
 
 type Props = {
   selectGenres: string[];
-  setSelectGenres: Dispatch<SetStateAction<string[]>>;
-  setPage: Dispatch<SetStateAction<number>>;
+  setPageParams: SetURLSearchParams;
 };
 
 const ITEM_HEIGHT = 50;
@@ -29,20 +28,23 @@ const MenuProps = {
   },
 };
 
-function isArrayContained(subArray: string[], mainArray: string[]): boolean {
-  return subArray.every((item) => mainArray.includes(item));
-}
-
-const SelectGenres = ({ selectGenres, setSelectGenres, setPage }: Props) => {
-  const { isLoading, isError, error, data, isFetching } = useQuery({
+const SelectGenres = ({ selectGenres, setPageParams }: Props) => {
+  const { isLoading, isError, data, isFetching } = useQuery({
     queryKey: ["genres"],
     queryFn: async () => {
-      const { data } = await getGenres();
-      return data as GenreType[];
+      const { genres } = await apiGetGenres();
+      return genres as GenreType[];
     },
     staleTime: 60000,
     refetchOnWindowFocus: false,
   });
+
+  useLayoutEffect(() => {
+    if (!isFetching && !isLoading && !isError) {
+      verifyGenreValidityAndUpdate(setPageParams, selectGenres, data);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectGenres, data]);
 
   const genresSelectMenu = useMemo(() => {
     return data?.map(({ name }) => (
@@ -53,31 +55,17 @@ const SelectGenres = ({ selectGenres, setSelectGenres, setPage }: Props) => {
     ));
   }, [data, selectGenres]);
 
-  useEffect(() => {
-    if (!isFetching && !isLoading && !isError) {
-      isArrayContained(
-        selectGenres,
-        data.map(({ name }) => name)
-      )
-        ? setSelectGenres(selectGenres)
-        : setSelectGenres([]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, selectGenres]);
-
   const handleChangeGenres = (
     event: SelectChangeEvent<typeof selectGenres>
   ) => {
     const {
       target: { value },
     } = event;
-    setSelectGenres(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
-    setPage(1);
+    if (!isFetching && !isLoading && !isError) {
+      verifyGenreValidityAndUpdate(setPageParams, value, data);
+    }
   };
-  if (isError) return <GeneralError />;
+  if (isError) return <></>;
   else
     return (
       <Box
@@ -102,7 +90,11 @@ const SelectGenres = ({ selectGenres, setSelectGenres, setPage }: Props) => {
             renderValue={(selected) => selected.join(", ")}
             MenuProps={MenuProps}
           >
-            {isFetching || isLoading ? <Loading /> : genresSelectMenu}
+            {isFetching || isLoading ? (
+              <Loading minHeight="10svh" />
+            ) : (
+              genresSelectMenu
+            )}
           </Select>
         </FormControl>
       </Box>
@@ -110,3 +102,48 @@ const SelectGenres = ({ selectGenres, setSelectGenres, setPage }: Props) => {
 };
 
 export default SelectGenres;
+
+function isValidGenre(
+  subArray: string[] | string,
+  mainArray: string[]
+): boolean {
+  if (typeof subArray === "string") return mainArray.includes(subArray);
+  return subArray.every((item) => mainArray.includes(item));
+}
+
+function verifyGenreValidityAndUpdate(
+  setPageParams: SetURLSearchParams,
+  selectGenres: string[] | string,
+  data: GenreType[]
+) {
+  const valueArray =
+    typeof selectGenres === "string" ? [selectGenres] : selectGenres;
+  isValidGenre(
+    valueArray,
+    data.map(({ name }) => name)
+  )
+    ? setPageParams(
+        (prev) => {
+          if (valueArray.length === 0) {
+            prev.delete("genres");
+          } else if (valueArray.length === 1) {
+            prev.set("genres", encodeURIComponent(valueArray.toString()));
+          } else if (valueArray.length > 1) {
+            prev.set("genres", encodeURIComponent(valueArray.join(",")));
+          }
+          prev.delete("page");
+          prev.set("page", encodeURIComponent("1"));
+          return prev;
+        },
+        { replace: true }
+      )
+    : setPageParams(
+        (prev) => {
+          prev.delete("genres");
+          prev.delete("page");
+          prev.set("page", encodeURIComponent("1"));
+          return prev;
+        },
+        { replace: true }
+      );
+}

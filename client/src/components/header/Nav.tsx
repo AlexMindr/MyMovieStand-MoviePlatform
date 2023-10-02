@@ -7,14 +7,6 @@ interface Props extends BoxProps {
   menuBars: boolean;
   activeStyle: string;
   user?: { role: string };
-  // divStyle?: {
-  //   width?: string;
-  //   alignItems?: string;
-  //   justifyContent?: string;
-  //   paddingBottom?: string;
-  //   backgroundImage?: string;
-  //   minWidth?: string;
-  // };
   ulFlexDirection?: string;
   ulTextAlign?: string;
 }

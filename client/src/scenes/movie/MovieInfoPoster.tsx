@@ -10,6 +10,7 @@ import AiringDetails from "@/components/movie/AiringDetails";
 import RatingBox from "@/components/movie/RatingBox";
 import SynopsisTrailer from "@/components/movie/SynopsisTrailer";
 import WatchListBox from "@/components/movie/WatchListBox";
+import imageUnavailable from "@/assets/ImageNotAvailable.png";
 
 type Props = {
   adult: boolean;
@@ -66,7 +67,12 @@ const MovieInfoPoster = ({
             width: "clamp(200px,100%,350px)",
           }}
           alt={title}
-          src={`https://image.tmdb.org/t/p/original${poster_path}`}
+          src={
+            poster_path
+              ? `https://image.tmdb.org/t/p/original${poster_path}`
+              : imageUnavailable
+          }
+          placeholder={imageUnavailable}
         />
       </FlexBox>
       {/* Essential Info and Trailer */}

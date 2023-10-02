@@ -2,7 +2,6 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { NavLink, useLocation } from "react-router-dom";
 import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Box from "@mui/material/Box";
@@ -10,14 +9,16 @@ import { useTheme } from "@mui/material";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import HeaderNotifications from "@/components/header/HeaderNotifications";
 import HeaderProfile from "@/components/header/HeaderProfile";
+import SignButton from "@/components/header/SignButton";
 
 const Header = () => {
   const theme = useTheme();
   const isAboveMd = useMediaQuery(theme.breakpoints.up("md"));
   const location = useLocation();
   //TO BE REMOVED
-  const user = { username: "adrianus", fullname: "gabi andr" };
-  const isLoggedIn = true;
+  //const user: { username: string } | undefined = undefined;
+  // const user = { username: "adrianus", fullname: "gabi andr" };
+  // const isLoggedIn = true;
   return (
     <Box
       display="flex"
@@ -53,7 +54,7 @@ const Header = () => {
         alignItems="center"
         justifyContent="flex-end"
       >
-        {user && isLoggedIn ? (
+        {/* {user != undefined ? (
           <>
             <Box>
               <NavLink to={`/watchlist/${user.username}`}>
@@ -78,60 +79,21 @@ const Header = () => {
 
             <HeaderProfile user={user} />
           </>
-        ) : (
-          <>
-            <NavLink state={{ from: location }} to="/login">
-              {({ isActive }) => (
-                <Button
-                  variant="text"
-                  sx={{
-                    fontWeight: 900,
-                    marginRight: "0.5rem",
-                    borderRadius: "10px",
-                    padding: {
-                      xs: "1px 2px 1px 2px",
-                      sm: "2px 3px 2px 3px",
-                      md: "3px 6px 3px 6px",
-                      lg: "5px 7px 5px 7px",
-                    },
-                    backgroundColor: theme.palette.tertiary[400],
-                    color: isActive
-                      ? theme.palette.grey[100]
-                      : theme.palette.secondary[400],
-                    "&:hover": { backgroundColor: theme.palette.tertiary[200] },
-                  }}
-                >
-                  Login
-                </Button>
-              )}
-            </NavLink>
-            <NavLink state={{ from: location }} to="/signup">
-              {({ isActive }) => (
-                <Button
-                  variant="text"
-                  sx={{
-                    fontWeight: 900,
-                    marginRight: "0.5rem",
-                    borderRadius: "10px",
-                    padding: {
-                      xs: "1px 2px 1px 2px",
-                      sm: "2px 3px 2px 3px",
-                      md: "3px 6px 3px 6px",
-                      lg: "5px 7px 5px 7px",
-                    },
-                    backgroundColor: theme.palette.tertiary[400],
-                    color: isActive
-                      ? theme.palette.grey[100]
-                      : theme.palette.secondary[400],
-                    "&:hover": { backgroundColor: theme.palette.tertiary[200] },
-                  }}
-                >
-                  Sign Up
-                </Button>
-              )}
-            </NavLink>
-          </>
-        )}
+        ) :( */}
+
+        <>
+          <NavLink state={{ from: location }} to="/login">
+            {({ isActive }) => (
+              <SignButton isActive={isActive}>Login</SignButton>
+            )}
+          </NavLink>
+          <NavLink state={{ from: location }} to="/signup">
+            {({ isActive }) => (
+              <SignButton isActive={isActive}>Sign up</SignButton>
+            )}
+          </NavLink>
+        </>
+        {/*  )} */}
       </Box>
     </Box>
   );
